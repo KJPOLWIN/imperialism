@@ -2,8 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-  #include <iostream>
-
 int main()
 {
   sf::RenderWindow window(sf::VideoMode(800, 600), "Imperialism");
@@ -21,13 +19,7 @@ int main()
       }
     }
 
-    //std::cout << "x: " << sf::Mouse::getPosition(window).x
-    //          << "\ty: " << sf::Mouse::getPosition(window).y << "\n";
-    
-    //if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-    //{
-      map.selectNodes(sf::Mouse::getPosition(window));
-    //}
+    map.selectNodes(sf::Mouse::getPosition(window));
 
     window.clear();
     map.draw(window);

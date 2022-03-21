@@ -3,8 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-  #include <iostream>
-
 Map::Map(int sizeX, int sizeY)
   : sizeX{ sizeX },
     sizeY{ sizeY }
@@ -25,20 +23,16 @@ void Map::selectNodes(sf::Vector2i clickPosition)
   int x{ clickPosition.x / 88 };  //Node width in px
   int y{ 2 * (clickPosition.y / 151) }; //Node height in px + 50 px below
 
-  std::cout << "map x: " << x <<
-               "\tmap y: " << y << "\n"; 
-
   for( auto& node : nodes )
   {
     node.disselect();
   }
   
-  //std::cout << clickPosition.x - x * 88 << "\n";
- 
   sf::Color area{ sf::Color::White }; 
   if(clickPosition.x >= 0 && clickPosition.y >= 0)
   {
-    area = clickmap.getPixel(clickPosition.x % 88, clickPosition.y % 151);
+    area = clickmap.getPixel(static_cast<unsigned int>(clickPosition.x % 88), 
+                             static_cast<unsigned int>(clickPosition.y % 151));
   }
 
   if(area == sf::Color::Red)
@@ -89,5 +83,5 @@ void Map::draw(sf::RenderWindow& targetWindow)
 
 MapNode& Map::getNode(int x, int y)
 {
-  return nodes.at(y * sizeX + x);
+  return nodes.at(static_cast<long unsigned int>(y * sizeX + x));
 }

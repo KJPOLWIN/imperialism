@@ -9,6 +9,9 @@ OBJ = main.o mapnode.o map.o
 output: $(OBJ)
 	g++ $(OBJ) -o $(TITLE) $(SFML) $(OPT)
 
+clear: 
+	rm $(OBJ) $(TITLE)
+
 main.o: main.cpp
 	g++ -c main.cpp $(SFML) $(OPT)
 	

@@ -4,6 +4,13 @@
   #include <SFML/Graphics.hpp>
   #include <array>
 
+  enum class TerrainType
+  {
+    grassland,
+    water,
+    desert
+  };
+
   class MapNode
   {
     public:
@@ -13,10 +20,14 @@
       void disselect();
       void draw(sf::RenderWindow& targetWindow);
 
+      void switchTerrainType();
+      void switchTerrainType(TerrainType newTerrain);
+      TerrainType getTerrainType();
+
       bool isSelected{ false };
    
     private:
       std::array<sf::Vertex, 7> vertices{  };
-
+      TerrainType terrain{ TerrainType::grassland };
   };
 #endif
