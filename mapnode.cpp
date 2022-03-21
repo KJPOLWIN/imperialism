@@ -35,6 +35,24 @@ MapNode::MapNode(int x, int y)
   vertices.at(6).position = vertices.at(0).position; 
 }
 
+void MapNode::select()
+{
+  isSelected = true;
+  for( auto& vertex : vertices )
+  {
+    vertex.color = sf::Color::Yellow;
+  }
+}
+
+void MapNode::disselect()
+{
+  isSelected = false;
+  for( auto& vertex : vertices )
+  {
+    vertex.color = sf::Color::White;
+  }
+}
+
 void MapNode::draw(sf::RenderWindow& targetWindow)
 {
   targetWindow.draw(&vertices.at(0), vertices.size(), sf::LineStrip);

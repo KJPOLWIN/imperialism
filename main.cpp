@@ -1,32 +1,14 @@
-#include "mapnode.h"
+#include "map.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
+
+  #include <iostream>
 
 int main()
 {
   sf::RenderWindow window(sf::VideoMode(800, 600), "Imperialism");
- 
-  std::vector<MapNode> nodes{  };
-  nodes.push_back(MapNode(0, 0));
-  nodes.push_back(MapNode(1, 0));
-  nodes.push_back(MapNode(2, 0));
-  nodes.push_back(MapNode(3, 0));
 
-  nodes.push_back(MapNode(0, 1));
-  nodes.push_back(MapNode(1, 1));
-  nodes.push_back(MapNode(2, 1));
-  nodes.push_back(MapNode(3, 1));
-  
-  nodes.push_back(MapNode(0, 2));
-  nodes.push_back(MapNode(1, 2));
-  nodes.push_back(MapNode(2, 2));
-  nodes.push_back(MapNode(3, 2));
-  
-  nodes.push_back(MapNode(0, 3));
-  nodes.push_back(MapNode(1, 3));
-  nodes.push_back(MapNode(2, 3));
-  nodes.push_back(MapNode(3, 3));
-
+  Map map(8, 7);
 
   sf::Event event{  };
   while(window.isOpen())
@@ -39,11 +21,16 @@ int main()
       }
     }
 
+    //std::cout << "x: " << sf::Mouse::getPosition(window).x
+    //          << "\ty: " << sf::Mouse::getPosition(window).y << "\n";
+    
+    //if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    //{
+      map.selectNodes(sf::Mouse::getPosition(window));
+    //}
+
     window.clear();
-    for( auto& node : nodes )
-    {
-      node.draw(window);
-    }
+    map.draw(window);
     window.display();
   }
 
