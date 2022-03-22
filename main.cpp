@@ -8,6 +8,7 @@ int main()
 
   Map map(8, 7);
 
+  bool canClick{ true };
   sf::Event event{  };
   while(window.isOpen())
   {
@@ -17,9 +18,19 @@ int main()
       {
         window.close();
       }
+      else if(event.type == sf::Event::MouseButtonPressed)
+      {
+        canClick = false;
+      }
+      else if(event.type == sf::Event::MouseButtonReleased)
+      {
+        canClick = true;
+      }
     }
 
     map.selectNodes(sf::Mouse::getPosition(window));
+    //map.switchNodeTerrain(canClick);
+    map.switchNodeTerrain();
 
     window.clear();
     map.draw(window);

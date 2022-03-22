@@ -69,6 +69,32 @@ void Map::selectNodes(sf::Vector2i clickPosition)
   }
 }
 
+//void Map::switchNodeTerrain(bool canClick)
+void Map::switchNodeTerrain()
+{
+  static bool canClick{ true };
+
+  if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+  {
+    if(canClick)
+    {
+      for( auto& node : nodes )
+      {
+        if(node.isSelected)
+        {
+          node.switchTerrainType();
+          canClick = false;
+          break;
+        }
+      }
+    }
+  }
+  else
+  {
+    canClick = true;
+  }
+}
+
 void Map::draw(sf::RenderWindow& targetWindow)
 {
   for( auto& node : nodes )
@@ -78,7 +104,17 @@ void Map::draw(sf::RenderWindow& targetWindow)
       //Check how it should be done and change this
       grassNode.setPosition(node.getPosition());
       targetWindow.draw(grassNode);
-    }  
+    }
+    else if(node.getTerrainType() == TerrainType::water)
+    { 
+      waterNode.setPosition(node.getPosition());
+      targetWindow.draw(waterNode);
+    }
+    else if(node.getTerrainType() == TerrainType::desert)
+    {
+      desertNode.setPosition(node.getPosition());
+      targetWindow.draw(desertNode);
+    } 
   }
 
   //Drawing unselected nodes first, so full selected node's border will be visible

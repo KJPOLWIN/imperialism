@@ -11,6 +11,8 @@
       Map(int sizeX, int sizeY);
       
       void selectNodes(sf::Vector2i clickPosition);
+      //void switchNodeTerrain(bool canClick);
+      void switchNodeTerrain();
       void draw(sf::RenderWindow& targetWindow);
 
     private:
