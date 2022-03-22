@@ -79,3 +79,9 @@ TerrainType MapNode::getTerrainType()
 {
   return terrain;
 }
+
+sf::Vector2f MapNode::getPosition()
+{
+  return sf::Vector2f(vertices.at(0).position.x, 
+                      vertices.at(1).position.y);
+}

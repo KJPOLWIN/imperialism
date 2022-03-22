@@ -24,6 +24,8 @@
       void switchTerrainType(TerrainType newTerrain);
       TerrainType getTerrainType();
 
+      sf::Vector2f getPosition();
+
       bool isSelected{ false };
    
     private:

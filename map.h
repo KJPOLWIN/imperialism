@@ -20,6 +20,14 @@
       const int sizeX{ 0 };
       const int sizeY{ 0 };
       sf::Image clickmap{  };
+
+      sf::Texture grassNodeTexture{  };
+      sf::Texture waterNodeTexture{  };
+      sf::Texture desertNodeTexture{  };
+      
+      sf::Sprite grassNode{  };
+      sf::Sprite waterNode{  };
+      sf::Sprite desertNode{  };
   };
 
 #endif

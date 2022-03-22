@@ -16,6 +16,14 @@ Map::Map(int sizeX, int sizeY)
       nodes.push_back(MapNode(x, y));
     }
   }
+
+  grassNodeTexture.loadFromFile("nodegrass.png");
+  waterNodeTexture.loadFromFile("nodewater.png");
+  desertNodeTexture.loadFromFile("nodedesert.png");
+
+  grassNode.setTexture(grassNodeTexture);
+  waterNode.setTexture(waterNodeTexture);
+  desertNode.setTexture(desertNodeTexture);
 }
 
 void Map::selectNodes(sf::Vector2i clickPosition)
@@ -63,6 +71,16 @@ void Map::selectNodes(sf::Vector2i clickPosition)
 
 void Map::draw(sf::RenderWindow& targetWindow)
 {
+  for( auto& node : nodes )
+  {
+    if(node.getTerrainType() == TerrainType::grassland)
+    {
+      //Check how it should be done and change this
+      grassNode.setPosition(node.getPosition());
+      targetWindow.draw(grassNode);
+    }  
+  }
+
   //Drawing unselected nodes first, so full selected node's border will be visible
   for( auto& node : nodes )
   {
