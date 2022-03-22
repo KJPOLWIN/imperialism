@@ -18,19 +18,16 @@ int main()
       {
         window.close();
       }
-      else if(event.type == sf::Event::MouseButtonPressed)
-      {
-        canClick = false;
-      }
-      else if(event.type == sf::Event::MouseButtonReleased)
+      else if(!canClick
+           && event.type == sf::Event::MouseButtonReleased
+           && event.mouseButton.button == sf::Mouse::Left)
       {
         canClick = true;
       }
     }
 
     map.selectNodes(sf::Mouse::getPosition(window));
-    //map.switchNodeTerrain(canClick);
-    map.switchNodeTerrain();
+    map.switchNodeTerrain(canClick);
 
     window.clear();
     map.draw(window);

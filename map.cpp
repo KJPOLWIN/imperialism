@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
+  #include <iostream>
+
 Map::Map(int sizeX, int sizeY)
   : sizeX{ sizeX },
     sizeY{ sizeY }
@@ -69,29 +71,19 @@ void Map::selectNodes(sf::Vector2i clickPosition)
   }
 }
 
-//void Map::switchNodeTerrain(bool canClick)
-void Map::switchNodeTerrain()
+void Map::switchNodeTerrain(bool& canClick)
 {
-  static bool canClick{ true };
-
-  if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+  if(canClick && sf::Mouse::isButtonPressed(sf::Mouse::Left))
   {
-    if(canClick)
+    for( auto& node : nodes )
     {
-      for( auto& node : nodes )
+      if(node.isSelected)
       {
-        if(node.isSelected)
-        {
-          node.switchTerrainType();
-          canClick = false;
-          break;
-        }
+        node.switchTerrainType();
+        canClick = false;
+        break;
       }
     }
-  }
-  else
-  {
-    canClick = true;
   }
 }
 
