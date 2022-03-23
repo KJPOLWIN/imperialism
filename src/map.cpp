@@ -19,9 +19,9 @@ Map::Map(int sizeX, int sizeY)
     }
   }
 
-  grassNodeTexture.loadFromFile("nodegrass.png");
-  waterNodeTexture.loadFromFile("nodewater.png");
-  desertNodeTexture.loadFromFile("nodedesert.png");
+  grassNodeTexture.loadFromFile("texture/nodegrass.png");
+  waterNodeTexture.loadFromFile("texture/nodewater.png");
+  desertNodeTexture.loadFromFile("texture/nodedesert.png");
 
   grassNode.setTexture(grassNodeTexture);
   waterNode.setTexture(waterNodeTexture);
@@ -71,20 +71,21 @@ void Map::selectNodes(sf::Vector2i clickPosition)
   }
 }
 
-void Map::switchNodeTerrain(bool& canClick)
+void Map::switchNodeTerrain()
+//void Map::switchNodeTerrain(bool& canClick)
 {
-  if(canClick && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-  {
+  /*if(canClick && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+  {*/
     for( auto& node : nodes )
     {
       if(node.isSelected)
       {
         node.switchTerrainType();
-        canClick = false;
+        //canClick = false;
         break;
       }
     }
-  }
+  //}
 }
 
 void Map::draw(sf::RenderWindow& targetWindow)
