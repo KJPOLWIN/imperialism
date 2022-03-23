@@ -10,7 +10,7 @@
     public:
       MainMenu(sf::Font& buttonFont);
 
-      void mouseInput(GameState& state);
+      void mouseInput(GameState& state, sf::RenderWindow& window);
       void run(sf::RenderWindow& window);
 
     private:

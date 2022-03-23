@@ -11,11 +11,10 @@ int main()
   sf::Font pressStart2P{  };
   pressStart2P.loadFromFile("font/PressStart2P-Regular.ttf");
 
-  GameState state{ GameState::game };
-
-  Game game{  };
+  GameState state{ GameState::mainMenu };
 
   MainMenu menu{ pressStart2P };
+  Game game{  };
 
   bool canClick{ true };
   sf::Event event{  };
@@ -34,7 +33,7 @@ int main()
         switch(state)
         {
           case GameState::mainMenu:
-            menu.mouseInput(state);
+            menu.mouseInput(state, window);
           break;
           case GameState::game:
             game.mouseInput(state);
