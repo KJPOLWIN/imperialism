@@ -15,7 +15,7 @@ void MainMenu::mouseInput(GameState& state, sf::RenderWindow& window)
 
   if(startButton.isClicked(clickPosition)) 
   {
-    state = GameState::game;
+    state = GameState::gameSettings;
   }
 }
 

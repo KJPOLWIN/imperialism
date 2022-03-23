@@ -1,6 +1,7 @@
 #include "gamestate.h"
 #include "game.h"
 #include "mainmenu.h"
+#include "gamesettings.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
@@ -14,6 +15,7 @@ int main()
   GameState state{ GameState::mainMenu };
 
   MainMenu menu{ pressStart2P };
+  GameSettings gameSettings{ pressStart2P };
   Game game{  };
 
   bool canClick{ true };
@@ -35,6 +37,11 @@ int main()
           case GameState::mainMenu:
             menu.mouseInput(state, window);
           break;
+
+          case GameState::gameSettings:
+            gameSettings.mouseInput(state, window);
+          break;
+
           case GameState::game:
             game.mouseInput(state);
           break;
@@ -56,6 +63,11 @@ int main()
       case GameState::mainMenu:
         menu.run(window);
       break;
+
+      case GameState::gameSettings:
+        gameSettings.run(window);
+      break;
+
       case GameState::game:
         game.run(window);
       break;
