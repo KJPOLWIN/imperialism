@@ -17,11 +17,16 @@ int main()
   MainMenu menu{ pressStart2P };
   GameSettings gameSettings{ pressStart2P };
   Game game{  };
-
+  
+  sf::Clock clock{  };
+  double timeElapsed{ 0.0 };
   bool canClick{ true };
   sf::Event event{  };
+
   while(window.isOpen())
   {
+    timeElapsed = clock.restart().asSeconds();
+
     while(window.pollEvent(event))
     {
       if(event.type == sf::Event::Closed)
@@ -47,7 +52,6 @@ int main()
           break;
         }
 
-        //map.switchNodeTerrain();
         canClick = false;
       }
       else if(!canClick
@@ -69,7 +73,7 @@ int main()
       break;
 
       case GameState::game:
-        game.run(window);
+        game.run(window, timeElapsed);
       break;
     }
   }

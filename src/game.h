@@ -12,11 +12,11 @@
       Game();
 
       void mouseInput(GameState& state);
-      void run(sf::RenderWindow& window);
+      void run(sf::RenderWindow& window, double timeElapsed);
       
     private:
       Map map{ 8, 7 }; 
-
+      sf::View view{ sf::FloatRect(0, 0, 800, 600) };
   };
 
 #endif
