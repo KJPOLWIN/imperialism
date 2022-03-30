@@ -10,17 +10,19 @@
     public:
       Map(int sizeX, int sizeY);
       
-      void selectNodes(sf::Vector2i clickPosition);
+      void selectNodes(sf::Vector2f clickPosition);
       void switchNodeTerrain();
       //void switchNodeTerrain(bool& canClick);
       void draw(sf::RenderWindow& targetWindow);
+  
+      void regenerate(int sizeX, int sizeY);
 
     private:
       MapNode& getNode(int x, int y);
 
       std::vector<MapNode> nodes{  };
-      const int sizeX{ 0 };
-      const int sizeY{ 0 };
+      int sizeX{ 0 };
+      int sizeY{ 0 };
       sf::Image clickmap{  };
 
       sf::Texture grassNodeTexture{  };

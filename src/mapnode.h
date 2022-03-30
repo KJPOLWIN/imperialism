@@ -30,6 +30,6 @@
    
     private:
       std::array<sf::Vertex, 7> vertices{  };
-      TerrainType terrain{ TerrainType::grassland };
+      TerrainType terrain{ TerrainType::water };
   };
 #endif

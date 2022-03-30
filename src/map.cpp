@@ -28,10 +28,10 @@ Map::Map(int sizeX, int sizeY)
   desertNode.setTexture(desertNodeTexture);
 }
 
-void Map::selectNodes(sf::Vector2i clickPosition)
+void Map::selectNodes(sf::Vector2f clickPosition)
 {
-  int x{ clickPosition.x / 88 };  //Node width in px
-  int y{ 2 * (clickPosition.y / 151) }; //Node height in px + 50 px below
+  int x{ static_cast<int>(clickPosition.x) / 88 };  //Node width in px
+  int y{ 2 * static_cast<int>(clickPosition.y) / 151 }; //Node height in px + 50 px below
 
   for( auto& node : nodes )
   {
@@ -41,8 +41,8 @@ void Map::selectNodes(sf::Vector2i clickPosition)
   sf::Color area{ sf::Color::White }; 
   if(clickPosition.x >= 0 && clickPosition.y >= 0)
   {
-    area = clickmap.getPixel(static_cast<unsigned int>(clickPosition.x % 88), 
-                             static_cast<unsigned int>(clickPosition.y % 151));
+    area = clickmap.getPixel(static_cast<unsigned int>(clickPosition.x) % 88, 
+                             static_cast<unsigned int>(clickPosition.y) % 151);
   }
 
   if(area == sf::Color::Red)
@@ -131,4 +131,20 @@ void Map::draw(sf::RenderWindow& targetWindow)
 MapNode& Map::getNode(int x, int y)
 {
   return nodes.at(static_cast<long unsigned int>(y * sizeX + x));
+}
+      
+void Map::regenerate(int sizeX, int sizeY)
+{
+  this->sizeX = sizeX;
+  this->sizeY = sizeY;
+
+  nodes.clear();
+  
+  for(int y{ 0 }; y < sizeY; ++y)
+  {
+    for(int x{ 0 }; x < sizeX; ++x)
+    {
+      nodes.push_back(MapNode(x, y));
+    }
+  }
 }

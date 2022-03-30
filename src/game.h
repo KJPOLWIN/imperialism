@@ -13,6 +13,8 @@
 
       void mouseInput(GameState& state);
       void run(sf::RenderWindow& window, double timeElapsed);
+
+      void regenerateMap(int width, int height);
       
     private:
       Map map{ 8, 7 }; 

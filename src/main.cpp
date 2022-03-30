@@ -3,7 +3,8 @@
 #include "mainmenu.h"
 #include "gamesettings.h"
 #include <SFML/Graphics.hpp>
-#include <vector>
+
+    #include <iostream>
 
 int main()
 {
@@ -13,6 +14,7 @@ int main()
   pressStart2P.loadFromFile("font/PressStart2P-Regular.ttf");
 
   GameState state{ GameState::mainMenu };
+  GameState oldState{ GameState::mainMenu };
 
   MainMenu menu{ pressStart2P };
   GameSettings gameSettings{ pressStart2P };
@@ -26,12 +28,25 @@ int main()
   while(window.isOpen())
   {
     timeElapsed = clock.restart().asSeconds();
-
+    
+    //Input
     while(window.pollEvent(event))
     {
       if(event.type == sf::Event::Closed)
       {
         window.close();
+      }
+      else if(event.type == sf::Event::TextEntered)
+      {
+        if(event.text.unicode < 128)
+        {
+          switch(state)
+          {
+            case GameState::gameSettings:
+              gameSettings.textInput(static_cast<char>(event.text.unicode));
+            break;
+          }
+        }
       }
       else if(canClick
           && event.type == sf::Event::MouseButtonPressed
@@ -62,6 +77,7 @@ int main()
       }
     }
 
+    //Updating and drawing
     switch(state)
     {
       case GameState::mainMenu:
@@ -73,10 +89,18 @@ int main()
       break;
 
       case GameState::game:
+        if(oldState == GameState::gameSettings)
+        {
+          game.regenerateMap(gameSettings.getMapWidth(), gameSettings.getMapHeight());
+        }
+        
         game.run(window, timeElapsed);
       break;
     }
+    
+    oldState = state;
   }
+  
 
   return 0;
 }
