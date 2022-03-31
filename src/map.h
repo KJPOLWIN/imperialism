@@ -19,6 +19,7 @@
 
     private:
       MapNode& getNode(int x, int y);
+      void createLandmass(int x, int y, int size);
 
       std::vector<MapNode> nodes{  };
       int sizeX{ 0 };

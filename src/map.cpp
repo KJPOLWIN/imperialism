@@ -1,5 +1,6 @@
 #include "map.h"
 #include "mapnode.h"
+#include "random.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
@@ -11,6 +12,7 @@ Map::Map(int sizeX, int sizeY)
 {
   clickmap.loadFromFile("clickmap.png");
 
+  //creating map
   for(int y{ 0 }; y < sizeY; ++y)
   {
     for(int x{ 0 }; x < sizeX; ++x)
@@ -19,6 +21,7 @@ Map::Map(int sizeX, int sizeY)
     }
   }
 
+  //loading textures and sprites
   grassNodeTexture.loadFromFile("texture/nodegrass.png");
   waterNodeTexture.loadFromFile("texture/nodewater.png");
   desertNodeTexture.loadFromFile("texture/nodedesert.png");
@@ -26,6 +29,7 @@ Map::Map(int sizeX, int sizeY)
   grassNode.setTexture(grassNodeTexture);
   waterNode.setTexture(waterNodeTexture);
   desertNode.setTexture(desertNodeTexture);
+
 }
 
 void Map::selectNodes(sf::Vector2f clickPosition)
@@ -127,12 +131,7 @@ void Map::draw(sf::RenderWindow& targetWindow)
     }
   }
 }
-
-MapNode& Map::getNode(int x, int y)
-{
-  return nodes.at(static_cast<long unsigned int>(y * sizeX + x));
-}
-      
+ 
 void Map::regenerate(int sizeX, int sizeY)
 {
   this->sizeX = sizeX;
@@ -145,6 +144,56 @@ void Map::regenerate(int sizeX, int sizeY)
     for(int x{ 0 }; x < sizeX; ++x)
     {
       nodes.push_back(MapNode(x, y));
+    }
+  }
+
+  //Terrain generation
+  int landmassCount{ Random::getRandomInt(1, 3) };
+
+  int landmassSize{  };
+  int landmassX{  };
+  int landmassY{  };  
+
+  for(int iii{ 0 }; iii < landmassCount; ++iii)
+  {
+    landmassSize = Random::getRandomInt(1, 6);
+    landmassX = Random::getRandomInt(0, sizeX - 1);
+    landmassY = Random::getRandomInt(0, sizeY - 1);   
+  
+    createLandmass(landmassX, landmassY, landmassSize);
+  } 
+}
+
+MapNode& Map::getNode(int x, int y)
+{
+  return nodes.at(static_cast<long unsigned int>(y * sizeX + x));
+
+}
+void Map::createLandmass(int x, int y, int size)
+{
+  if(size > 0)
+  {
+    if(x >= 0 && x < sizeX && y >= 0 && y < sizeY)
+    {
+      getNode(x, y).switchTerrainType(TerrainType::grassland);
+      //std::cout << "Creating land on " << x << ", " << y << "\n"; 
+    }
+    
+    createLandmass(x - 1, y, size - 1); //W
+    createLandmass(x + 1, y, size - 1); //E
+    if(y % 2 == 0)
+    {
+      createLandmass(x - 1, y - 1, size - 1); //NW
+      createLandmass(x, y - 1, size - 1); //NE
+      createLandmass(x - 1, y + 1, size - 1); //SW
+      createLandmass(x, y + 1, size - 1); //SE
+    }
+    else
+    {
+      createLandmass(x, y - 1, size - 1); //NW
+      createLandmass(x + 1, y - 1, size - 1); //NE
+      createLandmass(x, y + 1, size - 1); //SW
+      createLandmass(x + 1, y + 1, size - 1); //SE
     }
   }
 }
