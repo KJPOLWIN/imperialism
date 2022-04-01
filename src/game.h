@@ -9,9 +9,9 @@
   class Game
   {
     public:
-      Game();
+      Game(sf::Font& font);
 
-      void mouseInput(GameState& state);
+      void mouseInput(GameState& state, sf::RenderWindow& window);
       void run(sf::RenderWindow& window, double timeElapsed);
 
       void switchPause();
@@ -25,6 +25,10 @@
       sf::Texture shadeTexture{  };
       sf::Sprite shade{  };
       bool paused{ false };
+
+      sf::RectangleShape pauseMenuBackground{ sf::Vector2f(300, 400) };
+      sf::Text pauseMenuLabel{  };
+      TextButton menuButton{  };
   };
 
 #endif

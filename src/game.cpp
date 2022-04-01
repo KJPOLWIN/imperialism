@@ -4,15 +4,34 @@
 #include "gamestate.h"
 #include <SFML/Graphics.hpp>
 
-Game::Game()
+Game::Game(sf::Font& font)
+  : pauseMenuLabel{ "Game paused", font, 20 },
+    menuButton{ font, "Main menu", sf::Vector2f(300, 175), 20 }
 {
   shadeTexture.loadFromFile("texture/shade.png");
-  shade.setTexture(shadeTexture); 
+  shade.setTexture(shadeTexture);
+
+  pauseMenuBackground.setPosition(250, 100); 
+  pauseMenuBackground.setFillColor(sf::Color::Black);
+  pauseMenuBackground.setOutlineColor(sf::Color::White);
+  pauseMenuBackground.setOutlineThickness(10);
+
+  pauseMenuLabel.setPosition(300, 125);
 }
 
-void Game::mouseInput(GameState& state)
+void Game::mouseInput(GameState& state, sf::RenderWindow& window)
 {
-  map.switchNodeTerrain();
+  if(!paused)
+  {
+    map.switchNodeTerrain();
+  }
+
+  sf::Vector2i clickPosition{ sf::Mouse::getPosition(window) };
+  if(menuButton.isClicked(clickPosition))
+  {
+    state = GameState::mainMenu;
+    paused = false;
+  }
 }
 
 void Game::switchPause()
@@ -57,7 +76,9 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   if(paused)
   {
     window.draw(shade);
-  
+    window.draw(pauseMenuBackground); 
+    window.draw(pauseMenuLabel); 
+    menuButton.draw(window); 
   }
   window.display();
 }

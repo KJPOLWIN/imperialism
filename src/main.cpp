@@ -19,7 +19,7 @@ int main()
 
   MainMenu menu{ pressStart2P };
   GameSettings gameSettings{ pressStart2P };
-  Game game{  };
+  Game game{ pressStart2P };
   
   sf::Clock clock{  };
   double timeElapsed{ 0.0 };
@@ -64,7 +64,7 @@ int main()
           break;
 
           case GameState::game:
-            game.mouseInput(state);
+            game.mouseInput(state, window);
           break;
         }
 
