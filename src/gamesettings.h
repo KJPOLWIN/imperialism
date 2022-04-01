@@ -22,6 +22,8 @@
 
     private:
       TextButton startButton{  };
+      TextButton backButton{  };
+
       TextInput mapWidth{  };
       TextInput mapHeight{  };
       TextInput landmassCount{  };

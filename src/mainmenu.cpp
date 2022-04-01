@@ -5,10 +5,10 @@
 
 MainMenu::MainMenu(sf::Font& buttonFont)
   : title{ "imperialism", buttonFont, 50 },
-    startButton{ buttonFont, "start", sf::Vector2f(50.0f, 125.0f), 30 },
-    optionsButton{ buttonFont, "options", sf::Vector2f(50.0f, 175.0f), 30 },
-    creditsButton{ buttonFont, "credits", sf::Vector2f(50.0f, 225.0f), 30 },
-    exitButton{ buttonFont, "exit", sf::Vector2f(50.0f, 275.0f), 30 }
+    startButton{ buttonFont, "start", sf::Vector2f(50.0f, 150.0f), 30 },
+    optionsButton{ buttonFont, "options", sf::Vector2f(50.0f, 200.0f), 30 },
+    creditsButton{ buttonFont, "credits", sf::Vector2f(50.0f, 250.0f), 30 },
+    exitButton{ buttonFont, "exit", sf::Vector2f(50.0f, 300.0f), 30 }
 {
   title.setPosition(50.0f, 50.0f); 
 }

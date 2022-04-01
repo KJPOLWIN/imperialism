@@ -5,7 +5,8 @@
 #include <string>
 
 GameSettings::GameSettings(sf::Font& buttonFont)
-  : startButton{ buttonFont, "start", sf::Vector2f(50.0f, 500.0f), 30 },
+  : startButton{ buttonFont, "start", sf::Vector2f(600.0f, 500.0f), 30 },
+    backButton{ buttonFont, "back", sf::Vector2f(50.0f, 500.0f), 30 },
     mapWidth{ buttonFont, "8", 20, sf::Vector2f(500.0f, 50.0f) },
     mapHeight{ buttonFont, "7", 20, sf::Vector2f(500.0f, 100.0f) },
     landmassCount{ buttonFont, "3", 20, sf::Vector2f(500.0f, 150.0f) },
@@ -28,6 +29,10 @@ void GameSettings::mouseInput(GameState& state, sf::RenderWindow& window)
   if(startButton.isClicked(clickPosition))
   {
     state = GameState::game;
+  }
+  else if(backButton.isClicked(clickPosition))
+  {
+    state = GameState::mainMenu;
   }
   else if(mapWidth.isClicked(clickPosition))
   {
@@ -87,6 +92,7 @@ void GameSettings::run(sf::RenderWindow& window)
 
   window.clear();
   startButton.draw(window);
+  backButton.draw(window);
   mapWidth.draw(window);
   mapHeight.draw(window);
   landmassCount.draw(window);
