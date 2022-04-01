@@ -132,7 +132,7 @@ void Map::draw(sf::RenderWindow& targetWindow)
   }
 }
  
-void Map::regenerate(int sizeX, int sizeY)
+void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize)
 {
   this->sizeX = sizeX;
   this->sizeY = sizeY;
@@ -148,7 +148,7 @@ void Map::regenerate(int sizeX, int sizeY)
   }
 
   //Terrain generation
-  int landmassCount{ Random::getRandomInt(1, 3) };
+  int landmassCount{ static_cast<int>(landmassCountP * nodes.size() / 100) };
 
   int landmassSize{  };
   int landmassX{  };
@@ -156,7 +156,7 @@ void Map::regenerate(int sizeX, int sizeY)
 
   for(int iii{ 0 }; iii < landmassCount; ++iii)
   {
-    landmassSize = Random::getRandomInt(1, 6);
+    landmassSize = Random::getRandomInt(1, landmassMaxSize);
     landmassX = Random::getRandomInt(0, sizeX - 1);
     landmassY = Random::getRandomInt(0, sizeY - 1);   
   

@@ -91,7 +91,7 @@ int main()
       case GameState::game:
         if(oldState == GameState::gameSettings)
         {
-          game.regenerateMap(gameSettings.getMapWidth(), gameSettings.getMapHeight());
+          game.regenerateMap(gameSettings.getMapWidth(), gameSettings.getMapHeight(), gameSettings.getLandmassCount(), gameSettings.getLandmassSize());
         }
         
         game.run(window, timeElapsed);

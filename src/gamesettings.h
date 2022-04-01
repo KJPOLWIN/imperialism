@@ -17,11 +17,20 @@
 
       int getMapWidth();
       int getMapHeight();
+      int getLandmassCount();
+      int getLandmassSize();
 
     private:
       TextButton startButton{  };
       TextInput mapWidth{  };
       TextInput mapHeight{  };
+      TextInput landmassCount{  };
+      TextInput landmassSize{  };
+
+      sf::Text mapWidthLabel{  };
+      sf::Text mapHeightLabel{  };
+      sf::Text landmassCountLabel{  };
+      sf::Text landmassSizeLabel{  };
   };
 
 #endif

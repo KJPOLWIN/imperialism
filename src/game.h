@@ -14,7 +14,7 @@
       void mouseInput(GameState& state);
       void run(sf::RenderWindow& window, double timeElapsed);
 
-      void regenerateMap(int width, int height);
+      void regenerateMap(int width, int height, int landmassCount, int landmassSize);
       
     private:
       Map map{ 8, 7 }; 

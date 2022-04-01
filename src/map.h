@@ -15,7 +15,7 @@
       //void switchNodeTerrain(bool& canClick);
       void draw(sf::RenderWindow& targetWindow);
   
-      void regenerate(int sizeX, int sizeY);
+      void regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize);
 
     private:
       MapNode& getNode(int x, int y);

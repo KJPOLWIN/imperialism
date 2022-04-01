@@ -46,7 +46,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   window.display();
 }
 
-void Game::regenerateMap(int width, int height)
+void Game::regenerateMap(int width, int height, int landmassCount, int landmassSize)
 {
-  map.regenerate(width, height);
+  map.regenerate(width, height, landmassCount, landmassSize);
 }
