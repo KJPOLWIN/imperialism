@@ -9,6 +9,7 @@
 int main()
 {
   sf::RenderWindow window(sf::VideoMode(800, 600), "Imperialism");
+  window.setKeyRepeatEnabled(false);
 
   sf::Font pressStart2P{  };
   pressStart2P.loadFromFile("font/PressStart2P-Regular.ttf");
@@ -74,6 +75,14 @@ int main()
            && event.mouseButton.button == sf::Mouse::Left)
       {
         canClick = true;
+      }
+      else if(event.type == sf::Event::KeyPressed
+           && event.key.code == sf::Keyboard::Escape)
+      {
+        if(state == GameState::game)
+        {
+          game.switchPause();
+        }
       }
     }
 

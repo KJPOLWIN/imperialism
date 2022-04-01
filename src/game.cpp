@@ -6,12 +6,18 @@
 
 Game::Game()
 {
-  
+  shadeTexture.loadFromFile("texture/shade.png");
+  shade.setTexture(shadeTexture); 
 }
 
 void Game::mouseInput(GameState& state)
 {
   map.switchNodeTerrain();
+}
+
+void Game::switchPause()
+{
+  paused = !paused;
 }
 
 void Game::run(sf::RenderWindow& window, double timeElapsed)
@@ -20,29 +26,39 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
 
   sf::Vector2i mousePosition{ sf::Mouse::getPosition(window) };
   double scrollSpeed{ 500.0 };
-
-  if(mousePosition.x < 10)
+  
+  if(!paused)
   {
-    view.move(-scrollSpeed * timeElapsed, 0);
-  }
-  else if(mousePosition.x > 790)
-  {
-    view.move(scrollSpeed * timeElapsed, 0);
+    if(mousePosition.x < 10)
+    {
+      mapView.move(-scrollSpeed * timeElapsed, 0);
+    }
+    else if(mousePosition.x > 790)
+    {
+      mapView.move(scrollSpeed * timeElapsed, 0);
+    }
+  
+    if(mousePosition.y < 10)
+    {
+      mapView.move(0.0, -scrollSpeed * timeElapsed);
+    }
+    else if(mousePosition.y > 590)
+    {
+      mapView.move(0.0, scrollSpeed * timeElapsed);
+    }
   }
   
-  if(mousePosition.y < 10)
-  {
-    view.move(0.0, -scrollSpeed * timeElapsed);
-  }
-  else if(mousePosition.y > 590)
-  {
-    view.move(0.0, scrollSpeed * timeElapsed);
-  }
-  
-  window.setView(view);
-
   window.clear();
+  
+  window.setView(mapView);
   map.draw(window);
+  
+  window.setView(guiView);
+  if(paused)
+  {
+    window.draw(shade);
+  
+  }
   window.display();
 }
 

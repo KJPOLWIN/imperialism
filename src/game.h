@@ -14,11 +14,17 @@
       void mouseInput(GameState& state);
       void run(sf::RenderWindow& window, double timeElapsed);
 
+      void switchPause();
+
       void regenerateMap(int width, int height, int landmassCount, int landmassSize);
       
     private:
       Map map{ 8, 7 }; 
-      sf::View view{ sf::FloatRect(0, 0, 800, 600) };
+      sf::View mapView{ sf::FloatRect(0, 0, 800, 600) };
+      sf::View guiView{ sf::FloatRect(0, 0, 800, 600) };
+      sf::Texture shadeTexture{  };
+      sf::Sprite shade{  };
+      bool paused{ false };
   };
 
 #endif
