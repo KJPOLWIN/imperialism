@@ -5,7 +5,9 @@
   {
     mainMenu,
     gameSettings,
-    game
+    game,
+    options,
+    credits
   };
 
 #endif

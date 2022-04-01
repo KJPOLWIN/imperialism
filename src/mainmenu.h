@@ -14,7 +14,11 @@
       void run(sf::RenderWindow& window);
 
     private:
-     TextButton startButton{  }; 
+      sf::Text title{  };
+      TextButton startButton{  }; 
+      TextButton optionsButton{  };
+      TextButton creditsButton{  };
+      TextButton exitButton{  };
       
   };
 
