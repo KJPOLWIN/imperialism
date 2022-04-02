@@ -8,7 +8,8 @@
   {
     grassland,
     water,
-    desert
+    desert,
+    tundra
   };
 
   class MapNode

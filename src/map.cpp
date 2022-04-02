@@ -25,10 +25,12 @@ Map::Map(int sizeX, int sizeY)
   grassNodeTexture.loadFromFile("texture/nodegrass.png");
   waterNodeTexture.loadFromFile("texture/nodewater.png");
   desertNodeTexture.loadFromFile("texture/nodedesert.png");
+  tundraNodeTexture.loadFromFile("texture/nodetundra.png");
 
   grassNode.setTexture(grassNodeTexture);
   waterNode.setTexture(waterNodeTexture);
   desertNode.setTexture(desertNodeTexture);
+  tundraNode.setTexture(tundraNodeTexture);
 
 }
 
@@ -111,6 +113,11 @@ void Map::draw(sf::RenderWindow& targetWindow)
     {
       desertNode.setPosition(node.getPosition());
       targetWindow.draw(desertNode);
+    } 
+    else if(node.getTerrainType() == TerrainType::tundra)
+    {
+      tundraNode.setPosition(node.getPosition());
+      targetWindow.draw(tundraNode);
     } 
   }
 

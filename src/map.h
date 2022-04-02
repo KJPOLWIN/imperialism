@@ -30,10 +30,12 @@
       sf::Texture grassNodeTexture{  };
       sf::Texture waterNodeTexture{  };
       sf::Texture desertNodeTexture{  };
+      sf::Texture tundraNodeTexture{  };
       
       sf::Sprite grassNode{  };
       sf::Sprite waterNode{  };
       sf::Sprite desertNode{  };
+      sf::Sprite tundraNode{  };
   };
 
 #endif
