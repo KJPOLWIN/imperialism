@@ -147,7 +147,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     }
   }
 
-  //Terrain generation
+  //Landmass generation
   int landmassCount{ static_cast<int>(landmassCountP * nodes.size() / 100) };
 
   int landmassSize{  };
@@ -162,13 +162,86 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   
     createLandmass(landmassX, landmassY, landmassSize);
   } 
+
+  //Smearing landmasses
+  for(int y{ 0 }; y < sizeY; ++y)
+  {
+    for(int x{ 0 }; x < sizeX; ++x)
+    {
+      if(getNode(x, y).getTerrainType() != TerrainType::water
+      && neighboursTerrain(x, y, TerrainType::water)
+      && Random::testForProbability(0.5))
+      {
+        getNode(x, y).switchTerrainType(TerrainType::water);
+      }
+      else if(getNode(x, y).getTerrainType() == TerrainType::water
+      && neighboursTerrain(x, y, TerrainType::grassland)
+      && Random::testForProbability(0.5))
+      {
+        getNode(x, y).switchTerrainType(TerrainType::grassland);
+      }
+    }
+  }
 }
 
 MapNode& Map::getNode(int x, int y)
 {
   return nodes.at(static_cast<long unsigned int>(y * sizeX + x));
-
 }
+
+bool Map::neighboursTerrain(int x, int y, TerrainType terrain)
+{
+  if(x - 1 >= 0 && getNode(x - 1, y).getTerrainType() == terrain)
+  {
+    return true;
+  }
+  else if(x + 1 < sizeX && getNode(x + 1, y).getTerrainType() == terrain)
+  {
+    return true;
+  }
+
+  if(y % 2 == 0)
+  {
+    if(x - 1 >= 0 && y - 1 >= 0 && getNode(x - 1, y - 1).getTerrainType() == terrain)
+    {
+      return true;
+    }
+    else if(y - 1 >= 0 && getNode(x, y - 1).getTerrainType() == terrain)
+    {
+      return true;
+    }
+    else if(x - 1 >= 0 && y + 1 < sizeY && getNode(x - 1, y + 1).getTerrainType() == terrain)
+    {
+      return true;
+    }
+    else if(y + 1 < sizeY && getNode(x, y + 1).getTerrainType() == terrain)
+    {
+      return true;
+    }
+  }
+  else
+  {
+    if(y - 1 >= 0 && getNode(x, y - 1).getTerrainType() == terrain)
+    {
+      return true;
+    }
+    else if(x + 1 < sizeX && y - 1 >= 0 && getNode(x + 1, y - 1).getTerrainType() == terrain)
+    {
+      return true;
+    }
+    else if(y + 1 < sizeY && getNode(x, y + 1).getTerrainType() == terrain)
+    {
+      return true;
+    }
+    else if(x + 1 < sizeX && y + 1 < sizeY && getNode(x + 1, y + 1).getTerrainType() == terrain)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 void Map::createLandmass(int x, int y, int size)
 {
   if(size > 0)
@@ -184,15 +257,15 @@ void Map::createLandmass(int x, int y, int size)
     if(y % 2 == 0)
     {
       createLandmass(x - 1, y - 1, size - 1); //NW
-      createLandmass(x, y - 1, size - 1); //NE
+      createLandmass(x, y - 1, size - 1);     //NE
       createLandmass(x - 1, y + 1, size - 1); //SW
-      createLandmass(x, y + 1, size - 1); //SE
+      createLandmass(x, y + 1, size - 1);     //SE
     }
     else
     {
-      createLandmass(x, y - 1, size - 1); //NW
+      createLandmass(x, y - 1, size - 1);     //NW
       createLandmass(x + 1, y - 1, size - 1); //NE
-      createLandmass(x, y + 1, size - 1); //SW
+      createLandmass(x, y + 1, size - 1);     //SW
       createLandmass(x + 1, y + 1, size - 1); //SE
     }
   }
