@@ -78,20 +78,15 @@ void Map::selectNodes(sf::Vector2f clickPosition)
 }
 
 void Map::switchNodeTerrain()
-//void Map::switchNodeTerrain(bool& canClick)
 {
-  /*if(canClick && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-  {*/
-    for( auto& node : nodes )
+  for( auto& node : nodes )
+  {
+    if(node.isSelected)
     {
-      if(node.isSelected)
-      {
-        node.switchTerrainType();
-        //canClick = false;
-        break;
-      }
+      node.switchTerrainType();
+      break;
     }
-  //}
+  }
 }
 
 void Map::draw(sf::RenderWindow& targetWindow)
@@ -186,6 +181,29 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
       && Random::testForProbability(0.5))
       {
         getNode(x, y).switchTerrainType(TerrainType::grassland);
+      }
+    }
+  }
+
+  //Biome generation
+  for(int y{ 0 }; y < sizeY; ++y)
+  {
+    for(int x{ 0 }; x < sizeX; ++x)
+    {
+      if(getNode(x, y).getTerrainType() != TerrainType::water)
+      {
+        //Tundra: 1st and 7th of 7 climate zones
+        if(y < sizeY / 7 || y > 6 * sizeY / 7)
+        {
+          getNode(x, y).switchTerrainType(TerrainType::tundra);
+        }
+        //Grasslands: 2nd, 4th and 6th of 7 climate zones
+        //Desert: 3rd and 5th of 7 climate zones
+        else if((y >= 2 * sizeY / 7 && y <= 3 * sizeY / 7)
+             || (y >= 4 * sizeY / 7 && y <= 5 * sizeY / 7))
+        {
+          getNode(x, y).switchTerrainType(TerrainType::desert);
+        }
       }
     }
   }
