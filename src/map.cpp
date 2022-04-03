@@ -36,8 +36,8 @@ Map::Map(int sizeX, int sizeY)
 
 void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset)
 {
-  int x{ static_cast<int>(clickPosition.x - viewOffset.x) / 88 };  //Node width in px
-  int y{ 2 * static_cast<int>(clickPosition.y - viewOffset.y) / 151 }; //Node height in px + 50 px below
+  int x{ static_cast<int>(clickPosition.x + viewOffset.x) / 88 };  //Node width in px
+  int y{ 2 * (static_cast<int>(clickPosition.y + viewOffset.y) / 151) }; //Node height in px + 50 px below
 
   for( auto& node : nodes )
   {
@@ -47,8 +47,8 @@ void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset)
   sf::Color area{ sf::Color::White }; 
   if(clickPosition.x >= 0 && clickPosition.y >= 0)
   {
-    area = clickmap.getPixel(static_cast<unsigned int>(clickPosition.x) % 88, 
-                             static_cast<unsigned int>(clickPosition.y) % 151);
+    area = clickmap.getPixel(static_cast<unsigned int>(clickPosition.x + viewOffset.x) % 88, 
+                             static_cast<unsigned int>(clickPosition.y + viewOffset.y) % 151);
   }
 
   if(area == sf::Color::Red)
@@ -69,7 +69,6 @@ void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset)
   {
     ++y;
   }
-
 
   if(x >= 0 && x < sizeX && y >= 0 && y < sizeY)
   {
