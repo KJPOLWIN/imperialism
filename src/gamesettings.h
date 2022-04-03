@@ -11,7 +11,7 @@
     public:
       GameSettings(sf::Font& buttonFont);
       
-      void mouseInput(GameState& state, sf::RenderWindow& window);
+      void mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition);
       void textInput(char input);
       void run(sf::RenderWindow& window);
 

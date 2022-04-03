@@ -11,7 +11,7 @@
     public:
       Game(sf::Font& font);
 
-      void mouseInput(GameState& state, sf::RenderWindow& window);
+      void mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition);
       void run(sf::RenderWindow& window, double timeElapsed);
 
       void switchPause();

@@ -22,10 +22,8 @@ GameSettings::GameSettings(sf::Font& buttonFont)
   landmassSizeLabel.setPosition(sf::Vector2f(50.0f, 200.0f));
 }
 
-void GameSettings::mouseInput(GameState& state, sf::RenderWindow& window)
+void GameSettings::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
 {
-  sf::Vector2i clickPosition{ sf::Mouse::getPosition(window) };
-
   if(startButton.isClicked(clickPosition))
   {
     state = GameState::game;

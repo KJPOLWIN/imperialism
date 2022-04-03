@@ -19,14 +19,13 @@ Game::Game(sf::Font& font)
   pauseMenuLabel.setPosition(300, 125);
 }
 
-void Game::mouseInput(GameState& state, sf::RenderWindow& window)
+void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
 {
   if(!paused)
   {
     map.switchNodeTerrain();
   }
 
-  sf::Vector2i clickPosition{ sf::Mouse::getPosition(window) };
   if(menuButton.isClicked(clickPosition))
   {
     state = GameState::mainMenu;

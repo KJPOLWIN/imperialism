@@ -53,18 +53,20 @@ int main()
           && event.type == sf::Event::MouseButtonPressed
           && event.mouseButton.button == sf::Mouse::Left)
       {
+        sf::Vector2i clickPosition{ sf::Mouse::getPosition(window) };
+
         switch(state)
         {
           case GameState::mainMenu:
-            menu.mouseInput(state, window);
+            menu.mouseInput(state, window, clickPosition);
           break;
 
           case GameState::gameSettings:
-            gameSettings.mouseInput(state, window);
+            gameSettings.mouseInput(state, window, clickPosition);
           break;
 
           case GameState::game:
-            game.mouseInput(state, window);
+            game.mouseInput(state, window, clickPosition);
           break;
         }
 

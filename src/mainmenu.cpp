@@ -13,10 +13,8 @@ MainMenu::MainMenu(sf::Font& buttonFont)
   title.setPosition(50.0f, 50.0f); 
 }
 
-void MainMenu::mouseInput(GameState& state, sf::RenderWindow& window)
+void MainMenu::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
 {
-  sf::Vector2i clickPosition{ sf::Mouse::getPosition(window) };
-
   if(startButton.isClicked(clickPosition)) 
   {
     state = GameState::gameSettings;
