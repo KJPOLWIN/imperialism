@@ -10,7 +10,7 @@
     public:
       Map(int sizeX, int sizeY);
       
-      void selectNodes(sf::Vector2f clickPosition);
+      void selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset);
       void switchNodeTerrain();
       //void switchNodeTerrain(bool& canClick);
       void draw(sf::RenderWindow& targetWindow);

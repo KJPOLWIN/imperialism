@@ -34,10 +34,10 @@ Map::Map(int sizeX, int sizeY)
 
 }
 
-void Map::selectNodes(sf::Vector2f clickPosition)
+void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset)
 {
-  int x{ static_cast<int>(clickPosition.x) / 88 };  //Node width in px
-  int y{ 2 * static_cast<int>(clickPosition.y) / 151 }; //Node height in px + 50 px below
+  int x{ static_cast<int>(clickPosition.x - viewOffset.x) / 88 };  //Node width in px
+  int y{ 2 * static_cast<int>(clickPosition.y - viewOffset.y) / 151 }; //Node height in px + 50 px below
 
   for( auto& node : nodes )
   {

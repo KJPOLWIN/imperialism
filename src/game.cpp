@@ -26,7 +26,7 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
     map.switchNodeTerrain();
   }
 
-  if(menuButton.isClicked(clickPosition))
+  if(paused && menuButton.isClicked(clickPosition))
   {
     state = GameState::mainMenu;
     paused = false;
@@ -40,8 +40,6 @@ void Game::switchPause()
 
 void Game::run(sf::RenderWindow& window, double timeElapsed)
 {
-  map.selectNodes(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
-
   sf::Vector2i mousePosition{ sf::Mouse::getPosition(window) };
   double scrollSpeed{ 500.0 };
   
@@ -65,6 +63,9 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
       mapView.move(0.0, scrollSpeed * timeElapsed);
     }
   }
+  
+  map.selectNodes(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
+                  sf::Vector2f(mapView.getCenter().x - 400.0f, mapView.getCenter().y - 300.0f));
   
   window.clear();
   
