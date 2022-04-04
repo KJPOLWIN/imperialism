@@ -26,10 +26,13 @@
       sf::Texture shadeTexture{  };
       sf::Sprite shade{  };
       bool paused{ false };
-
+    
       sf::RectangleShape pauseMenuBackground{ sf::Vector2f(300, 400) };
       sf::Text pauseMenuLabel{  };
       TextButton menuButton{  };
+  
+      sf::RectangleShape nodeWidgetBackground{ sf::Vector2f(300, 200) };
+      sf::Text nodeNameLabel{  };
   };
 
 #endif

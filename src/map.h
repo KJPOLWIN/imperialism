@@ -16,6 +16,7 @@
       void draw(sf::RenderWindow& targetWindow);
   
       void regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize);
+      std::string getSelectedNodeName();
 
     private:
       MapNode& getNode(int x, int y);

@@ -8,7 +8,8 @@
 
 Game::Game(sf::Font& font)
   : pauseMenuLabel{ "Game paused", font, 20 },
-    menuButton{ font, "Main menu", sf::Vector2f(300, 175), 20 }
+    menuButton{ font, "Main menu", sf::Vector2f(300, 175), 20 },
+    nodeNameLabel{ "", font, 20 }
 {
   shadeTexture.loadFromFile("texture/shade.png");
   shade.setTexture(shadeTexture);
@@ -19,6 +20,13 @@ Game::Game(sf::Font& font)
   pauseMenuBackground.setOutlineThickness(10);
 
   pauseMenuLabel.setPosition(300, 125);
+
+  nodeWidgetBackground.setPosition(400, 50); 
+  nodeWidgetBackground.setFillColor(sf::Color::Black);
+  nodeWidgetBackground.setOutlineColor(sf::Color::White);
+  nodeWidgetBackground.setOutlineThickness(10);
+
+  nodeNameLabel.setPosition(450, 75);
 }
 
 void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
@@ -84,13 +92,19 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   
   map.selectNodes(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
                   sf::Vector2f(mapView.getCenter().x - 400.0f, mapView.getCenter().y - 300.0f));
-  
+  nodeNameLabel.setString(map.getSelectedNodeName());
+
   window.clear();
   
   window.setView(mapView);
   map.draw(window);
-  
+
   window.setView(guiView);
+  if(nodeNameLabel.getString() != "")
+  {
+    window.draw(nodeWidgetBackground);
+    window.draw(nodeNameLabel);
+  }
   if(paused)
   {
     window.draw(shade);

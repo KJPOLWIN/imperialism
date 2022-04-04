@@ -294,3 +294,33 @@ void Map::createLandmass(int x, int y, int size)
     }
   }
 }
+
+std::string Map::getSelectedNodeName()
+{
+  for( auto& node : nodes )
+  {
+    if(node.isSelected)
+    {
+      switch(node.getTerrainType())
+      {
+        case TerrainType::grassland:
+          return "Grassland";
+        break;
+
+        case TerrainType::water:
+          return "Water";
+        break;
+
+        case TerrainType::desert:
+          return "Desert";
+        break;
+
+        case TerrainType::tundra:
+          return "Tundra";
+        break;
+      }
+    }
+  }
+
+  return "";
+}
