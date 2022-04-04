@@ -26,11 +26,18 @@ Map::Map(int sizeX, int sizeY)
   waterNodeTexture.loadFromFile("texture/nodewater.png");
   desertNodeTexture.loadFromFile("texture/nodedesert.png");
   tundraNodeTexture.loadFromFile("texture/nodetundra.png");
+  riflemenTexture.loadFromFile("texture/riflemen.png");
 
   grassNode.setTexture(grassNodeTexture);
   waterNode.setTexture(waterNodeTexture);
   desertNode.setTexture(desertNodeTexture);
   tundraNode.setTexture(tundraNodeTexture);
+  riflemenSprite.setTexture(riflemenTexture);
+    
+  
+    
+    
+  units.push_back(Unit(1, 1));
 
 }
 
@@ -130,6 +137,13 @@ void Map::draw(sf::RenderWindow& targetWindow)
     {
       node.draw(targetWindow);
     }
+  }
+
+  //Drawing units
+  for( auto& unit : units )
+  {
+    riflemenSprite.setPosition(unit.getPosition());
+    targetWindow.draw(riflemenSprite);
   }
 }
  

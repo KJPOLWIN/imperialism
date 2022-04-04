@@ -2,6 +2,7 @@
 #define MAP_H
 
   #include "mapnode.h"
+  #include "unit.h"
   #include <SFML/Graphics.hpp>
   #include <vector>
 
@@ -24,6 +25,7 @@
       bool neighboursTerrain(int x, int y, TerrainType terrain);
 
       std::vector<MapNode> nodes{  };
+      std::vector<Unit> units{  };
       int sizeX{ 0 };
       int sizeY{ 0 };
       sf::Image clickmap{  };
@@ -32,11 +34,13 @@
       sf::Texture waterNodeTexture{  };
       sf::Texture desertNodeTexture{  };
       sf::Texture tundraNodeTexture{  };
+      sf::Texture riflemenTexture{  };
       
       sf::Sprite grassNode{  };
       sf::Sprite waterNode{  };
       sf::Sprite desertNode{  };
       sf::Sprite tundraNode{  };
+      sf::Sprite riflemenSprite{  };
   };
 
 #endif
