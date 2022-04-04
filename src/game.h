@@ -12,6 +12,7 @@
       Game(sf::Font& font);
 
       void mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition);
+      void scrollInput(double scroll);
       void run(sf::RenderWindow& window, double timeElapsed);
 
       void switchPause();

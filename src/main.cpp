@@ -86,6 +86,13 @@ int main()
           game.switchPause();
         }
       }
+      else if(event.type == sf::Event::MouseWheelScrolled)
+      {
+        if(state == GameState::game)
+        {
+          game.scrollInput(event.mouseWheelScroll.delta);
+        }
+      }
     }
 
     //Updating and drawing
