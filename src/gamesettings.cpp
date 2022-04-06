@@ -5,12 +5,12 @@
 #include <string>
 
 GameSettings::GameSettings(sf::Font& buttonFont)
-  : startButton{ buttonFont, "start", sf::Vector2f(600.0f, 500.0f), 30 },
-    backButton{ buttonFont, "back", sf::Vector2f(50.0f, 500.0f), 30 },
-    mapWidth{ buttonFont, "8", 20, sf::Vector2f(500.0f, 50.0f) },
-    mapHeight{ buttonFont, "7", 20, sf::Vector2f(500.0f, 100.0f) },
-    landmassCount{ buttonFont, "3", 20, sf::Vector2f(500.0f, 150.0f) },
-    landmassSize{ buttonFont, "6", 20, sf::Vector2f(500.f, 200.0f) },
+  : startButton{ buttonFont, "start", sf::Vector2f(1720.0f, 980.0f), 30 },
+    backButton{ buttonFont, "back", sf::Vector2f(50.0f, 980.0f), 30 },
+    mapWidth{ buttonFont, "30", 20, sf::Vector2f(600.0f, 50.0f) },
+    mapHeight{ buttonFont, "20", 20, sf::Vector2f(600.0f, 100.0f) },
+    landmassCount{ buttonFont, "3", 20, sf::Vector2f(600.0f, 150.0f) },
+    landmassSize{ buttonFont, "6", 20, sf::Vector2f(600.f, 200.0f) },
     mapWidthLabel{ "Map width", buttonFont, 20 },
     mapHeightLabel{ "Map height", buttonFont, 20 },
     landmassCountLabel{ "Landmasses/100 nodes", buttonFont, 20 },

@@ -21,13 +21,13 @@
       
     private:
       Map map{ 8, 7 }; 
-      sf::View mapView{ sf::FloatRect(0, 0, 800, 600) };
-      sf::View guiView{ sf::FloatRect(0, 0, 800, 600) };
+      sf::View mapView{ sf::FloatRect(0, 0, 1920, 1080) };
+      sf::View guiView{ sf::FloatRect(0, 0, 1920, 1080) };
       sf::Texture shadeTexture{  };
       sf::Sprite shade{  };
       bool paused{ false };
     
-      sf::RectangleShape pauseMenuBackground{ sf::Vector2f(300, 400) };
+      sf::RectangleShape pauseMenuBackground{ sf::Vector2f(400, 600) };
       sf::Text pauseMenuLabel{  };
       TextButton menuButton{  };
   

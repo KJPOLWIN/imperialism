@@ -8,7 +8,7 @@
 
 int main()
 {
-  sf::RenderWindow window(sf::VideoMode(800, 600), "Imperialism");
+  sf::RenderWindow window(sf::VideoMode(1920, 1080), "Imperialism", sf::Style::Fullscreen);
   window.setKeyRepeatEnabled(false);
 
   sf::Font pressStart2P{  };

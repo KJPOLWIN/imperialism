@@ -8,28 +8,28 @@
     #include <iostream>
 
 Game::Game(sf::Font& font)
-  : pauseMenuLabel{ "Game paused", font, 20 },
-    menuButton{ font, "Main menu", sf::Vector2f(300, 175), 20 },
+  : pauseMenuLabel{ "Game paused", font, 30 },
+    menuButton{ font, "Main menu", sf::Vector2f(300, 350), 24 },
     nodeNameLabel{ "", font, 20 }
 {
   shadeTexture.loadFromFile("texture/shade.png");
   shade.setTexture(shadeTexture);
 
-  pauseMenuBackground.setPosition(250, 100); 
+  pauseMenuBackground.setPosition(710, 250); 
   pauseMenuBackground.setFillColor(sf::Color::Black);
   pauseMenuBackground.setOutlineColor(sf::Color::White);
   pauseMenuBackground.setOutlineThickness(10);
 
-  pauseMenuLabel.setPosition(0, 125);
+  pauseMenuLabel.setPosition(0, 275);
   GUI::centerTextInField(pauseMenuLabel, pauseMenuBackground);
   GUI::centerTextInField(menuButton, pauseMenuBackground);
 
-  nodeWidgetBackground.setPosition(400, 50); 
+  nodeWidgetBackground.setPosition(1520, 100); 
   nodeWidgetBackground.setFillColor(sf::Color::Black);
   nodeWidgetBackground.setOutlineColor(sf::Color::White);
   nodeWidgetBackground.setOutlineThickness(10);
 
-  nodeNameLabel.setPosition(0, 75);
+  nodeNameLabel.setPosition(0, 125);
 }
 
 void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
@@ -78,7 +78,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     {
       mapView.move(-scrollSpeed * timeElapsed * zoomLevel, 0);
     }
-    else if(mousePosition.x > 790)
+    else if(mousePosition.x > 1910)
     {
       mapView.move(scrollSpeed * timeElapsed * zoomLevel, 0);
     }
@@ -87,7 +87,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     {
       mapView.move(0.0, -scrollSpeed * timeElapsed * zoomLevel);
     }
-    else if(mousePosition.y > 590)
+    else if(mousePosition.y > 1070)
     {
       mapView.move(0.0, scrollSpeed * timeElapsed * zoomLevel);
     }
