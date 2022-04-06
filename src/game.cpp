@@ -2,6 +2,7 @@
 #include "map.h"
 #include "textbutton.h"
 #include "gamestate.h"
+#include "gui.h"
 #include <SFML/Graphics.hpp>
 
     #include <iostream>
@@ -19,14 +20,16 @@ Game::Game(sf::Font& font)
   pauseMenuBackground.setOutlineColor(sf::Color::White);
   pauseMenuBackground.setOutlineThickness(10);
 
-  pauseMenuLabel.setPosition(300, 125);
+  pauseMenuLabel.setPosition(0, 125);
+  GUI::centerTextInField(pauseMenuLabel, pauseMenuBackground);
+  GUI::centerTextInField(menuButton, pauseMenuBackground);
 
   nodeWidgetBackground.setPosition(400, 50); 
   nodeWidgetBackground.setFillColor(sf::Color::Black);
   nodeWidgetBackground.setOutlineColor(sf::Color::White);
   nodeWidgetBackground.setOutlineThickness(10);
 
-  nodeNameLabel.setPosition(450, 75);
+  nodeNameLabel.setPosition(0, 75);
 }
 
 void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
@@ -93,6 +96,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   map.selectNodes(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
                   sf::Vector2f(mapView.getCenter().x - 400.0f, mapView.getCenter().y - 300.0f));
   nodeNameLabel.setString(map.getSelectedNodeName());
+  GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
 
   window.clear();
   
