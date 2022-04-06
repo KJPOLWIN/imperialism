@@ -2,6 +2,8 @@
 #include "game.h"
 #include "mainmenu.h"
 #include "gamesettings.h"
+#include "options.h"
+#include "credits.h"
 #include <SFML/Graphics.hpp>
 
     #include <iostream>
@@ -20,6 +22,7 @@ int main()
   MainMenu menu{ pressStart2P };
   GameSettings gameSettings{ pressStart2P };
   Game game{ pressStart2P };
+  Options options{ pressStart2P };
   
   sf::Clock clock{  };
   double timeElapsed{ 0.0 };
@@ -68,6 +71,10 @@ int main()
           case GameState::game:
             game.mouseInput(state, window, clickPosition);
           break;
+
+          case GameState::options:
+            options.mouseInput(state, clickPosition);
+          break;
         }
 
         canClick = false;
@@ -113,6 +120,10 @@ int main()
         }
         
         game.run(window, timeElapsed);
+      break;
+
+      case GameState::options:
+        options.run(window);
       break;
     }
     
