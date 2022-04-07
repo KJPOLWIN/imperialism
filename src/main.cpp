@@ -17,7 +17,8 @@ int main()
   pressStart2P.loadFromFile("font/PressStart2P-Regular.ttf");
 
   GameState state{ GameState::mainMenu };
-  GameState oldState{ GameState::mainMenu };
+  GameState lastFrameState{ GameState::mainMenu };
+  GameState previousState{ GameState::mainMenu };
 
   MainMenu menu{ pressStart2P };
   GameSettings gameSettings{ pressStart2P };
@@ -74,7 +75,7 @@ int main()
           break;
 
           case GameState::options:
-            options.mouseInput(state, clickPosition);
+            options.mouseInput(state, previousState, clickPosition);
           break;
 
           case GameState::credits:
@@ -118,7 +119,7 @@ int main()
       break;
 
       case GameState::game:
-        if(oldState == GameState::gameSettings)
+        if(lastFrameState == GameState::gameSettings)
         {
           game.regenerateMap(gameSettings.getMapWidth(), gameSettings.getMapHeight(), gameSettings.getLandmassCount(), gameSettings.getLandmassSize());
         }
@@ -134,8 +135,12 @@ int main()
         credits.run(window);
       break;
     }
-    
-    oldState = state;
+   
+    if(lastFrameState != state)
+    {
+      previousState = lastFrameState;
+    }
+    lastFrameState = state;
   }
   
 

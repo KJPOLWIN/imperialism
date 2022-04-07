@@ -10,6 +10,7 @@
 Game::Game(sf::Font& font)
   : pauseMenuLabel{ "Game paused", font, 30 },
     menuButton{ font, "Main menu", sf::Vector2f(300, 350), 24 },
+    optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
     nodeNameLabel{ "", font, 20 }
 {
   shadeTexture.loadFromFile("texture/shade.png");
@@ -23,6 +24,7 @@ Game::Game(sf::Font& font)
   pauseMenuLabel.setPosition(0, 275);
   GUI::centerTextInField(pauseMenuLabel, pauseMenuBackground);
   GUI::centerTextInField(menuButton, pauseMenuBackground);
+  GUI::centerTextInField(optionsButton, pauseMenuBackground);
 
   nodeWidgetBackground.setPosition(1520, 100); 
   nodeWidgetBackground.setFillColor(sf::Color::Black);
@@ -38,11 +40,17 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
   {
     map.switchNodeTerrain();
   }
-
-  if(paused && menuButton.isClicked(clickPosition))
+  else
   {
-    state = GameState::mainMenu;
-    paused = false;
+    if(menuButton.isClicked(clickPosition))
+    {
+      state = GameState::mainMenu;
+      paused = false;
+    }
+    else if(optionsButton.isClicked(clickPosition))
+    {
+      state = GameState::options;
+    }
   }
 }
 
@@ -114,7 +122,8 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     window.draw(shade);
     window.draw(pauseMenuBackground); 
     window.draw(pauseMenuLabel); 
-    menuButton.draw(window); 
+    menuButton.draw(window);
+    optionsButton.draw(window);
   }
   window.display();
 }

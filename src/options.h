@@ -10,7 +10,7 @@
     public:
       Options(sf::Font& font);
       
-      void mouseInput(GameState& state, sf::Vector2i clickPosition);
+      void mouseInput(GameState& state, GameState previousState, sf::Vector2i clickPosition);
       void run(sf::RenderWindow& window);
 
     private:

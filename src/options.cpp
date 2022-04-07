@@ -9,11 +9,11 @@ Options::Options(sf::Font& font)
 
 }
       
-void Options::mouseInput(GameState& state, sf::Vector2i clickPosition)
+void Options::mouseInput(GameState& state, GameState previousState, sf::Vector2i clickPosition)
 {
   if(backButton.isClicked(clickPosition))
   {
-    state = GameState::mainMenu;
+    state = previousState;
   }
 }
  
