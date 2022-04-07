@@ -23,6 +23,7 @@ int main()
   GameSettings gameSettings{ pressStart2P };
   Game game{ pressStart2P };
   Options options{ pressStart2P };
+  Credits credits{ pressStart2P };
   
   sf::Clock clock{  };
   double timeElapsed{ 0.0 };
@@ -75,6 +76,9 @@ int main()
           case GameState::options:
             options.mouseInput(state, clickPosition);
           break;
+
+          case GameState::credits:
+            credits.mouseInput(state, clickPosition);
         }
 
         canClick = false;
@@ -124,6 +128,10 @@ int main()
 
       case GameState::options:
         options.run(window);
+      break;
+
+      case GameState::credits:
+        credits.run(window);
       break;
     }
     
