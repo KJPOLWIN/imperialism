@@ -3,6 +3,7 @@
 #include "random.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <cmath>
 
   #include <iostream>
 
@@ -34,17 +35,13 @@ Map::Map(int sizeX, int sizeY)
   tundraNode.setTexture(tundraNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
-  
-    
-    
   units.push_back(Unit(1, 1));
-
 }
 
-void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset)
+void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom)
 {
-  int x{ static_cast<int>(clickPosition.x + viewOffset.x) / 88 };  //Node width in px
-  int y{ 2 * (static_cast<int>(clickPosition.y + viewOffset.y) / 151) }; //Node height in px + 50 px below
+  int x{ static_cast<int>(clickPosition.x * zoom + viewOffset.x) / 88 };  //Node width in px
+  int y{ 2 * (static_cast<int>(clickPosition.y * zoom + viewOffset.y) / 151) }; //Node height in px + 50 px below
 
   for( auto& node : nodes )
   {
@@ -54,8 +51,8 @@ void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset)
   sf::Color area{ sf::Color::White }; 
   if(clickPosition.x >= 0 && clickPosition.y >= 0)
   {
-    area = clickmap.getPixel(static_cast<unsigned int>(clickPosition.x + viewOffset.x) % 88, 
-                             static_cast<unsigned int>(clickPosition.y + viewOffset.y) % 151);
+    area = clickmap.getPixel(static_cast<unsigned int>(clickPosition.x * zoom + viewOffset.x) % 88, 
+                             static_cast<unsigned int>(clickPosition.y * zoom + viewOffset.y) % 151);
   }
 
   if(area == sf::Color::Red)

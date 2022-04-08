@@ -9,7 +9,7 @@
 
 Game::Game(sf::Font& font)
   : pauseMenuLabel{ "Game paused", font, 30 },
-    menuButton{ font, "Main menu", sf::Vector2f(300, 350), 24 },
+    menuButton{ font, "Main menu", sf::Vector2f(300, 375), 24 },
     optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
     nodeNameLabel{ "", font, 20 }
 {
@@ -64,6 +64,7 @@ void Game::scrollInput(double direction)
   {
     mapView.zoom(2);
   }
+
 }
 
 void Game::switchPause()
@@ -102,7 +103,8 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   }
   
   map.selectNodes(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
-                  sf::Vector2f(mapView.getCenter().x - 400.0f, mapView.getCenter().y - 300.0f));
+                  sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), (mapView.getCenter().y - mapView.getSize().y / 2)),
+                  mapView.getSize().x / 1920);
   nodeNameLabel.setString(map.getSelectedNodeName());
   GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
 
