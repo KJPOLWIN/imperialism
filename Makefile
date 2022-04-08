@@ -4,7 +4,7 @@ OPT = -pedantic-errors -Wall -Weffc++ -Wextra -Wsign-conversion -std=c++17
 # Name of the program file
 TITLE = imperialism
 
-OBJ = main.o mapnode.o map.o textbutton.o game.o mainmenu.o gamesettings.o textinput.o unit.o gui.o options.o credits.o
+OBJ = main.o mapnode.o map.o textbutton.o game.o mainmenu.o gamesettings.o textinput.o unit.o gui.o options.o credits.o imagebutton.o
 
 output: $(OBJ)
 	g++ $(OBJ) -o $(TITLE) $(SFML) $(OPT)
@@ -47,3 +47,6 @@ options.o: src/options.h src/options.cpp src/textbutton.h
 
 credits.o: src/credits.h src/credits.cpp src/textbutton.h
 	g++ -c src/credits.cpp $(SFML) $(OPT)
+
+imagebutton.o: src/imagebutton.h src/imagebutton.cpp
+	g++ -c src/imagebutton.cpp $(SFML) $(OPT)

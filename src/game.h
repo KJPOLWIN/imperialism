@@ -3,6 +3,7 @@
 
   #include "map.h"
   #include "textbutton.h"
+  #include "imagebutton.h"
   #include "gamestate.h"
   #include <SFML/Graphics.hpp>
 
@@ -31,6 +32,9 @@
       sf::Text pauseMenuLabel{  };
       TextButton menuButton{  };
       TextButton optionsButton{  };
+      sf::Texture pauseButtonTexture{  };
+      sf::Sprite pauseButtonSprite{  };
+      ImageButton pauseButton{  };
   
       sf::RectangleShape nodeWidgetBackground{ sf::Vector2f(300, 200) };
       sf::Text nodeNameLabel{  };
