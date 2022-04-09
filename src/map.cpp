@@ -35,10 +35,10 @@ Map::Map(int sizeX, int sizeY)
   tundraNode.setTexture(tundraNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
-  units.push_back(Unit(1, 1));
+  units.push_back(Unit(1, 1, "Riflemen"));
 }
 
-void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom)
+void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom)
 {
   int x{ static_cast<int>(clickPosition.x * zoom + viewOffset.x) / 88 };  //Node width in px
   int y{ 2 * (static_cast<int>(clickPosition.y * zoom + viewOffset.y) / 151) }; //Node height in px + 50 px below
@@ -46,6 +46,11 @@ void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset, doubl
   for( auto& node : nodes )
   {
     node.disselect();
+  }
+
+  for( auto& unit : units )
+  {
+    unit.isSelected = false;
   }
   
   sf::Color area{ sf::Color::White }; 
@@ -77,6 +82,15 @@ void Map::selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset, doubl
   if(x >= 0 && x < sizeX && y >= 0 && y < sizeY)
   {
     getNode(x, y).select();
+
+    for( auto& unit : units )
+    {
+      if(unit.getGridPosition() == sf::Vector2i(x, y))
+      {
+        unit.isSelected = true;
+        break;
+      }
+    }
   }
 }
 
@@ -330,6 +344,19 @@ std::string Map::getSelectedNodeName()
           return "Tundra";
         break;
       }
+    }
+  }
+
+  return "";
+}
+
+std::string Map::getSelectedUnitName()
+{
+  for( auto& unit : units )
+  {
+    if(unit.isSelected)
+    {
+      return unit.getName();
     }
   }
 

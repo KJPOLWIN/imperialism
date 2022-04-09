@@ -4,6 +4,7 @@
 #include <cmath>
 
 MapNode::MapNode(int x, int y)
+  : gridPosition{ x, y }
 {
   for( auto& vertex : vertices )
   {
@@ -84,4 +85,9 @@ sf::Vector2f MapNode::getPosition()
 {
   return sf::Vector2f(vertices.at(0).position.x, 
                       vertices.at(1).position.y);
+}
+
+sf::Vector2i MapNode::getGridPosition()
+{
+  return gridPosition;
 }

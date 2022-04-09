@@ -11,13 +11,14 @@
     public:
       Map(int sizeX, int sizeY);
       
-      void selectNodes(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom);
+      void selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom);
       void switchNodeTerrain();
       //void switchNodeTerrain(bool& canClick);
       void draw(sf::RenderWindow& targetWindow);
   
       void regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize);
       std::string getSelectedNodeName();
+      std::string getSelectedUnitName();
 
     private:
       MapNode& getNode(int x, int y);

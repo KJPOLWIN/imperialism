@@ -15,7 +15,8 @@ Game::Game(sf::Font& font)
     exitToDesktopButton{ font, "Exit to desktop", sf::Vector2f(300, 800), 24 },
     pauseButton{ &pauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 30) },
     unpauseButton{ &unpauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 30) },
-    nodeNameLabel{ "", font, 20 }
+    nodeNameLabel{ "", font, 20 },
+    unitNameLabel{ "", font, 20 }
 {
   shadeTexture.loadFromFile("texture/shade.png");
   shade.setTexture(shadeTexture);
@@ -41,6 +42,13 @@ Game::Game(sf::Font& font)
   nodeWidgetBackground.setOutlineThickness(10);
 
   nodeNameLabel.setPosition(0, 125);
+
+  unitWidgetBackground.setPosition(100, 780);
+  unitWidgetBackground.setFillColor(sf::Color::Black);
+  unitWidgetBackground.setOutlineColor(sf::Color::White);
+  unitWidgetBackground.setOutlineThickness(10);
+
+  unitNameLabel.setPosition(125, 805);
 }
 
 void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
@@ -124,11 +132,14 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     }
   }
   
-  map.selectNodes(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
-                  sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), (mapView.getCenter().y - mapView.getSize().y / 2)),
-                  mapView.getSize().x / 1920);
+  map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
+                          sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
+                                       (mapView.getCenter().y - mapView.getSize().y / 2)),
+                          mapView.getSize().x / 1920);
   nodeNameLabel.setString(map.getSelectedNodeName());
   GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
+
+  unitNameLabel.setString(map.getSelectedUnitName());
 
   window.clear();
   
@@ -140,6 +151,12 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   {
     window.draw(nodeWidgetBackground);
     window.draw(nodeNameLabel);
+  }
+  
+  if(unitNameLabel.getString() != "")
+  {
+    window.draw(unitWidgetBackground);
+    window.draw(unitNameLabel);
   }
 
   if(paused)

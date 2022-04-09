@@ -26,11 +26,13 @@
       TerrainType getTerrainType();
 
       sf::Vector2f getPosition();
+      sf::Vector2i getGridPosition();
 
       bool isSelected{ false };
    
     private:
       std::array<sf::Vertex, 7> vertices{  };
+      sf::Vector2i gridPosition{ 0, 0 };
       TerrainType terrain{ TerrainType::water };
   };
 #endif
