@@ -13,12 +13,15 @@ Game::Game(sf::Font& font)
     menuButton{ font, "Main menu", sf::Vector2f(300, 375), 24 },
     optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
     pauseButton{ &pauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 30) },
+    unpauseButton{ &unpauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 30) },
     nodeNameLabel{ "", font, 20 }
 {
   shadeTexture.loadFromFile("texture/shade.png");
   shade.setTexture(shadeTexture);
   pauseButtonTexture.loadFromFile("texture/pause.png");
   pauseButtonSprite.setTexture(pauseButtonTexture);
+  unpauseButtonTexture.loadFromFile("texture/unpause.png");
+  unpauseButtonSprite.setTexture(unpauseButtonTexture);
 
   pauseMenuBackground.setPosition(710, 250); 
   pauseMenuBackground.setFillColor(sf::Color::Black);
@@ -59,6 +62,10 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
     else if(optionsButton.isClicked(clickPosition))
     {
       state = GameState::options;
+    }
+    else if(unpauseButton.isClicked(clickPosition))
+    {
+      paused = false;
     }
   }
 }
@@ -136,6 +143,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     window.draw(pauseMenuLabel); 
     menuButton.draw(window);
     optionsButton.draw(window);
+    unpauseButton.draw(window);
   }
   else
   {

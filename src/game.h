@@ -32,9 +32,14 @@
       sf::Text pauseMenuLabel{  };
       TextButton menuButton{  };
       TextButton optionsButton{  };
+
       sf::Texture pauseButtonTexture{  };
       sf::Sprite pauseButtonSprite{  };
       ImageButton pauseButton{  };
+
+      sf::Texture unpauseButtonTexture{  };
+      sf::Sprite unpauseButtonSprite{  };
+      ImageButton unpauseButton{  };
   
       sf::RectangleShape nodeWidgetBackground{ sf::Vector2f(300, 200) };
       sf::Text nodeNameLabel{  };
