@@ -32,6 +32,7 @@
       sf::Text pauseMenuLabel{  };
       TextButton menuButton{  };
       TextButton optionsButton{  };
+      TextButton exitToDesktopButton{  };
 
       sf::Texture pauseButtonTexture{  };
       sf::Sprite pauseButtonSprite{  };

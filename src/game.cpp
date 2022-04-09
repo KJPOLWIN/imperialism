@@ -12,6 +12,7 @@ Game::Game(sf::Font& font)
   : pauseMenuLabel{ "Game paused", font, 30 },
     menuButton{ font, "Main menu", sf::Vector2f(300, 375), 24 },
     optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
+    exitToDesktopButton{ font, "Exit to desktop", sf::Vector2f(300, 800), 24 },
     pauseButton{ &pauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 30) },
     unpauseButton{ &unpauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 30) },
     nodeNameLabel{ "", font, 20 }
@@ -32,6 +33,7 @@ Game::Game(sf::Font& font)
   GUI::centerTextInField(pauseMenuLabel, pauseMenuBackground);
   GUI::centerTextInField(menuButton, pauseMenuBackground);
   GUI::centerTextInField(optionsButton, pauseMenuBackground);
+  GUI::centerTextInField(exitToDesktopButton, pauseMenuBackground);
 
   nodeWidgetBackground.setPosition(1520, 100); 
   nodeWidgetBackground.setFillColor(sf::Color::Black);
@@ -66,6 +68,10 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
     else if(unpauseButton.isClicked(clickPosition))
     {
       paused = false;
+    }
+    else if(exitToDesktopButton.isClicked(clickPosition))
+    {
+      window.close();
     }
   }
 }
@@ -144,6 +150,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     menuButton.draw(window);
     optionsButton.draw(window);
     unpauseButton.draw(window);
+    exitToDesktopButton.draw(window);
   }
   else
   {
