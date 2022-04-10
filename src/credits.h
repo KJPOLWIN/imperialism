@@ -15,6 +15,20 @@
 
     private:
       TextButton backButton{  };
+      sf::RectangleShape positioningField{ sf::Vector2f(1920, 1080) };
+      sf::Text title{  };
+      sf::Text version{  };
+      
+      sf::Text code{  };
+      sf::Text codeAuthors{  };
+
+      sf::Text fontLabel{  };
+      sf::Text fontName{  };
+      sf::Text fontAuthors{  };
+      sf::Text fontLicense{  };
+
+      sf::Text sfml{  };
+      sf::Text date{  };
       
   };
 

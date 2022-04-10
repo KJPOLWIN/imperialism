@@ -11,6 +11,7 @@
 int main()
 {
   sf::RenderWindow window(sf::VideoMode(1920, 1080), "Imperialism", sf::Style::Fullscreen);
+  window.setFramerateLimit(60);
   window.setKeyRepeatEnabled(false);
 
   sf::Font pressStart2P{  };
