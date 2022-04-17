@@ -11,7 +11,7 @@
       Unit(int x, int y, std::string name);
 
       sf::Vector2f getPosition();
-      sf::Vector2i getGridPosition();
+      HexVector getHexPosition();
       std::string getName();
 
       bool isSelected{ false };

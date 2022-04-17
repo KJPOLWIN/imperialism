@@ -1,21 +1,26 @@
 #ifndef MAPNODE_H
 #define MAPNODE_H
 
+  #include "hexvector.h"
   #include <SFML/Graphics.hpp>
   #include <array>
+
 
   enum class TerrainType
   {
     grassland,
     water,
     desert,
-    tundra
+    tundra,
+    blank
   };
 
   class MapNode
   {
     public:
       MapNode(int x, int y);
+      MapNode()
+        : terrain{ TerrainType::blank } {}
 
       void select();
       void disselect();
@@ -26,13 +31,14 @@
       TerrainType getTerrainType();
 
       sf::Vector2f getPosition();
-      sf::Vector2i getGridPosition();
+      HexVector getHexPosition();
 
       bool isSelected{ false };
    
     private:
       std::array<sf::Vertex, 7> vertices{  };
-      sf::Vector2i gridPosition{ 0, 0 };
+      HexVector hexPosition{  };
+      //sf::Vector2i gridPosition{ 0, 0 };
       TerrainType terrain{ TerrainType::water };
   };
 #endif

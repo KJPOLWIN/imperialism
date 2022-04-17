@@ -9,7 +9,7 @@
   class Map
   { 
     public:
-      Map(int sizeX, int sizeY);
+      Map();
       
       void selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom);
       void switchNodeTerrain();
@@ -21,11 +21,12 @@
       std::string getSelectedUnitName();
 
     private:
-      MapNode& getNode(int x, int y);
-      void createLandmass(int x, int y, int size);
-      bool neighboursTerrain(int x, int y, TerrainType terrain);
+      MapNode& getNode(int q, int r, int s);
+      void createLandmass(int q, int r, int s, int size);
+      bool neighboursTerrain(int q, int r, int s, TerrainType terrain);
 
       std::vector<MapNode> nodes{  };
+      MapNode nothingness{  };
       std::vector<Unit> units{  };
       int sizeX{ 0 };
       int sizeY{ 0 };
@@ -42,6 +43,8 @@
       sf::Sprite desertNode{  };
       sf::Sprite tundraNode{  };
       sf::Sprite riflemenSprite{  };
+
+      sf::Text debug{  };
   };
 
 #endif

@@ -14,9 +14,9 @@ sf::Vector2f Unit::getPosition()
   return positioningNode.getPosition();
 }
 
-sf::Vector2i Unit::getGridPosition()
+HexVector Unit::getHexPosition()
 {
-  return positioningNode.getGridPosition();
+  return positioningNode.getHexPosition();
 }
 
 std::string Unit::getName()

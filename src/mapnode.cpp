@@ -1,10 +1,11 @@
 #include "mapnode.h"
+#include "hexvector.h"
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <cmath>
 
 MapNode::MapNode(int x, int y)
-  : gridPosition{ x, y }
+  : hexPosition{ x, y }
 {
   for( auto& vertex : vertices )
   {
@@ -87,7 +88,7 @@ sf::Vector2f MapNode::getPosition()
                       vertices.at(1).position.y);
 }
 
-sf::Vector2i MapNode::getGridPosition()
+HexVector MapNode::getHexPosition()
 {
-  return gridPosition;
+  return hexPosition;
 }

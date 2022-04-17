@@ -21,7 +21,7 @@
       void regenerateMap(int width, int height, int landmassCount, int landmassSize);
       
     private:
-      Map map{ 8, 7 }; 
+      Map map{  }; 
       sf::View mapView{ sf::FloatRect(0, 0, 1920, 1080) };
       sf::View guiView{ sf::FloatRect(0, 0, 1920, 1080) };
       sf::Texture shadeTexture{  };
