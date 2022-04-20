@@ -2,8 +2,10 @@
 #include "mapnode.h"
 #include <SFML/Graphics.hpp>
 
-Unit::Unit(int x, int y, std::string name)
+Unit::Unit(int x, int y, std::string name, int movePoints)
    : positioningNode{ x, y },
+     movePoints{ movePoints },
+     maxMovePoints{ movePoints },
      name{ name }
 {
 
@@ -12,6 +14,11 @@ Unit::Unit(int x, int y, std::string name)
 sf::Vector2f Unit::getPosition()
 {
   return positioningNode.getPosition();
+}
+      
+void Unit::setPosition(HexVector newPosition)
+{
+  positioningNode.setPosition(newPosition);
 }
 
 HexVector Unit::getHexPosition()
@@ -22,4 +29,24 @@ HexVector Unit::getHexPosition()
 std::string Unit::getName()
 {
   return name;
+}
+      
+int Unit::getHealth()
+{
+  return health;
+}
+
+int Unit::getMaxHealth()
+{
+  return maxHealth;
+}
+
+int Unit::getMovePoints()
+{
+  return movePoints;
+}
+
+int Unit::getMaxMovePoints()
+{
+  return maxMovePoints;
 }

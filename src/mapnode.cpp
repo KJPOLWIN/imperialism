@@ -88,6 +88,38 @@ sf::Vector2f MapNode::getPosition()
                       vertices.at(1).position.y);
 }
 
+void MapNode::setPosition(HexVector newPosition)
+{
+  hexPosition = newPosition;
+  
+  constexpr double sideLength{ 50.0 };
+
+  const int x{ hexPosition.toCartesian().x };
+  const int y{ hexPosition.toCartesian().y };
+
+  double posX{ x * sideLength * sqrt(3) };
+  double posY{ 3 * y * sideLength / 2 };
+  if(y % 2 == 1)
+  {
+    posX = x * sideLength * sqrt(3) + sideLength * sqrt(3) / 2;
+    posY = 3 * y * sideLength / 2;
+  }
+
+  vertices.at(0).position = sf::Vector2f(posX, 
+                                         posY + sideLength / 2);
+  vertices.at(1).position = sf::Vector2f(posX + (sideLength * sqrt(3)) / 2, 
+                                         posY);
+  vertices.at(2).position = sf::Vector2f(posX + sideLength * sqrt(3), 
+                                         posY + sideLength / 2);
+  vertices.at(3).position = sf::Vector2f(posX + sideLength * sqrt(3),
+                                         posY + 3 * sideLength / 2);
+  vertices.at(4).position = sf::Vector2f(posX + (sideLength * sqrt(3)) / 2, 
+                                         posY + 2 * sideLength);
+  vertices.at(5).position = sf::Vector2f(posX, 
+                                         posY + 3 * sideLength / 2);
+  vertices.at(6).position = vertices.at(0).position;
+}
+
 HexVector MapNode::getHexPosition()
 {
   return hexPosition;

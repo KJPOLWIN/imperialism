@@ -31,6 +31,7 @@
       TerrainType getTerrainType();
 
       sf::Vector2f getPosition();
+      void setPosition(HexVector newPosition);
       HexVector getHexPosition();
 
       bool isSelected{ false };

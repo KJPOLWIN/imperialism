@@ -32,12 +32,14 @@
       int sizeY{ 0 };
       sf::Image clickmap{  };
 
+      sf::Texture selectedNodeTexture{  };
       sf::Texture grassNodeTexture{  };
       sf::Texture waterNodeTexture{  };
       sf::Texture desertNodeTexture{  };
       sf::Texture tundraNodeTexture{  };
       sf::Texture riflemenTexture{  };
       
+      sf::Sprite selectedNode{  };
       sf::Sprite grassNode{  };
       sf::Sprite waterNode{  };
       sf::Sprite desertNode{  };

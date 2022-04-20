@@ -55,7 +55,14 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
 {
   if(!paused)
   {
-    map.switchNodeTerrain();
+    map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
+                            sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
+                                         (mapView.getCenter().y - mapView.getSize().y / 2)),
+                            mapView.getSize().x / 1920);
+    nodeNameLabel.setString(map.getSelectedNodeName());
+    GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
+    unitNameLabel.setString(map.getSelectedUnitName());
+    //map.switchNodeTerrain();
 
     if(pauseButton.isClicked(clickPosition))
     {
@@ -105,9 +112,9 @@ void Game::switchPause()
 void Game::run(sf::RenderWindow& window, double timeElapsed)
 {
   sf::Vector2i mousePosition{ sf::Mouse::getPosition(window) };
-  double scrollSpeed{ 500.0 };
+  double scrollSpeed{ 1000.0 };
 
-  double zoomLevel{ mapView.getSize().x / 800 };
+  double zoomLevel{ mapView.getSize().x / 1920 };
 
   //std::cout << zoomLevel << "\n";
   
@@ -132,14 +139,14 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     }
   }
   
-  map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
-                          sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
-                                       (mapView.getCenter().y - mapView.getSize().y / 2)),
-                          mapView.getSize().x / 1920);
-  nodeNameLabel.setString(map.getSelectedNodeName());
-  GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
+  //map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
+  //                        sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
+  //                                     (mapView.getCenter().y - mapView.getSize().y / 2)),
+  //                        mapView.getSize().x / 1920);
+  //nodeNameLabel.setString(map.getSelectedNodeName());
+  //GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
 
-  unitNameLabel.setString(map.getSelectedUnitName());
+  //unitNameLabel.setString(map.getSelectedUnitName());
 
   window.clear();
   

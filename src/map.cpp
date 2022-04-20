@@ -21,26 +21,21 @@ Map::Map()
   }
 
   //loading textures and sprites
+  selectedNodeTexture.loadFromFile("texture/selectednode.png");
   grassNodeTexture.loadFromFile("texture/nodegrass.png");
   waterNodeTexture.loadFromFile("texture/nodewater.png");
   desertNodeTexture.loadFromFile("texture/nodedesert.png");
   tundraNodeTexture.loadFromFile("texture/nodetundra.png");
   riflemenTexture.loadFromFile("texture/riflemen.png");
 
+  selectedNode.setTexture(selectedNodeTexture);
   grassNode.setTexture(grassNodeTexture);
   waterNode.setTexture(waterNodeTexture);
   desertNode.setTexture(desertNodeTexture);
   tundraNode.setTexture(tundraNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
-  units.push_back(Unit(1, 1, "Riflemen"));
-
-  /*for(auto& node : nodes)
-  {
-    HexVector hexpos{ node.getHexPosition() };
-    sf::Vector2i cartpos{ hexpos.toCartesian() };
-    std::cout << hexpos.q << ", " << hexpos.r << ", " << hexpos.s << " => " << cartpos.x << ", " << cartpos.y << "\n";
-  }*/
+  units.push_back(Unit(1, 1, "Riflemen", 3));
 }
 
 void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom)
