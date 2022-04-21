@@ -38,6 +38,24 @@ Map::Map()
   units.push_back(Unit(1, 1, "Riflemen", 3));
 }
 
+void Map::moveUnits(HexVector position)
+{
+  for( auto& unit : units )
+  {
+    if(unit.isSelected)
+    {
+      HexVector unitPos{ unit.getHexPosition() };
+      int unitMP{ unit.getMovePoints() };
+      if(position.q >= unitPos.q - unitMP && position.q <= unitPos.q + unitMP
+      && position.r >= unitPos.r - unitMP && position.r <= unitPos.r + unitMP
+      && position.s >= unitPos.s - unitMP && position.s <= unitPos.s + unitMP)
+      {
+        unit.setPosition(position);
+      }
+    }
+  }
+}
+
 sf::Vector2i Map::getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom)
 {
   int x{ static_cast<int>(clickPosition.x * zoom + viewOffset.x) / 88 };  //Node width in px
