@@ -38,21 +38,10 @@ Map::Map()
   units.push_back(Unit(1, 1, "Riflemen", 3));
 }
 
-void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom)
+sf::Vector2i Map::getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom)
 {
   int x{ static_cast<int>(clickPosition.x * zoom + viewOffset.x) / 88 };  //Node width in px
   int y{ 2 * (static_cast<int>(clickPosition.y * zoom + viewOffset.y) / 151) }; //Node height in px + 50 px below
-
-
-  for( auto& node : nodes )
-  {
-    node.disselect();
-  }
-
-  for( auto& unit : units )
-  {
-    unit.isSelected = false;
-  }
   
   sf::Color area{ sf::Color::White }; 
   if(clickPosition.x >= 0 && clickPosition.y >= 0)
@@ -60,7 +49,7 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
     area = clickmap.getPixel(static_cast<unsigned int>(clickPosition.x * zoom + viewOffset.x) % 88, 
                              static_cast<unsigned int>(clickPosition.y * zoom + viewOffset.y) % 151);
   }
-
+  
   if(area == sf::Color::Red)
   {
     --x;
@@ -80,9 +69,27 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
     ++y;
   }
   
-  HexVector chosenHex{ x, y }; 
+  
+  return sf::Vector2i(x, y);
+}
 
-  if(x >= 0 && x < sizeX && y >= 0 && y < sizeY)
+void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom)
+{
+  for( auto& node : nodes )
+  {
+    node.disselect();
+  }
+
+  for( auto& unit : units )
+  {
+    unit.isSelected = false;
+  }
+  
+  sf::Vector2i selectedNodeCartesian{ getClickedNode(clickPosition, viewOffset, zoom) };
+  HexVector chosenHex{ selectedNodeCartesian.x, selectedNodeCartesian.y }; 
+
+  if(selectedNodeCartesian.x >= 0 && selectedNodeCartesian.x < sizeX 
+  && selectedNodeCartesian.y >= 0 && selectedNodeCartesian.y < sizeY)
   {
     getNode(chosenHex.q, chosenHex.r, chosenHex.s).select();
 
@@ -158,6 +165,23 @@ void Map::draw(sf::RenderWindow& targetWindow)
   {
     riflemenSprite.setPosition(unit.getPosition());
     targetWindow.draw(riflemenSprite);
+  
+    if(unit.isSelected)
+    {
+      for( auto& node : nodes )
+      {
+        HexVector nodePos{ node.getHexPosition() };
+        HexVector unitPos{ unit.getHexPosition() };
+        int unitMP{ unit.getMovePoints() };
+        if(nodePos.q >= unitPos.q - unitMP && nodePos.q <= unitPos.q + unitMP
+        && nodePos.r >= unitPos.r - unitMP && nodePos.r <= unitPos.r + unitMP
+        && nodePos.s >= unitPos.s - unitMP && nodePos.s <= unitPos.s + unitMP)
+        {
+          selectedNode.setPosition(node.getPosition());
+          targetWindow.draw(selectedNode);
+        }
+      } 
+    }
   }
 }
  

@@ -10,7 +10,8 @@
   { 
     public:
       Map();
-      
+     
+      sf::Vector2i getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom); 
       void selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom);
       void switchNodeTerrain();
       //void switchNodeTerrain(bool& canClick);
