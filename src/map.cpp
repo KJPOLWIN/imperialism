@@ -26,6 +26,7 @@ Map::Map()
   waterNodeTexture.loadFromFile("texture/nodewater.png");
   desertNodeTexture.loadFromFile("texture/nodedesert.png");
   tundraNodeTexture.loadFromFile("texture/nodetundra.png");
+  mountainsNodeTexture.loadFromFile("texture/nodemountain.png");
   riflemenTexture.loadFromFile("texture/riflemen.png");
 
   selectedNode.setTexture(selectedNodeTexture);
@@ -33,6 +34,7 @@ Map::Map()
   waterNode.setTexture(waterNodeTexture);
   desertNode.setTexture(desertNodeTexture);
   tundraNode.setTexture(tundraNodeTexture);
+  mountainsNode.setTexture(mountainsNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
   units.push_back(Unit(1, 1, "Riflemen", 3));
@@ -159,6 +161,11 @@ void Map::draw(sf::RenderWindow& targetWindow)
       tundraNode.setPosition(node.getPosition());
       targetWindow.draw(tundraNode);
     } 
+    else if(node.getTerrainType() == TerrainType::mountains)
+    {
+      mountainsNode.setPosition(node.getPosition());
+      targetWindow.draw(mountainsNode);
+    }
   }
 
   //Drawing unselected nodes first, so full selected node's border will be visible
@@ -317,6 +324,33 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
       }
     }
   }
+
+  //Mountains generator
+  const int mountainRangeLenght{ 5 };
+  int mountainRangeCountP{ 1 };
+  int mountainRangeCount{ static_cast<int>(mountainRangeCountP * nodes.size() / 100) };
+
+  int rangeX{ 0 };
+  int rangeY{ 0 };
+
+  for(int iii{ 0 }; iii < mountainRangeCount; ++iii)
+  {
+    rangeX = Random::getRandomInt(0, sizeX - 1);
+    rangeY = Random::getRandomInt(0, sizeY - 1);
+    HexVector rangeHexPosition{ rangeX, rangeY };
+  
+    for(int jjj{ 0 }; jjj < mountainRangeLenght; ++jjj)
+    {
+      if(getNode(rangeHexPosition.q, rangeHexPosition.r, rangeHexPosition.s).getTerrainType()
+          != TerrainType::blank)
+      {
+        getNode(rangeHexPosition.q, rangeHexPosition.r, rangeHexPosition.s).switchTerrainType(TerrainType::mountains);
+        rangeHexPosition.q += Random::getRandomInt(-1, 1);
+        rangeHexPosition.r += Random::getRandomInt(-1, 1);
+        rangeHexPosition.s += Random::getRandomInt(-1, 1);
+      }
+    }
+  }
 }
 
 MapNode& Map::getNode(int q, int r, int s)
@@ -454,6 +488,10 @@ std::string Map::getSelectedNodeName()
 
         case TerrainType::tundra:
           return "Tundra";
+        break;
+
+        case TerrainType::mountains:
+          return "Mountains";
         break;
       }
     }

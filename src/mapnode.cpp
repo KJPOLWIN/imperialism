@@ -62,7 +62,7 @@ void MapNode::draw(sf::RenderWindow& targetWindow)
 
 void MapNode::switchTerrainType()
 {
-  if(terrain == TerrainType::tundra)
+  if(terrain == TerrainType::mountains)
   {
     terrain = TerrainType::grassland;
   }

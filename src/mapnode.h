@@ -12,6 +12,7 @@
     water,
     desert,
     tundra,
+    mountains,
     blank
   };
 

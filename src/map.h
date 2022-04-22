@@ -39,6 +39,7 @@
       sf::Texture waterNodeTexture{  };
       sf::Texture desertNodeTexture{  };
       sf::Texture tundraNodeTexture{  };
+      sf::Texture mountainsNodeTexture{  };
       sf::Texture riflemenTexture{  };
       
       sf::Sprite selectedNode{  };
@@ -46,6 +47,7 @@
       sf::Sprite waterNode{  };
       sf::Sprite desertNode{  };
       sf::Sprite tundraNode{  };
+      sf::Sprite mountainsNode{  };
       sf::Sprite riflemenSprite{  };
 
       sf::Text debug{  };
