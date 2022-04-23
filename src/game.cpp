@@ -156,8 +156,6 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
 
   //unitNameLabel.setString(map.getSelectedUnitName());
 
-  window.clear();
-  
   window.setView(mapView);
   map.draw(window);
 
@@ -188,7 +186,6 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   {
     pauseButton.draw(window);
   }
-  window.display();
 }
 
 void Game::regenerateMap(int width, int height, int landmassCount, int landmassSize)

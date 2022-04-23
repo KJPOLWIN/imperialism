@@ -88,7 +88,6 @@ void GameSettings::run(sf::RenderWindow& window)
     landmassSize.active = false;
   }
 
-  window.clear();
   startButton.draw(window);
   backButton.draw(window);
   mapWidth.draw(window);
@@ -99,7 +98,6 @@ void GameSettings::run(sf::RenderWindow& window)
   window.draw(mapHeightLabel);
   window.draw(landmassCountLabel);
   window.draw(landmassSizeLabel);
-  window.display();
 }
       
 int GameSettings::getMapWidth()

@@ -26,7 +26,11 @@ int main()
   Game game{ pressStart2P };
   Options options{ pressStart2P };
   Credits credits{ pressStart2P };
-  
+ 
+  sf::Text fpsDisplay{ "e", pressStart2P, 16 };
+  fpsDisplay.setPosition(5, 5);
+  fpsDisplay.setFillColor(sf::Color::Red);
+
   sf::Clock clock{  };
   double timeElapsed{ 0.0 };
   bool canClick{ true };
@@ -36,6 +40,8 @@ int main()
   {
     timeElapsed = clock.restart().asSeconds();
     
+    window.clear();
+
     //Input
     while(window.pollEvent(event))
     {
@@ -136,6 +142,14 @@ int main()
         credits.run(window);
       break;
     }
+
+    if(options.fpsDisplaySelected)
+    {
+      fpsDisplay.setString(std::to_string(static_cast<int>(1 / timeElapsed)));
+      window.draw(fpsDisplay);
+    }
+      
+    window.display();
    
     if(lastFrameState != state)
     {

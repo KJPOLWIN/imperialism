@@ -18,14 +18,12 @@ void Options::mouseInput(GameState& state, GameState previousState, sf::Vector2i
   }
   else if(fpsDisplay.isClicked(clickPosition))
   {
-
+    fpsDisplaySelected = !fpsDisplaySelected;
   }
 }
  
 void Options::run(sf::RenderWindow& window)
 {
-  window.clear();
   backButton.draw(window);
   fpsDisplay.draw(window);
-  window.display();
 }

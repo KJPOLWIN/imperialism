@@ -35,11 +35,9 @@ void MainMenu::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector
 
 void MainMenu::run(sf::RenderWindow& window)
 {
-  window.clear();
   window.draw(title);
   startButton.draw(window);
   optionsButton.draw(window);
   creditsButton.draw(window);
   exitButton.draw(window);
-  window.display();
 }

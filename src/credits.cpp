@@ -58,7 +58,6 @@ void Credits::mouseInput(GameState& state, sf::Vector2i clickPosition)
  
 void Credits::run(sf::RenderWindow& window)
 {
-  window.clear();
   backButton.draw(window);
   window.draw(title);
   window.draw(version);
@@ -70,5 +69,4 @@ void Credits::run(sf::RenderWindow& window)
   window.draw(fontLicense);
   window.draw(sfml);
   window.draw(date);
-  window.display();
 }
