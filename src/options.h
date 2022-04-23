@@ -2,6 +2,7 @@
 #define OPTIONS_H
 
   #include "textbutton.h"
+  #include "texttoggle.h"
   #include "gamestate.h"
   #include <SFML/Graphics.hpp>
 
@@ -15,7 +16,7 @@
 
     private:
       TextButton backButton{  };
-
+      TextToggle fpsDisplay{  };
   };
 
 #endif
