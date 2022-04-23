@@ -11,7 +11,7 @@
 int main()
 {
   sf::RenderWindow window(sf::VideoMode(1920, 1080), "Imperialism", sf::Style::Fullscreen);
-  window.setFramerateLimit(60);
+  //window.setFramerateLimit(60);
   window.setKeyRepeatEnabled(false);
 
   sf::Font pressStart2P{  };
@@ -143,12 +143,22 @@ int main()
       break;
     }
 
+    //Options
     if(options.fpsDisplaySelected)
     {
       fpsDisplay.setString(std::to_string(static_cast<int>(1 / timeElapsed)));
       window.draw(fpsDisplay);
     }
-      
+
+    if(options.vSyncSelected)
+    {
+      window.setVerticalSyncEnabled(true);
+    }
+    else
+    {
+      window.setVerticalSyncEnabled(false);
+    }
+
     window.display();
    
     if(lastFrameState != state)

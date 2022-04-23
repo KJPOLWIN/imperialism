@@ -15,10 +15,12 @@
       void run(sf::RenderWindow& window);
 
       bool fpsDisplaySelected{ false };
+      bool vSyncSelected{ false };
 
     private:
       TextButton backButton{  };
       TextToggle fpsDisplay{  };
+      TextToggle vSync{  };
   };
 
 #endif
