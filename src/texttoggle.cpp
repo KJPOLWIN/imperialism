@@ -20,16 +20,7 @@ bool TextToggle::isClicked(sf::Vector2i clickPosition)
 {
   if(text.getGlobalBounds().contains(clickPosition.x, clickPosition.y))
   {
-    if(text.getFillColor() == sf::Color::White)
-    {
-      background.setFillColor(sf::Color(30, 30, 30));
-      text.setFillColor(sf::Color::Yellow);
-    }
-    else
-    {
-      background.setFillColor(sf::Color::Black);
-      text.setFillColor(sf::Color::White);
-    }
+    toggle();
 
     return true;
   }
@@ -41,6 +32,21 @@ void TextToggle::draw(sf::RenderWindow& targetWindow)
 {
   targetWindow.draw(background);
   targetWindow.draw(text);
+}
+      
+void TextToggle::toggle()
+{
+  if(text.getFillColor() == sf::Color::White)
+  {
+    background.setFillColor(sf::Color(30, 30, 30));
+    text.setFillColor(sf::Color::Yellow);
+  }
+  else
+  {
+    background.setFillColor(sf::Color::Black);
+    text.setFillColor(sf::Color::White);
+  }
+
 }
       
 void TextToggle::setPosition(sf::Vector2f newPosition)

@@ -10,7 +10,7 @@ output: $(OBJ)
 	g++ $(OBJ) -o $(TITLE) $(SFML) $(OPT)
 
 clear: 
-	rm $(OBJ) $(TITLE)
+	rm $(OBJ) $(TITLE) options.json
 
 main.o: src/main.cpp src/game.h src/mainmenu.h
 	g++ -c src/main.cpp $(SFML) $(OPT)

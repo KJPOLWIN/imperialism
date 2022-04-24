@@ -33,3 +33,13 @@ void Options::run(sf::RenderWindow& window)
   fpsDisplay.draw(window);
   vSync.draw(window);
 }
+      
+void Options::toggleFPSDisplay()
+{
+  fpsDisplay.toggle();
+}
+
+void Options::toggleVSync()
+{
+  vSync.toggle();
+}

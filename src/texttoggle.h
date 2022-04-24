@@ -14,6 +14,8 @@
       bool isClicked(sf::Vector2i clickPosition);
       void draw(sf::RenderWindow& targetWindow);
 
+      void toggle();
+
       void setPosition(sf::Vector2f newPosition);
       void setPosition(double x, double y);
       sf::Vector2f getPosition();

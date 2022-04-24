@@ -14,6 +14,9 @@
       void mouseInput(GameState& state, GameState previousState, sf::Vector2i clickPosition);
       void run(sf::RenderWindow& window);
 
+      void toggleFPSDisplay();
+      void toggleVSync();
+
       bool fpsDisplaySelected{ false };
       bool vSyncSelected{ false };
 

@@ -5,32 +5,79 @@
 #include "options.h"
 #include "credits.h"
 #include <SFML/Graphics.hpp>
+#include "json.hpp"
+#include <fstream>
 
     #include <iostream>
 
 int main()
 {
+  //Setting up the window
   sf::RenderWindow window(sf::VideoMode(1920, 1080), "Imperialism", sf::Style::Fullscreen);
   //window.setFramerateLimit(60);
   window.setKeyRepeatEnabled(false);
 
+  //Reading JSON
+  nlohmann::json savedOptions{  };
+  std::fstream optionsFile{  };
+  optionsFile.open("options.json", std::ios::in);
+
+  if(optionsFile.peek() == std::ifstream::traits_type::eof())
+  {
+    savedOptions["fpsDisplay"] = false;
+    savedOptions["vSync"] = false;
+  }
+  else
+  {
+    optionsFile >> savedOptions;
+  }
+
+  optionsFile.close();
+
+  /*if(!optionsFile.is_open())
+  {
+    optionsFile.open("options.json", std::ios::out);
+    optionsFile.close();
+    optionsFile.open("options.json", std::ios::in | std::ios::out | std::ios::trunc);
+  }
+  else
+  {
+  }*/
+
+  //Loading fonts
   sf::Font pressStart2P{  };
   pressStart2P.loadFromFile("font/PressStart2P-Regular.ttf");
 
+  //Game state variables
   GameState state{ GameState::mainMenu };
   GameState lastFrameState{ GameState::mainMenu };
   GameState previousState{ GameState::mainMenu };
 
+  //Setting up game states
   MainMenu menu{ pressStart2P };
   GameSettings gameSettings{ pressStart2P };
   Game game{ pressStart2P };
   Options options{ pressStart2P };
   Credits credits{ pressStart2P };
+
+  //Uploading saved options
+  options.fpsDisplaySelected = savedOptions["fpsDisplay"];
+  options.vSyncSelected = savedOptions["vSync"];
+  if(options.fpsDisplaySelected)
+  {
+    options.toggleFPSDisplay();
+  }
+  if(options.vSyncSelected)
+  {
+    options.toggleVSync();
+  }
  
+  //Setting up  fps display
   sf::Text fpsDisplay{ "e", pressStart2P, 16 };
   fpsDisplay.setPosition(5, 5);
   fpsDisplay.setFillColor(sf::Color::Red);
 
+  //Setting up clock, click control and events
   sf::Clock clock{  };
   double timeElapsed{ 0.0 };
   bool canClick{ true };
@@ -167,7 +214,24 @@ int main()
     }
     lastFrameState = state;
   }
-  
+ 
+  //Saving options
+  savedOptions["fpsDisplay"] = options.fpsDisplaySelected;
+  savedOptions["vSync"] = options.vSyncSelected;
+  optionsFile.open("options.json", std::ios::out | std::ios::trunc);
+  if(optionsFile.is_open())
+  { 
+    optionsFile << std::setw(4) << savedOptions << std::endl;
+    optionsFile.close();
+  }
+  /*else
+  {
+    if(optionsFile.is_open())
+    {
+      optionsFile << std::setw(4) << savedOptions << "\n";
+      optionsFile.close();
+    }
+  }*/
 
   return 0;
 }
