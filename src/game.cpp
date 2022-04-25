@@ -51,10 +51,15 @@ Game::Game(sf::Font& font)
   unitWidgetBackground.setOutlineColor(sf::Color::White);
   unitWidgetBackground.setOutlineThickness(10);
 
-  unitNameLabel.setPosition(125, 805);
-  unitHealth.setPosition(150, 855);
+  unitNameLabel.setPosition(325, 805);
+  unitHealth.setPosition(350, 855);
   unitHealth.setFillColor(sf::Color::Green);
-  unitMovePoints.setPosition(150, 905);
+  unitMovePoints.setPosition(350, 885);
+  unitMovePoints.setFillColor(sf::Color(44, 234, 221));
+
+  riflemenLargeTexture.loadFromFile("texture/riflemen_large.png");
+  riflemenLarge.setTexture(riflemenLargeTexture);
+  riflemenLarge.setPosition(125, 805);
 
 }
 
@@ -90,6 +95,10 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
                          + std::to_string(map.getSelectedUnit().getHealth()) 
                          + "/" 
                          + std::to_string(map.getSelectedUnit().getMaxHealth()));
+      unitMovePoints.setString("Move points: "
+                             + std::to_string(map.getSelectedUnit().getMovePoints()) 
+                             + "/" 
+                             + std::to_string(map.getSelectedUnit().getMaxMovePoints()));
     }
   }
   else
@@ -187,6 +196,11 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     window.draw(unitNameLabel);
     window.draw(unitHealth);
     window.draw(unitMovePoints);
+
+    if(unitNameLabel.getString() == "Riflemen")
+    {
+      window.draw(riflemenLarge);
+    }
   }
 
   nextTurnButton.draw(window);
