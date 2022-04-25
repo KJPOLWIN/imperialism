@@ -47,6 +47,10 @@
 
       sf::RectangleShape unitWidgetBackground{ sf::Vector2f(500, 200) };
       sf::Text unitNameLabel{  };
+      sf::Text unitHealth{  };
+      sf::Text unitMovePoints{  };
+
+      TextButton nextTurnButton{  };
   };
 
 #endif

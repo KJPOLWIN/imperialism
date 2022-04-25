@@ -18,6 +18,8 @@
       std::string getName();
       int getHealth();
       int getMaxHealth();
+      void regenerateMovePoints();
+      void decreaseMovePoints(int pointsToDecrease);
       int getMovePoints();
       int getMaxMovePoints();
 

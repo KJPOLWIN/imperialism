@@ -39,6 +39,14 @@ Map::Map()
     
   units.push_back(Unit(1, 1, "Riflemen", 3));
 }
+      
+void Map::nextTurn()
+{
+  for( auto& unit : units )
+  {
+    unit.regenerateMovePoints();
+  }
+}
 
 void Map::moveUnits(HexVector position)
 {
@@ -500,7 +508,7 @@ std::string Map::getSelectedNodeName()
   return "";
 }
 
-std::string Map::getSelectedUnitName()
+/*std::string Map::getSelectedUnitName()
 {
   for( auto& unit : units )
   {
@@ -511,4 +519,16 @@ std::string Map::getSelectedUnitName()
   }
 
   return "";
+}*/
+Unit& Map::getSelectedUnit()
+{
+  for( auto& unit : units )
+  {
+    if(unit.isSelected)
+    {
+      return unit;
+    }
+  }
+
+  return nobody;
 }

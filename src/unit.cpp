@@ -40,6 +40,16 @@ int Unit::getMaxHealth()
 {
   return maxHealth;
 }
+      
+void Unit::regenerateMovePoints()
+{
+  movePoints = maxMovePoints;
+}
+
+void Unit::decreaseMovePoints(int pointsToDecrease)
+{
+  movePoints -= pointsToDecrease;
+}
 
 int Unit::getMovePoints()
 {

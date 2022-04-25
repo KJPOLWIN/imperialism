@@ -10,7 +10,8 @@
   { 
     public:
       Map();
-    
+   
+      void nextTurn(); 
       void moveUnits(HexVector position); 
       sf::Vector2i getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom); 
       void selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom);
@@ -20,7 +21,8 @@
   
       void regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize);
       std::string getSelectedNodeName();
-      std::string getSelectedUnitName();
+      //std::string getSelectedUnitName();
+      Unit& getSelectedUnit();
 
     private:
       MapNode& getNode(int q, int r, int s);
@@ -29,6 +31,7 @@
 
       std::vector<MapNode> nodes{  };
       MapNode nothingness{  };
+      Unit nobody{ 0, 0, "", 0 };
       std::vector<Unit> units{  };
       int sizeX{ 0 };
       int sizeY{ 0 };

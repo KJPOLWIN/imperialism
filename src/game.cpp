@@ -13,10 +13,13 @@ Game::Game(sf::Font& font)
     menuButton{ font, "Main menu", sf::Vector2f(300, 375), 24 },
     optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
     exitToDesktopButton{ font, "Exit to desktop", sf::Vector2f(300, 800), 24 },
-    pauseButton{ &pauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 30) },
-    unpauseButton{ &unpauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 30) },
-    nodeNameLabel{ "", font, 20 },
-    unitNameLabel{ "", font, 20 }
+    pauseButton{ &pauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
+    unpauseButton{ &unpauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
+    nodeNameLabel{ "", font, 24 },
+    unitNameLabel{ "", font, 24 },
+    unitHealth{ "", font, 16 },
+    unitMovePoints{ "", font, 16 },
+    nextTurnButton{ font, "Next turn", sf::Vector2f(1550, 950), 32 }
 {
   shadeTexture.loadFromFile("texture/shade.png");
   shade.setTexture(shadeTexture);
@@ -49,32 +52,44 @@ Game::Game(sf::Font& font)
   unitWidgetBackground.setOutlineThickness(10);
 
   unitNameLabel.setPosition(125, 805);
+  unitHealth.setPosition(150, 855);
+  unitHealth.setFillColor(sf::Color::Green);
+  unitMovePoints.setPosition(150, 905);
+
 }
 
 void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
 {
   if(!paused)
   {
-    sf::Vector2i posCartesian{ map.getClickedNode(window.mapPixelToCoords(sf::Mouse::getPosition(window)),    
-                                              sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
-                                                           (mapView.getCenter().y - mapView.getSize().y / 2)),
-                                              mapView.getSize().x / 1920) };
-    HexVector newPos{ posCartesian.x, posCartesian.y };
-    map.moveUnits(newPos);
-    
-
-    map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
-                            sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
-                                         (mapView.getCenter().y - mapView.getSize().y / 2)),
-                            mapView.getSize().x / 1920);
-    nodeNameLabel.setString(map.getSelectedNodeName());
-    GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
-    unitNameLabel.setString(map.getSelectedUnitName());
-    //map.switchNodeTerrain();
-
-    if(pauseButton.isClicked(clickPosition))
+    if(nextTurnButton.isClicked(clickPosition))
+    {
+      map.nextTurn();
+    }
+    else if(pauseButton.isClicked(clickPosition))
     {
       paused = true;
+    }
+    else
+    {
+      sf::Vector2i posCartesian{ map.getClickedNode(window.mapPixelToCoords(sf::Mouse::getPosition(window)),    
+                                                 sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
+                                                              (mapView.getCenter().y - mapView.getSize().y / 2)),
+                                                 mapView.getSize().x / 1920) };
+      HexVector newPos{ posCartesian.x, posCartesian.y };
+      map.moveUnits(newPos);
+
+      map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
+                              sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
+                                           (mapView.getCenter().y - mapView.getSize().y / 2)),
+                              mapView.getSize().x / 1920);
+      nodeNameLabel.setString(map.getSelectedNodeName());
+      GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
+      unitNameLabel.setString(map.getSelectedUnit().getName());
+      unitHealth.setString("Health: "
+                         + std::to_string(map.getSelectedUnit().getHealth()) 
+                         + "/" 
+                         + std::to_string(map.getSelectedUnit().getMaxHealth()));
     }
   }
   else
@@ -170,7 +185,11 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   {
     window.draw(unitWidgetBackground);
     window.draw(unitNameLabel);
+    window.draw(unitHealth);
+    window.draw(unitMovePoints);
   }
+
+  nextTurnButton.draw(window);
 
   if(paused)
   {
