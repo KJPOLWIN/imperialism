@@ -39,7 +39,7 @@ Game::Game(sf::Font& font)
   GUI::centerTextInField(optionsButton, pauseMenuBackground);
   GUI::centerTextInField(exitToDesktopButton, pauseMenuBackground);
 
-  nodeWidgetBackground.setPosition(1520, 100); 
+  nodeWidgetBackground.setPosition(1420, 100); 
   nodeWidgetBackground.setFillColor(sf::Color::Black);
   nodeWidgetBackground.setOutlineColor(sf::Color::White);
   nodeWidgetBackground.setOutlineThickness(10);

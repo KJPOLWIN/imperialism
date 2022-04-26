@@ -26,6 +26,9 @@ Map::Map()
   waterNodeTexture.loadFromFile("texture/nodewater.png");
   desertNodeTexture.loadFromFile("texture/nodedesert.png");
   tundraNodeTexture.loadFromFile("texture/nodetundra.png");
+  grassHillsNodeTexture.loadFromFile("texture/nodegrasshills.png");
+  desertHillsNodeTexture.loadFromFile("texture/nodedeserthills.png");
+  tundraHillsNodeTexture.loadFromFile("texture/nodetundrahills.png");
   mountainsNodeTexture.loadFromFile("texture/nodemountain.png");
   riflemenTexture.loadFromFile("texture/riflemen.png");
 
@@ -34,6 +37,9 @@ Map::Map()
   waterNode.setTexture(waterNodeTexture);
   desertNode.setTexture(desertNodeTexture);
   tundraNode.setTexture(tundraNodeTexture);
+  grassHillsNode.setTexture(grassHillsNodeTexture);
+  desertHillsNode.setTexture(desertHillsNodeTexture);
+  tundraHillsNode.setTexture(tundraHillsNodeTexture);
   mountainsNode.setTexture(mountainsNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
@@ -168,7 +174,22 @@ void Map::draw(sf::RenderWindow& targetWindow)
     {
       tundraNode.setPosition(node.getPosition());
       targetWindow.draw(tundraNode);
-    } 
+    }
+    else if(node.getTerrainType() == TerrainType::grassHills)
+    {
+      grassHillsNode.setPosition(node.getPosition());
+      targetWindow.draw(grassHillsNode);
+    }
+    else if(node.getTerrainType() == TerrainType::desertHills)
+    {
+      desertHillsNode.setPosition(node.getPosition());
+      targetWindow.draw(desertHillsNode);
+    }
+    else if(node.getTerrainType() == TerrainType::tundraHills)
+    {
+      tundraHillsNode.setPosition(node.getPosition());
+      targetWindow.draw(tundraHillsNode);
+    }
     else if(node.getTerrainType() == TerrainType::mountains)
     {
       mountainsNode.setPosition(node.getPosition());
@@ -251,24 +272,6 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   }
 
   //Smudging landmasses
-  /*for(int y{ 0 }; y < sizeY; ++y)
-  {
-    for(int x{ 0 }; x < sizeX; ++x)
-    {
-      if(getNode(x, y).getTerrainType() != TerrainType::water
-      && neighboursTerrain(x, y, TerrainType::water)
-      && Random::testForProbability(0.5))
-      {
-        getNode(x, y).switchTerrainType(TerrainType::water);
-      }
-      else if(getNode(x, y).getTerrainType() == TerrainType::water
-      && neighboursTerrain(x, y, TerrainType::grassland)
-      && Random::testForProbability(0.5))
-      {
-        getNode(x, y).switchTerrainType(TerrainType::grassland);
-      }
-    }
-  }*/
   for( auto& node : nodes )
   {
     if(node.getTerrainType() != TerrainType::water
@@ -292,27 +295,6 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   }
 
   //Biome generation
-  /*for(int y{ 0 }; y < sizeY; ++y)
-  {
-    for(int x{ 0 }; x < sizeX; ++x)
-    {
-      if(getNode(x, y).getTerrainType() != TerrainType::water)
-      {
-        //Tundra: 1st and 7th of 7 climate zones
-        if(y < sizeY / 7 || y > 6 * sizeY / 7)
-        {
-          getNode(x, y).switchTerrainType(TerrainType::tundra);
-        }
-        //Grasslands: 2nd, 4th and 6th of 7 climate zones
-        //Desert: 3rd and 5th of 7 climate zones
-        else if((y >= 2 * sizeY / 7 && y <= 3 * sizeY / 7)
-             || (y >= 4 * sizeY / 7 && y <= 5 * sizeY / 7))
-        {
-          getNode(x, y).switchTerrainType(TerrainType::desert);
-        }
-      }
-    }
-  }*/
   for( auto& node : nodes )
   {
     if(node.getTerrainType() != TerrainType::water)
@@ -333,7 +315,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     }
   }
 
-  //Mountains generator
+  //Mountains generation
   const int mountainRangeLenght{ 5 };
   int mountainRangeCountP{ 1 };
   int mountainRangeCount{ static_cast<int>(mountainRangeCountP * nodes.size() / 100) };
@@ -359,6 +341,55 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
       }
     }
   }
+
+  //Hills generation
+  for(auto& node : nodes)
+  {
+    HexVector nodePos{ node.getHexPosition() };
+    if(neighboursTerrain(nodePos.q, nodePos.r, nodePos.s, TerrainType::mountains)
+    && Random::testForProbability(0.5))
+    {
+      if(node.getTerrainType() == TerrainType::grassland)
+      {
+        node.switchTerrainType(TerrainType::grassHills);
+      }
+      else if(node.getTerrainType() == TerrainType::desert)
+      {
+        node.switchTerrainType(TerrainType::desertHills);
+      }
+      else if(node.getTerrainType() == TerrainType::tundra)
+      {
+        node.switchTerrainType(TerrainType::tundraHills);
+      }
+    }
+  }
+  
+  for(auto& node : nodes)
+  {
+    HexVector nodePos{ node.getHexPosition() };
+    if((node.getTerrainType() == TerrainType::grassland
+     || node.getTerrainType() == TerrainType::desert
+     || node.getTerrainType() == TerrainType::tundra)
+    && (neighboursTerrain(nodePos.q, nodePos.r, nodePos.s, TerrainType::grassHills)
+     || neighboursTerrain(nodePos.q, nodePos.r, nodePos.s, TerrainType::tundraHills)
+     || neighboursTerrain(nodePos.q, nodePos.r, nodePos.s, TerrainType::desertHills))
+    && Random::testForProbability(0.5))
+    {
+      if(node.getTerrainType() == TerrainType::grassland)
+      {
+        node.switchTerrainType(TerrainType::grassHills);
+      }
+      else if(node.getTerrainType() == TerrainType::desert)
+      {
+        node.switchTerrainType(TerrainType::desertHills);
+      }
+      else if(node.getTerrainType() == TerrainType::tundra)
+      {
+        node.switchTerrainType(TerrainType::tundraHills);
+      }
+    }
+  }
+
 }
 
 MapNode& Map::getNode(int q, int r, int s)
@@ -496,6 +527,18 @@ std::string Map::getSelectedNodeName()
 
         case TerrainType::tundra:
           return "Tundra";
+        break;
+
+        case TerrainType::grassHills:
+          return "Grassland hills";
+        break;
+
+        case TerrainType::desertHills:
+          return "Desert hills";
+        break;
+
+        case TerrainType::tundraHills:
+          return "Tundra hills";
         break;
 
         case TerrainType::mountains:

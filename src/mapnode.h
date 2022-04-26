@@ -12,6 +12,9 @@
     water,
     desert,
     tundra,
+    grassHills,
+    desertHills,
+    tundraHills,
     mountains,
     blank
   };

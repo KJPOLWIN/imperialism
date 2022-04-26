@@ -16,12 +16,10 @@
       sf::Vector2i getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom); 
       void selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom);
       void switchNodeTerrain();
-      //void switchNodeTerrain(bool& canClick);
       void draw(sf::RenderWindow& targetWindow);
   
       void regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize);
       std::string getSelectedNodeName();
-      //std::string getSelectedUnitName();
       Unit& getSelectedUnit();
 
     private:
@@ -42,6 +40,9 @@
       sf::Texture waterNodeTexture{  };
       sf::Texture desertNodeTexture{  };
       sf::Texture tundraNodeTexture{  };
+      sf::Texture grassHillsNodeTexture{  };
+      sf::Texture desertHillsNodeTexture{  };
+      sf::Texture tundraHillsNodeTexture{  };
       sf::Texture mountainsNodeTexture{  };
       sf::Texture riflemenTexture{  };
       
@@ -50,6 +51,9 @@
       sf::Sprite waterNode{  };
       sf::Sprite desertNode{  };
       sf::Sprite tundraNode{  };
+      sf::Sprite grassHillsNode{  };
+      sf::Sprite desertHillsNode{  };
+      sf::Sprite tundraHillsNode{  };
       sf::Sprite mountainsNode{  };
       sf::Sprite riflemenSprite{  };
 
