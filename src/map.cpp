@@ -34,6 +34,7 @@ Map::Map()
   jungleNodeTexture.loadFromFile("texture/nodejungle.png");
   jungleHillsNodeTexture.loadFromFile("texture/nodejunglehills.png");
   mountainsNodeTexture.loadFromFile("texture/nodemountain.png");
+  riverNodeTexture.loadFromFile("texture/noderiver.png");
   riflemenTexture.loadFromFile("texture/riflemen.png");
 
   selectedNode.setTexture(selectedNodeTexture);
@@ -49,6 +50,7 @@ Map::Map()
   jungleNode.setTexture(jungleNodeTexture);
   jungleHillsNode.setTexture(jungleHillsNodeTexture);
   mountainsNode.setTexture(mountainsNodeTexture);
+  riverNode.setTexture(riverNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
   units.push_back(Unit(1, 1, "Riflemen", 3));
@@ -222,6 +224,11 @@ void Map::draw(sf::RenderWindow& targetWindow)
     {
       mountainsNode.setPosition(node.getPosition());
       targetWindow.draw(mountainsNode);
+    }
+    else if(node.getTerrainType() == TerrainType::river)
+    {
+      riverNode.setPosition(node.getPosition());
+      targetWindow.draw(riverNode);
     }
   }
 
@@ -450,6 +457,44 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
       }
     }
   }
+
+  //River generation
+  int riverCount{ Random::getRandomInt(0, 5) };
+  for(int iii{ 0 }; iii < riverCount; ++iii)
+  {
+    sf::Vector2i startCoords{ Random::getRandomInt(0, sizeX - 1),
+                              Random::getRandomInt(0, sizeY - 1) };
+    HexVector currentNodePos{ startCoords.x, startCoords.y }; 
+  
+    HexVector riverDirection{ Random::getRandomInt(-1, 1), 
+                              Random::getRandomInt(-1, 1),
+                              Random::getRandomInt(-1, 1) };
+
+    int riverLenght{ Random::getRandomInt(3, 10) };
+
+
+    for(int jjj{ 0 }; jjj < riverLenght; ++jjj)
+    {
+      if(getNode(currentNodePos.q, 
+                 currentNodePos.r, 
+                 currentNodePos.s).getTerrainType() == TerrainType::water)
+      {
+        break; 
+      }
+
+      getNode(currentNodePos.q, 
+              currentNodePos.r, 
+              currentNodePos.s).switchTerrainType(TerrainType::river);
+    
+      currentNodePos = HexVector(currentNodePos.q + riverDirection.q,
+                                 currentNodePos.r + riverDirection.r,
+                                 currentNodePos.s + riverDirection.s);
+    
+      riverDirection = HexVector{ Random::getRandomInt(-1, 1), 
+                                  Random::getRandomInt(-1, 1),
+                                  Random::getRandomInt(-1, 1) };
+    }
+  }
 }
 
 MapNode& Map::getNode(int q, int r, int s)
@@ -538,11 +583,15 @@ std::string Map::getSelectedNodeName()
         
         case TerrainType::jungleHills:
           return "Rainforest hills";
+        break;
         
-          break;
         case TerrainType::mountains:
           return "Mountains";
         break;
+      
+        case TerrainType::river:
+          return "River";
+        break;  
       }
     }
   }
@@ -550,18 +599,6 @@ std::string Map::getSelectedNodeName()
   return "";
 }
 
-/*std::string Map::getSelectedUnitName()
-{
-  for( auto& unit : units )
-  {
-    if(unit.isSelected)
-    {
-      return unit.getName();
-    }
-  }
-
-  return "";
-}*/
 Unit& Map::getSelectedUnit()
 {
   for( auto& unit : units )

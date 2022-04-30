@@ -48,6 +48,7 @@
       sf::Texture jungleNodeTexture{  };
       sf::Texture jungleHillsNodeTexture{  };
       sf::Texture mountainsNodeTexture{  };
+      sf::Texture riverNodeTexture{  };
       sf::Texture riflemenTexture{  };
       
       sf::Sprite selectedNode{  };
@@ -63,6 +64,7 @@
       sf::Sprite jungleNode{  };
       sf::Sprite jungleHillsNode{  };
       sf::Sprite mountainsNode{  };
+      sf::Sprite riverNode{  };
       sf::Sprite riflemenSprite{  };
   };
 

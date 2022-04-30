@@ -20,6 +20,7 @@
     jungle,
     jungleHills,
     mountains,
+    river,
     blank
   };
 
