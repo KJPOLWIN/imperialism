@@ -43,6 +43,10 @@
       sf::Texture grassHillsNodeTexture{  };
       sf::Texture desertHillsNodeTexture{  };
       sf::Texture tundraHillsNodeTexture{  };
+      sf::Texture forestNodeTexture{  };
+      sf::Texture forestHillsNodeTexture{  };
+      sf::Texture jungleNodeTexture{  };
+      sf::Texture jungleHillsNodeTexture{  };
       sf::Texture mountainsNodeTexture{  };
       sf::Texture riflemenTexture{  };
       
@@ -54,10 +58,12 @@
       sf::Sprite grassHillsNode{  };
       sf::Sprite desertHillsNode{  };
       sf::Sprite tundraHillsNode{  };
+      sf::Sprite forestNode{  };
+      sf::Sprite forestHillsNode{  };
+      sf::Sprite jungleNode{  };
+      sf::Sprite jungleHillsNode{  };
       sf::Sprite mountainsNode{  };
       sf::Sprite riflemenSprite{  };
-
-      sf::Text debug{  };
   };
 
 #endif

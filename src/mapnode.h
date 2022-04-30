@@ -15,6 +15,10 @@
     grassHills,
     desertHills,
     tundraHills,
+    forest,
+    forestHills,
+    jungle,
+    jungleHills,
     mountains,
     blank
   };

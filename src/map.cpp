@@ -29,6 +29,10 @@ Map::Map()
   grassHillsNodeTexture.loadFromFile("texture/nodegrasshills.png");
   desertHillsNodeTexture.loadFromFile("texture/nodedeserthills.png");
   tundraHillsNodeTexture.loadFromFile("texture/nodetundrahills.png");
+  forestNodeTexture.loadFromFile("texture/nodeforest.png");
+  forestHillsNodeTexture.loadFromFile("texture/nodeforesthills.png");
+  jungleNodeTexture.loadFromFile("texture/nodejungle.png");
+  jungleHillsNodeTexture.loadFromFile("texture/nodejunglehills.png");
   mountainsNodeTexture.loadFromFile("texture/nodemountain.png");
   riflemenTexture.loadFromFile("texture/riflemen.png");
 
@@ -40,6 +44,10 @@ Map::Map()
   grassHillsNode.setTexture(grassHillsNodeTexture);
   desertHillsNode.setTexture(desertHillsNodeTexture);
   tundraHillsNode.setTexture(tundraHillsNodeTexture);
+  forestNode.setTexture(forestNodeTexture);
+  forestHillsNode.setTexture(forestHillsNodeTexture);
+  jungleNode.setTexture(jungleNodeTexture);
+  jungleHillsNode.setTexture(jungleHillsNodeTexture);
   mountainsNode.setTexture(mountainsNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
@@ -189,6 +197,26 @@ void Map::draw(sf::RenderWindow& targetWindow)
     {
       tundraHillsNode.setPosition(node.getPosition());
       targetWindow.draw(tundraHillsNode);
+    }
+    else if(node.getTerrainType() == TerrainType::forest)
+    {
+      forestNode.setPosition(node.getPosition());
+      targetWindow.draw(forestNode);
+    }
+    else if(node.getTerrainType() == TerrainType::forestHills)
+    {
+      forestHillsNode.setPosition(node.getPosition());
+      targetWindow.draw(forestHillsNode);
+    }
+    else if(node.getTerrainType() == TerrainType::jungle)
+    {
+      jungleNode.setPosition(node.getPosition());
+      targetWindow.draw(jungleNode);
+    }
+    else if(node.getTerrainType() == TerrainType::jungleHills)
+    {
+      jungleHillsNode.setPosition(node.getPosition());
+      targetWindow.draw(jungleHillsNode);
     }
     else if(node.getTerrainType() == TerrainType::mountains)
     {
@@ -390,6 +418,38 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     }
   }
 
+  //Forest generation
+  for(auto& node : nodes)
+  {
+    if((node.getTerrainType() == TerrainType::grassland
+     || node.getTerrainType() == TerrainType::grassHills)
+    && Random::testForProbability(0.25))
+    {
+      int y{ node.getHexPosition().toCartesian().y };
+      if((y >= 3 * sizeY / 7 && y <= 4 * sizeY / 7))
+      {
+        if(node.getTerrainType() == TerrainType::grassHills)
+        {
+          node.switchTerrainType(TerrainType::jungleHills);
+        }
+        else
+        {
+          node.switchTerrainType(TerrainType::jungle);
+        }
+      }
+      else
+      {
+        if(node.getTerrainType() == TerrainType::grassHills)
+        {
+          node.switchTerrainType(TerrainType::forestHills);
+        }
+        else
+        {
+          node.switchTerrainType(TerrainType::forest);
+        }
+      }
+    }
+  }
 }
 
 MapNode& Map::getNode(int q, int r, int s)
@@ -411,57 +471,6 @@ bool Map::neighboursTerrain(int q, int r, int s, TerrainType terrain)
        || getNode(q,     r + 1, s - 1).getTerrainType() == terrain    //SE
        || getNode(q - 1, r + 1, s    ).getTerrainType() == terrain    //SW
        || getNode(q - 1, r,     s + 1).getTerrainType() == terrain);  //W
-
-
-  /*if(x - 1 >= 0 && getNode(x - 1, y).getTerrainType() == terrain)
-  {
-    return true;
-  }
-  else if(x + 1 < sizeX && getNode(x + 1, y).getTerrainType() == terrain)
-  {
-    return true;
-  }
-
-  if(y % 2 == 0)
-  {
-    if(x - 1 >= 0 && y - 1 >= 0 && getNode(x - 1, y - 1).getTerrainType() == terrain)
-    {
-      return true;
-    }
-    else if(y - 1 >= 0 && getNode(x, y - 1).getTerrainType() == terrain)
-    {
-      return true;
-    }
-    else if(x - 1 >= 0 && y + 1 < sizeY && getNode(x - 1, y + 1).getTerrainType() == terrain)
-    {
-      return true;
-    }
-    else if(y + 1 < sizeY && getNode(x, y + 1).getTerrainType() == terrain)
-    {
-      return true;
-    }
-  }
-  else
-  {
-    if(y - 1 >= 0 && getNode(x, y - 1).getTerrainType() == terrain)
-    {
-      return true;
-    }
-    else if(x + 1 < sizeX && y - 1 >= 0 && getNode(x + 1, y - 1).getTerrainType() == terrain)
-    {
-      return true;
-    }
-    else if(y + 1 < sizeY && getNode(x, y + 1).getTerrainType() == terrain)
-    {
-      return true;
-    }
-    else if(x + 1 < sizeX && y + 1 < sizeY && getNode(x + 1, y + 1).getTerrainType() == terrain)
-    {
-      return true;
-    }
-  }
-
-  return false;*/
 }
 
 void Map::createLandmass(int q, int r, int s, int size)
@@ -477,32 +486,6 @@ void Map::createLandmass(int q, int r, int s, int size)
       node.switchTerrainType(TerrainType::grassland);
     }
   }
-
-  /*if(size > 0)
-  {
-    if(x >= 0 && x < sizeX && y >= 0 && y < sizeY)
-    {
-      getNode(x, y).switchTerrainType(TerrainType::grassland);
-      //std::cout << "Creating land on " << x << ", " << y << "\n"; 
-    }
-    
-    createLandmass(x - 1, y, size - 1); //W
-    createLandmass(x + 1, y, size - 1); //E
-    if(y % 2 == 0)
-    {
-      createLandmass(x - 1, y - 1, size - 1); //NW
-      createLandmass(x, y - 1, size - 1);     //NE
-      createLandmass(x - 1, y + 1, size - 1); //SW
-      createLandmass(x, y + 1, size - 1);     //SE
-    }
-    else
-    {
-      createLandmass(x, y - 1, size - 1);     //NW
-      createLandmass(x + 1, y - 1, size - 1); //NE
-      createLandmass(x, y + 1, size - 1);     //SW
-      createLandmass(x + 1, y + 1, size - 1); //SE
-    }
-  }*/
 }
 
 std::string Map::getSelectedNodeName()
@@ -541,6 +524,22 @@ std::string Map::getSelectedNodeName()
           return "Tundra hills";
         break;
 
+        case TerrainType::forest:
+          return "Forest";
+        break;
+
+        case TerrainType::forestHills:
+          return "Forest hills";
+        break;
+        
+        case TerrainType::jungle:
+          return "Rainforest";
+        break;
+        
+        case TerrainType::jungleHills:
+          return "Rainforest hills";
+        
+          break;
         case TerrainType::mountains:
           return "Mountains";
         break;
