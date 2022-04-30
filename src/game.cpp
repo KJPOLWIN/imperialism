@@ -9,7 +9,7 @@
     #include <iostream>
 
 Game::Game(sf::Font& font)
-  : pauseMenuLabel{ "Game paused", font, 30 },
+  : pauseMenuLabel{ "Game paused", font, 32 },
     menuButton{ font, "Main menu", sf::Vector2f(300, 375), 24 },
     optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
     exitToDesktopButton{ font, "Exit to desktop", sf::Vector2f(300, 800), 24 },

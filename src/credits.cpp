@@ -5,17 +5,17 @@
 #include <SFML/Graphics.hpp>
 
 Credits::Credits(sf::Font& font)
-  : backButton{ font, "back", sf::Vector2f(100, 970), 30 },
-    title{ "imperialism", font, 76 },
-    version{ "early development edition", font, 36 },
+  : backButton{ font, "back", sf::Vector2f(100, 970), 32 },
+    title{ "imperialism", font, 80 },
+    version{ "early development edition", font, 40 },
     code{ "Code and graphics", font, 24 },
     codeAuthors{ "POLWIN", font, 32 },
     fontLabel{ "Font", font, 24 },
     fontName{ "Press Start 2P", font, 32 },
     fontAuthors{ "made by CodeMan38", font, 32 },
     fontLicense{ "licensed under Open Font License", font, 32 },
-    sfml{ "Made with SFML", font, 26 },
-    date{ "2022", font, 26 }
+    sfml{ "Made with SFML", font, 24 },
+    date{ "2022", font, 24 }
 {
   title.setPosition(0, 75);
   GUI::centerTextInField(title, positioningField);
