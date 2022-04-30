@@ -11,15 +11,6 @@ Map::Map()
 {
   clickmap.loadFromFile("clickmap.png");
 
-  //creating map
-  for(int y{ 0 }; y < sizeY; ++y)
-  {
-    for(int x{ 0 }; x < sizeX; ++x)
-    {
-      nodes.push_back(MapNode(x, y));
-    }
-  }
-
   //loading textures and sprites
   selectedNodeTexture.loadFromFile("texture/selectednode.png");
   grassNodeTexture.loadFromFile("texture/nodegrass.png");
@@ -130,16 +121,15 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
   }
   
   sf::Vector2i selectedNodeCartesian{ getClickedNode(clickPosition, viewOffset, zoom) };
-  HexVector chosenHex{ selectedNodeCartesian.x, selectedNodeCartesian.y }; 
 
   if(selectedNodeCartesian.x >= 0 && selectedNodeCartesian.x < sizeX 
   && selectedNodeCartesian.y >= 0 && selectedNodeCartesian.y < sizeY)
   {
-    getNode(chosenHex.q, chosenHex.r, chosenHex.s).select();
+    getNode(selectedNodeCartesian).select();
 
     for( auto& unit : units )
     {
-      if(unit.getHexPosition() == chosenHex)
+      if(unit.getHexPosition() == HexVector(selectedNodeCartesian))
       {
         unit.isSelected = true;
         break;
@@ -301,27 +291,22 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     landmassSize = Random::getRandomInt(1, landmassMaxSize);
     landmassX = Random::getRandomInt(0, sizeX - 1);
     landmassY = Random::getRandomInt(0, sizeY - 1);  
-    HexVector landmassPosition{ landmassX, landmassY };
   
-    createLandmass(landmassPosition.q, landmassPosition.r, landmassPosition.s, landmassSize);
+    createLandmass(landmassX, landmassY, landmassSize);
   }
 
   //Smudging landmasses
   for( auto& node : nodes )
   {
     if(node.getTerrainType() != TerrainType::water
-    && neighboursTerrain(node.getHexPosition().q, 
-                         node.getHexPosition().r, 
-                         node.getHexPosition().s, 
+    && neighboursTerrain(node.getHexPosition(), 
                          TerrainType::water)
     && Random::testForProbability(0.5))
     {
       node.switchTerrainType(TerrainType::water);
     }
     else if(node.getTerrainType() == TerrainType::water
-    && neighboursTerrain(node.getHexPosition().q, 
-                         node.getHexPosition().r, 
-                         node.getHexPosition().s, 
+    && neighboursTerrain(node.getHexPosition(), 
                          TerrainType::grassland)
     && Random::testForProbability(0.5))
     {
@@ -366,22 +351,23 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   
     for(int jjj{ 0 }; jjj < mountainRangeLenght; ++jjj)
     {
-      if(getNode(rangeHexPosition.q, rangeHexPosition.r, rangeHexPosition.s).getTerrainType()
-          != TerrainType::blank)
+      if(getNode(sf::Vector2i(rangeX, rangeY)).getTerrainType() != TerrainType::blank)
       {
-        getNode(rangeHexPosition.q, rangeHexPosition.r, rangeHexPosition.s).switchTerrainType(TerrainType::mountains);
+        getNode(sf::Vector2i(rangeX, rangeY)).switchTerrainType(TerrainType::mountains);
         rangeHexPosition.q += Random::getRandomInt(-1, 1);
         rangeHexPosition.r += Random::getRandomInt(-1, 1);
         rangeHexPosition.s += Random::getRandomInt(-1, 1);
       }
+
+      rangeX = rangeHexPosition.toCartesian().x;
+      rangeY = rangeHexPositiossssss;l.toCartesian().y
     }
   }
 
   //Hills generation
   for(auto& node : nodes)
   {
-    HexVector nodePos{ node.getHexPosition() };
-    if(neighboursTerrain(nodePos.q, nodePos.r, nodePos.s, TerrainType::mountains)
+    if(neighboursTerrain(node.getHexPosition(), TerrainType::mountains)
     && Random::testForProbability(0.5))
     {
       if(node.getTerrainType() == TerrainType::grassland)
@@ -401,13 +387,12 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   
   for(auto& node : nodes)
   {
-    HexVector nodePos{ node.getHexPosition() };
     if((node.getTerrainType() == TerrainType::grassland
      || node.getTerrainType() == TerrainType::desert
      || node.getTerrainType() == TerrainType::tundra)
-    && (neighboursTerrain(nodePos.q, nodePos.r, nodePos.s, TerrainType::grassHills)
-     || neighboursTerrain(nodePos.q, nodePos.r, nodePos.s, TerrainType::tundraHills)
-     || neighboursTerrain(nodePos.q, nodePos.r, nodePos.s, TerrainType::desertHills))
+    && (neighboursTerrain(node.getHexPosition(), TerrainType::grassHills)
+     || neighboursTerrain(node.getHexPosition(), TerrainType::tundraHills)
+     || neighboursTerrain(node.getHexPosition(), TerrainType::desertHills))
     && Random::testForProbability(0.5))
     {
       if(node.getTerrainType() == TerrainType::grassland)
@@ -507,6 +492,16 @@ MapNode& Map::getNode(int q, int r, int s)
 
   return nothingness;
 }
+      
+MapNode& Map::getNode(HexVector position)
+{
+  return getNode(position.q, position.r, position.s);
+}
+
+MapNode& Map::getNode(sf::Vector2i position)
+{
+  return getNode(HexVector(position));
+}
 
 bool Map::neighboursTerrain(int q, int r, int s, TerrainType terrain)
 {
@@ -516,6 +511,16 @@ bool Map::neighboursTerrain(int q, int r, int s, TerrainType terrain)
        || getNode(q,     r + 1, s - 1).getTerrainType() == terrain    //SE
        || getNode(q - 1, r + 1, s    ).getTerrainType() == terrain    //SW
        || getNode(q - 1, r,     s + 1).getTerrainType() == terrain);  //W
+}
+
+bool Map::neighboursTerrain(HexVector position, TerrainType terrain)
+{
+  return neighboursTerrain(position.q, position.r, position.s, terrain);
+}
+
+bool Map::neighboursTerrain(int x, int y, TerrainType terrain)
+{
+  return neighboursTerrain(HexVector(x, y), terrain);
 }
 
 void Map::createLandmass(int q, int r, int s, int size)
@@ -531,6 +536,16 @@ void Map::createLandmass(int q, int r, int s, int size)
       node.switchTerrainType(TerrainType::grassland);
     }
   }
+}
+
+void Map::createLandmass(HexVector position, int size)
+{
+  createLandmass(position.q, position.r, position.s, size);
+}
+
+void Map::createLandmass(int x, int y, int size)
+{
+  createLandmass(HexVector(x, y), size);
 }
 
 std::string Map::getSelectedNodeName()

@@ -24,8 +24,14 @@
 
     private:
       MapNode& getNode(int q, int r, int s);
+      MapNode& getNode(HexVector position);
+      MapNode& getNode(sf::Vector2i position);
       void createLandmass(int q, int r, int s, int size);
+      void createLandmass(HexVector position, int size);
+      void createLandmass(int x, int y, int size);
       bool neighboursTerrain(int q, int r, int s, TerrainType terrain);
+      bool neighboursTerrain(HexVector position, TerrainType terrain);
+      bool neighboursTerrain(int x, int y, TerrainType terrain);
 
       std::vector<MapNode> nodes{  };
       MapNode nothingness{  };

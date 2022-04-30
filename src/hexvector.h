@@ -10,7 +10,14 @@
         : q{ q }, r{ r }, s{ s } {}
       
       HexVector(int x, int y)
-        : q{ x - static_cast<int>((y - (y & 1)) / 2) }, r{ y }, s{ -q-r } {}
+        : q{ x - static_cast<int>((y - (y & 1)) / 2) }, 
+          r{ y }, 
+          s{ -q-r } {}
+
+      HexVector(sf::Vector2i cartesian)
+        : q{ cartesian.x - static_cast<int>((cartesian.y - (cartesian.y & 1)) / 2) }, 
+          r{ cartesian.y }, 
+          s{ -q-r } {}
       
       HexVector() = default;
 
