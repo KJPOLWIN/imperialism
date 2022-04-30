@@ -360,7 +360,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
       }
 
       rangeX = rangeHexPosition.toCartesian().x;
-      rangeY = rangeHexPositiossssss;l.toCartesian().y
+      rangeY = rangeHexPosition.toCartesian().y;
     }
   }
 

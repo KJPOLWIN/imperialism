@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 MainMenu::MainMenu(sf::Font& buttonFont)
-  : title{ "imperialism", buttonFont, 76 },
+  : title{ "imperialism", buttonFont, 72 },
     startButton{ buttonFont, "start", sf::Vector2f(100.0f, 350.0f), 40 },
     optionsButton{ buttonFont, "options", sf::Vector2f(100.0f, 425.0f), 40 },
     creditsButton{ buttonFont, "credits", sf::Vector2f(100.0f, 500.0f), 40 },
