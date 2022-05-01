@@ -313,9 +313,9 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     createLandmass(landmassX, landmassY, landmassSize);
   }
 
-  //Smudging landmasses
   for( auto& node : nodes )
   {
+    //Smudging landmasses
     if(node.getTerrainType() != TerrainType::water
     && neighboursTerrain(node.getHexPosition(), 
                          TerrainType::water)
@@ -330,11 +330,8 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     {
       node.switchTerrainType(TerrainType::grassland);
     }
-  }
-
-  //Biome generation
-  for( auto& node : nodes )
-  {
+  
+    //Biome generation
     if(node.getTerrainType() != TerrainType::water)
     {
       int y{ node.getHexPosition().toCartesian().y };
@@ -464,11 +461,22 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   //River generation
   for(auto& node : nodes)
   {
-    if(node.getTerrainType() != TerrainType::water && Random::testForProbability(0.01))
+    if(node.getTerrainType() != TerrainType::water 
+    && node.getTerrainType() != TerrainType::river
+    && node.getTerrainType() != TerrainType::mountains
+    && !neighboursTerrain(node.getHexPosition(), TerrainType::river)
+    && (neighboursTerrain(node.getHexPosition(), TerrainType::mountains)
+     || neighboursTerrain(node.getHexPosition(), TerrainType::grassHills)
+     || neighboursTerrain(node.getHexPosition(), TerrainType::desertHills)
+     || neighboursTerrain(node.getHexPosition(), TerrainType::tundraHills)
+     || neighboursTerrain(node.getHexPosition(), TerrainType::forestHills)
+     || neighboursTerrain(node.getHexPosition(), TerrainType::jungleHills))
+    && Random::testForProbability(0.01))
     {
       node.switchTerrainType(TerrainType::river);
 
-      double shortestDistanceToWater{ 0 };
+      double shortestDistanceToWater{ 200.0 * static_cast<double>(sizeX) };
+      MapNode* closestWaterNode{ nullptr };
       for(auto& waterNode : nodes)
       {
         if(waterNode.getTerrainType() == TerrainType::water)
@@ -476,21 +484,50 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
           sf::Vector2f nPos{ node.getPosition() };
           sf::Vector2f wnPos{ waterNode.getPosition() }; 
           double distance{ sqrt(pow(nPos.x - wnPos.x, 2) + pow(nPos.y - wnPos.y, 2)) };
-          if(distance < shortestDistanceToWater || shortestDistanceToWater < 0.1)
+          if(distance < shortestDistanceToWater && distance < 2000)
           {
             shortestDistanceToWater = distance;
+            closestWaterNode = &waterNode;
           }
         }
       }
 
+      int directionToWater{ Random::getRandomInt(0, 5) };
+      if(closestWaterNode != nullptr)
+      {
+        sf::Vector2f cwtPos{ closestWaterNode->getPosition() };
+        double angle{ atan2(cwtPos.y - node.getPosition().y, 
+                            cwtPos.x - node.getPosition().x) * 180 / M_PI };
+        if(angle < 0) angle += 360;
+        int directionToWater{ static_cast<int>(angle / 60) };
+      }
+
       HexVector position{ node.getHexPosition() };
-      int direction{ Random::getRandomInt(0, 5) };
+      int direction{ 0 };
       while(true)
       {
-        direction += Random::getRandomInt(-1, 1);
+        if(position.toCartesian().x < 0 
+        || position.toCartesian().y < 0
+        || position.toCartesian().x > sizeX
+        || position.toCartesian().y > sizeY
+        || getNode(position).getTerrainType() == TerrainType::water)
+        { 
+          break;
+        }
+        else if(neighboursTerrain(position, TerrainType::water))
+        {
+          getNode(position).switchTerrainType(TerrainType::river);
+          break;
+        }
+        else
+        {
+          getNode(position).switchTerrainType(TerrainType::river);
+        }
+
+        direction = Random::getRandomInt(directionToWater - 1, directionToWater + 1);
         if(direction == -1) direction = 5;
         else if(direction == 6) direction = 0;
-        
+
         switch(direction)
         {
           case 0: //NW
@@ -523,54 +560,9 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
             position.s += 1;
           break;
         }
-
-        if(getNode(position).getTerrainType() == TerrainType::water)
-        {
-          break;
-        }
-        else
-        {
-          getNode(position).switchTerrainType(TerrainType::river);
-        }
       }
     }
   }
-  /*int riverCount{ Random::getRandomInt(0, 5) };
-  for(int iii{ 0 }; iii < riverCount; ++iii)
-  {
-    sf::Vector2i startCoords{ Random::getRandomInt(0, sizeX - 1),
-                              Random::getRandomInt(0, sizeY - 1) };
-    HexVector currentNodePos{ startCoords.x, startCoords.y }; 
-  
-    HexVector riverDirection{ Random::getRandomInt(-1, 1), 
-                              Random::getRandomInt(-1, 1),
-                              Random::getRandomInt(-1, 1) };
-
-    int riverLenght{ Random::getRandomInt(3, 10) };
-
-
-    for(int jjj{ 0 }; jjj < riverLenght; ++jjj)
-    {
-      if(getNode(currentNodePos.q, 
-                 currentNodePos.r, 
-                 currentNodePos.s).getTerrainType() == TerrainType::water)
-      {
-        break; 
-      }
-
-      getNode(currentNodePos.q, 
-              currentNodePos.r, 
-              currentNodePos.s).switchTerrainType(TerrainType::river);
-    
-      currentNodePos = HexVector(currentNodePos.q + riverDirection.q,
-                                 currentNodePos.r + riverDirection.r,
-                                 currentNodePos.s + riverDirection.s);
-    
-      riverDirection = HexVector{ Random::getRandomInt(-1, 1), 
-                                  Random::getRandomInt(-1, 1),
-                                  Random::getRandomInt(-1, 1) };
-    }
-  }*/
 }
 
 MapNode& Map::getNode(int q, int r, int s)

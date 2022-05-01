@@ -81,7 +81,7 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
                                                  sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
                                                               (mapView.getCenter().y - mapView.getSize().y / 2)),
                                                  mapView.getSize().x / 1920) };
-      HexVector newPos{ posCartesian.x, posCartesian.y };
+      HexVector newPos{ posCartesian };
       map.moveUnits(newPos);
 
       map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
@@ -148,8 +148,6 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
 
   double zoomLevel{ mapView.getSize().x / 1920 };
 
-  //std::cout << zoomLevel << "\n";
-  
   if(!paused)
   {
     if(mousePosition.x < 10)
@@ -171,15 +169,6 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     }
   }
   
-  //map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
-  //                        sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
-  //                                     (mapView.getCenter().y - mapView.getSize().y / 2)),
-  //                        mapView.getSize().x / 1920);
-  //nodeNameLabel.setString(map.getSelectedNodeName());
-  //GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
-
-  //unitNameLabel.setString(map.getSelectedUnitName());
-
   window.setView(mapView);
   map.draw(window, 
            sf::Vector2f(mapView.getCenter().x - mapView.getSize().x / 2,
