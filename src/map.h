@@ -16,7 +16,7 @@
       sf::Vector2i getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom); 
       void selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom);
       void switchNodeTerrain();
-      void draw(sf::RenderWindow& targetWindow);
+      void draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double zoom);
   
       void regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize);
       std::string getSelectedNodeName();

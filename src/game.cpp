@@ -181,7 +181,10 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   //unitNameLabel.setString(map.getSelectedUnitName());
 
   window.setView(mapView);
-  map.draw(window);
+  map.draw(window, 
+           sf::Vector2f(mapView.getCenter().x - mapView.getSize().x / 2,
+                        mapView.getCenter().y - mapView.getSize().y / 2), 
+           zoomLevel);
 
   window.setView(guiView);
   if(nodeNameLabel.getString() != "")

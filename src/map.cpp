@@ -150,82 +150,92 @@ void Map::switchNodeTerrain()
   }
 }
 
-void Map::draw(sf::RenderWindow& targetWindow)
+void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double zoom)
 {
   for( auto& node : nodes )
   {
-    if(node.getTerrainType() == TerrainType::grassland)
+    if(node.getPosition().x > viewOffset.x - 80 
+    && node.getPosition().y > viewOffset.y - 101
+    && node.getPosition().x < viewOffset.x + 1920 * zoom 
+    && node.getPosition().y < viewOffset.y + 1080 * zoom)
     {
-      //Check how it should be done and change this
-      grassNode.setPosition(node.getPosition());
-      targetWindow.draw(grassNode);
-    }
-    else if(node.getTerrainType() == TerrainType::water)
-    { 
-      waterNode.setPosition(node.getPosition());
-      targetWindow.draw(waterNode);
-    }
-    else if(node.getTerrainType() == TerrainType::desert)
-    {
-      desertNode.setPosition(node.getPosition());
-      targetWindow.draw(desertNode);
-    } 
-    else if(node.getTerrainType() == TerrainType::tundra)
-    {
-      tundraNode.setPosition(node.getPosition());
-      targetWindow.draw(tundraNode);
-    }
-    else if(node.getTerrainType() == TerrainType::grassHills)
-    {
-      grassHillsNode.setPosition(node.getPosition());
-      targetWindow.draw(grassHillsNode);
-    }
-    else if(node.getTerrainType() == TerrainType::desertHills)
-    {
-      desertHillsNode.setPosition(node.getPosition());
-      targetWindow.draw(desertHillsNode);
-    }
-    else if(node.getTerrainType() == TerrainType::tundraHills)
-    {
-      tundraHillsNode.setPosition(node.getPosition());
-      targetWindow.draw(tundraHillsNode);
-    }
-    else if(node.getTerrainType() == TerrainType::forest)
-    {
-      forestNode.setPosition(node.getPosition());
-      targetWindow.draw(forestNode);
-    }
-    else if(node.getTerrainType() == TerrainType::forestHills)
-    {
-      forestHillsNode.setPosition(node.getPosition());
-      targetWindow.draw(forestHillsNode);
-    }
-    else if(node.getTerrainType() == TerrainType::jungle)
-    {
-      jungleNode.setPosition(node.getPosition());
-      targetWindow.draw(jungleNode);
-    }
-    else if(node.getTerrainType() == TerrainType::jungleHills)
-    {
-      jungleHillsNode.setPosition(node.getPosition());
-      targetWindow.draw(jungleHillsNode);
-    }
-    else if(node.getTerrainType() == TerrainType::mountains)
-    {
-      mountainsNode.setPosition(node.getPosition());
-      targetWindow.draw(mountainsNode);
-    }
-    else if(node.getTerrainType() == TerrainType::river)
-    {
-      riverNode.setPosition(node.getPosition());
-      targetWindow.draw(riverNode);
+      if(node.getTerrainType() == TerrainType::grassland)
+      {
+        //Check how it should be done and change this
+        grassNode.setPosition(node.getPosition());
+        targetWindow.draw(grassNode);
+      }
+      else if(node.getTerrainType() == TerrainType::water)
+      { 
+        waterNode.setPosition(node.getPosition());
+        targetWindow.draw(waterNode);
+      }
+      else if(node.getTerrainType() == TerrainType::desert)
+      {
+        desertNode.setPosition(node.getPosition());
+        targetWindow.draw(desertNode);
+      } 
+      else if(node.getTerrainType() == TerrainType::tundra)
+      {
+        tundraNode.setPosition(node.getPosition());
+        targetWindow.draw(tundraNode);
+      }
+      else if(node.getTerrainType() == TerrainType::grassHills)
+      {
+        grassHillsNode.setPosition(node.getPosition());
+        targetWindow.draw(grassHillsNode);
+      }
+      else if(node.getTerrainType() == TerrainType::desertHills)
+      {
+        desertHillsNode.setPosition(node.getPosition());
+        targetWindow.draw(desertHillsNode);
+      }
+      else if(node.getTerrainType() == TerrainType::tundraHills)
+      {
+        tundraHillsNode.setPosition(node.getPosition());
+        targetWindow.draw(tundraHillsNode);
+      }
+      else if(node.getTerrainType() == TerrainType::forest)
+      {
+        forestNode.setPosition(node.getPosition());
+        targetWindow.draw(forestNode);
+      }
+      else if(node.getTerrainType() == TerrainType::forestHills)
+      {
+        forestHillsNode.setPosition(node.getPosition());
+        targetWindow.draw(forestHillsNode);
+      }
+      else if(node.getTerrainType() == TerrainType::jungle)
+      {
+        jungleNode.setPosition(node.getPosition());
+        targetWindow.draw(jungleNode);
+      }
+      else if(node.getTerrainType() == TerrainType::jungleHills)
+      {
+        jungleHillsNode.setPosition(node.getPosition());
+        targetWindow.draw(jungleHillsNode);
+      }
+      else if(node.getTerrainType() == TerrainType::mountains)
+      {
+        mountainsNode.setPosition(node.getPosition());
+        targetWindow.draw(mountainsNode);
+      }
+      else if(node.getTerrainType() == TerrainType::river)
+      {
+        riverNode.setPosition(node.getPosition());
+        targetWindow.draw(riverNode);
+      }
     }
   }
 
   //Drawing unselected nodes first, so full selected node's border will be visible
   for( auto& node : nodes )
   {
-    if(!node.isSelected)
+    if(!node.isSelected
+    && node.getPosition().x > viewOffset.x - 80 
+    && node.getPosition().y > viewOffset.y - 101
+    && node.getPosition().x < viewOffset.x + 1920 * zoom 
+    && node.getPosition().y < viewOffset.y + 1080 * zoom)
     {
       node.draw(targetWindow);
     }
@@ -233,7 +243,11 @@ void Map::draw(sf::RenderWindow& targetWindow)
   
   for( auto& node : nodes )
   {
-    if(node.isSelected)
+    if(node.isSelected
+    && node.getPosition().x > viewOffset.x - 80 
+    && node.getPosition().y > viewOffset.y - 101
+    && node.getPosition().x < viewOffset.x + 1920 * zoom 
+    && node.getPosition().y < viewOffset.y + 1080 * zoom)
     {
       node.draw(targetWindow);
     }
@@ -245,7 +259,11 @@ void Map::draw(sf::RenderWindow& targetWindow)
     riflemenSprite.setPosition(unit.getPosition());
     targetWindow.draw(riflemenSprite);
   
-    if(unit.isSelected)
+    if(unit.isSelected
+    && unit.getPosition().x > viewOffset.x - 80 
+    && unit.getPosition().y > viewOffset.y - 101
+    && unit.getPosition().x < viewOffset.x + 1920 * zoom 
+    && unit.getPosition().y < viewOffset.y + 1080 * zoom)
     {
       for( auto& node : nodes )
       {
@@ -444,7 +462,80 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   }
 
   //River generation
-  int riverCount{ Random::getRandomInt(0, 5) };
+  for(auto& node : nodes)
+  {
+    if(node.getTerrainType() != TerrainType::water && Random::testForProbability(0.01))
+    {
+      node.switchTerrainType(TerrainType::river);
+
+      double shortestDistanceToWater{ 0 };
+      for(auto& waterNode : nodes)
+      {
+        if(waterNode.getTerrainType() == TerrainType::water)
+        {
+          sf::Vector2f nPos{ node.getPosition() };
+          sf::Vector2f wnPos{ waterNode.getPosition() }; 
+          double distance{ sqrt(pow(nPos.x - wnPos.x, 2) + pow(nPos.y - wnPos.y, 2)) };
+          if(distance < shortestDistanceToWater || shortestDistanceToWater < 0.1)
+          {
+            shortestDistanceToWater = distance;
+          }
+        }
+      }
+
+      HexVector position{ node.getHexPosition() };
+      int direction{ Random::getRandomInt(0, 5) };
+      while(true)
+      {
+        direction += Random::getRandomInt(-1, 1);
+        if(direction == -1) direction = 5;
+        else if(direction == 6) direction = 0;
+        
+        switch(direction)
+        {
+          case 0: //NW
+            position.r -= 1;
+            position.s += 1;
+          break;
+          
+          case 1: //NE
+            position.q += 1;
+            position.r -= 1;
+          break;
+          
+          case 2: //E
+            position.q += 1;
+            position.s -= 1;
+          break;
+          
+          case 3: //SE
+            position.r += 1;
+            position.s -= 1;
+          break;
+          
+          case 4: //SW
+            position.q -= 1;
+            position.r += 1;
+          break;
+          
+          case 5: //W
+            position.q -= 1;
+            position.s += 1;
+          break;
+        }
+
+        if(getNode(position).getTerrainType() == TerrainType::water)
+        {
+          break;
+        }
+        else
+        {
+          getNode(position).switchTerrainType(TerrainType::river);
+        }
+      }
+    }
+  }
+  /*int riverCount{ Random::getRandomInt(0, 5) };
   for(int iii{ 0 }; iii < riverCount; ++iii)
   {
     sf::Vector2i startCoords{ Random::getRandomInt(0, sizeX - 1),
@@ -479,7 +570,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
                                   Random::getRandomInt(-1, 1),
                                   Random::getRandomInt(-1, 1) };
     }
-  }
+  }*/
 }
 
 MapNode& Map::getNode(int q, int r, int s)
