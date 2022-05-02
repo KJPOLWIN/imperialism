@@ -15,7 +15,7 @@
       void moveUnits(HexVector position); 
       sf::Vector2i getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom); 
       void selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom);
-      void switchNodeTerrain();
+      //void switchNodeTerrain();
       void draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double zoom);
   
       void regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize);
@@ -54,7 +54,9 @@
       sf::Texture jungleNodeTexture{  };
       sf::Texture jungleHillsNodeTexture{  };
       sf::Texture mountainsNodeTexture{  };
-      sf::Texture riverNodeTexture{  };
+      sf::Texture grasslandRiverNodeTexture{  };
+      sf::Texture desertRiverNodeTexture{  };
+      sf::Texture tundraRiverNodeTexture{  };
       sf::Texture riflemenTexture{  };
       
       sf::Sprite selectedNode{  };
@@ -70,7 +72,9 @@
       sf::Sprite jungleNode{  };
       sf::Sprite jungleHillsNode{  };
       sf::Sprite mountainsNode{  };
-      sf::Sprite riverNode{  };
+      sf::Sprite grasslandRiverNode{  };
+      sf::Sprite desertRiverNode{  };
+      sf::Sprite tundraRiverNode{  };
       sf::Sprite riflemenSprite{  };
   };
 

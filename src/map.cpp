@@ -25,7 +25,9 @@ Map::Map()
   jungleNodeTexture.loadFromFile("texture/nodejungle.png");
   jungleHillsNodeTexture.loadFromFile("texture/nodejunglehills.png");
   mountainsNodeTexture.loadFromFile("texture/nodemountain.png");
-  riverNodeTexture.loadFromFile("texture/noderiver.png");
+  grasslandRiverNodeTexture.loadFromFile("texture/nodegrasslandriver.png");
+  desertRiverNodeTexture.loadFromFile("texture/nodedesertriver.png");
+  tundraRiverNodeTexture.loadFromFile("texture/nodetundrariver.png");
   riflemenTexture.loadFromFile("texture/riflemen.png");
 
   selectedNode.setTexture(selectedNodeTexture);
@@ -41,7 +43,9 @@ Map::Map()
   jungleNode.setTexture(jungleNodeTexture);
   jungleHillsNode.setTexture(jungleHillsNodeTexture);
   mountainsNode.setTexture(mountainsNodeTexture);
-  riverNode.setTexture(riverNodeTexture);
+  grasslandRiverNode.setTexture(grasslandRiverNodeTexture);
+  desertRiverNode.setTexture(desertRiverNodeTexture);
+  tundraRiverNode.setTexture(tundraRiverNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
   units.push_back(Unit(1, 1, "Riflemen", 3));
@@ -138,7 +142,7 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
   }
 }
 
-void Map::switchNodeTerrain()
+/*void Map::switchNodeTerrain()
 {
   for( auto& node : nodes )
   {
@@ -148,7 +152,7 @@ void Map::switchNodeTerrain()
       break;
     }
   }
-}
+}*/
 
 void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double zoom)
 {
@@ -220,10 +224,20 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
         mountainsNode.setPosition(node.getPosition());
         targetWindow.draw(mountainsNode);
       }
-      else if(node.getTerrainType() == TerrainType::river)
+      else if(node.getTerrainType() == TerrainType::grasslandRiver)
       {
-        riverNode.setPosition(node.getPosition());
-        targetWindow.draw(riverNode);
+        grasslandRiverNode.setPosition(node.getPosition());
+        targetWindow.draw(grasslandRiverNode);
+      }
+      else if(node.getTerrainType() == TerrainType::desertRiver)
+      {
+        desertRiverNode.setPosition(node.getPosition());
+        targetWindow.draw(desertRiverNode);
+      }
+      else if(node.getTerrainType() == TerrainType::tundraRiver)
+      {
+        tundraRiverNode.setPosition(node.getPosition());
+        targetWindow.draw(tundraRiverNode);
       }
     }
   }
@@ -462,9 +476,9 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   for(auto& node : nodes)
   {
     if(node.getTerrainType() != TerrainType::water 
-    && node.getTerrainType() != TerrainType::river
+    && node.getTerrainType() != TerrainType::grasslandRiver
     && node.getTerrainType() != TerrainType::mountains
-    && !neighboursTerrain(node.getHexPosition(), TerrainType::river)
+    && !neighboursTerrain(node.getHexPosition(), TerrainType::grasslandRiver)
     && (neighboursTerrain(node.getHexPosition(), TerrainType::mountains)
      || neighboursTerrain(node.getHexPosition(), TerrainType::grassHills)
      || neighboursTerrain(node.getHexPosition(), TerrainType::desertHills)
@@ -473,7 +487,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
      || neighboursTerrain(node.getHexPosition(), TerrainType::jungleHills))
     && Random::testForProbability(0.01))
     {
-      node.switchTerrainType(TerrainType::river);
+      node.switchTerrainType(TerrainType::grasslandRiver);
 
       double shortestDistanceToWater{ 200.0 * static_cast<double>(sizeX) };
       MapNode* closestWaterNode{ nullptr };
@@ -499,7 +513,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
         double angle{ atan2(cwtPos.y - node.getPosition().y, 
                             cwtPos.x - node.getPosition().x) * 180 / M_PI };
         if(angle < 0) angle += 360;
-        int directionToWater{ static_cast<int>(angle / 60) };
+        directionToWater = static_cast<int>(angle / 60);
       }
 
       HexVector position{ node.getHexPosition() };
@@ -516,12 +530,12 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
         }
         else if(neighboursTerrain(position, TerrainType::water))
         {
-          getNode(position).switchTerrainType(TerrainType::river);
+          getNode(position).switchTerrainType(TerrainType::grasslandRiver);
           break;
         }
         else
         {
-          getNode(position).switchTerrainType(TerrainType::river);
+          getNode(position).switchTerrainType(TerrainType::grasslandRiver);
         }
 
         direction = Random::getRandomInt(directionToWater - 1, directionToWater + 1);
@@ -561,6 +575,26 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
           break;
         }
       }
+    }
+  }
+
+  //River climate generation
+  for(auto& node : nodes)
+  if(node.getTerrainType() == TerrainType::grasslandRiver)
+  {
+    int y{ node.getHexPosition().toCartesian().y };
+    //Tundra: 1st, 7th
+    if(y < sizeY / 7 || y > 6 * sizeY / 7)
+    { 
+      node.switchTerrainType(TerrainType::tundraRiver);
+    }
+    //Grasslands: 2nd, 4th, 6th
+    //Desert: 3rd, 5th
+    if((y >= 2 * sizeY / 7 && y <= 3 * sizeY / 7)
+    || (y >= 4 * sizeY / 7 && y <= 5 * sizeY / 7))
+    {
+      node.switchTerrainType(TerrainType::desertRiver);
+
     }
   }
 }
@@ -687,8 +721,16 @@ std::string Map::getSelectedNodeName()
           return "Mountains";
         break;
       
-        case TerrainType::river:
-          return "River";
+        case TerrainType::grasslandRiver:
+          return "Grassland river";
+        break;  
+        
+        case TerrainType::desertRiver:
+          return "Desert river";
+        break;  
+        
+        case TerrainType::tundraRiver:
+          return "Tundra river";
         break;  
       }
     }
