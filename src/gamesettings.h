@@ -19,6 +19,15 @@
       int getMapHeight();
       int getLandmassCount();
       int getLandmassSize();
+      double getLandToWaterChance();
+      double getWaterToLandChance();
+      int getMountainRangeMaxLenght();
+      int getMountainRangeCount();
+      double getFirstPassHillChance();
+      double getSecondPassHillChance();
+      double getForestChance();
+      double getRiverChance();
+
 
     private:
       TextButton startButton{  };
@@ -28,11 +37,27 @@
       TextInput mapHeight{  };
       TextInput landmassCount{  };
       TextInput landmassSize{  };
+      TextInput landToWaterChance{  };
+      TextInput waterToLandChance{  };
+      TextInput mountainRangeMaxLenght{  };
+      TextInput mountainRangeCount{  };
+      TextInput firstPassHillChance{  };
+      TextInput secondPassHillChance{  };
+      TextInput forestChance{  };
+      TextInput riverChance{  };
 
       sf::Text mapWidthLabel{  };
       sf::Text mapHeightLabel{  };
       sf::Text landmassCountLabel{  };
       sf::Text landmassSizeLabel{  };
+      sf::Text landToWaterChanceLabel{  };
+      sf::Text waterToLandChanceLabel{  };
+      sf::Text mountainRangeMaxLenghtLabel{  };
+      sf::Text mountainRangeCountLabel{  };
+      sf::Text firstPassHillChanceLabel{  };
+      sf::Text secondPassHillChanceLabel{  };
+      sf::Text forestChanceLabel{  };
+      sf::Text riverChanceLabel{  };
   };
 
 #endif

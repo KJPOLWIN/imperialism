@@ -175,7 +175,13 @@ int main()
       case GameState::game:
         if(lastFrameState == GameState::gameSettings)
         {
-          game.regenerateMap(gameSettings.getMapWidth(), gameSettings.getMapHeight(), gameSettings.getLandmassCount(), gameSettings.getLandmassSize());
+          game.regenerateMap(gameSettings.getMapWidth(), gameSettings.getMapHeight(), 
+                             gameSettings.getLandmassCount(), gameSettings.getLandmassSize(),
+                             gameSettings.getLandToWaterChance(), gameSettings.getWaterToLandChance(),
+                             gameSettings.getMountainRangeMaxLenght(), gameSettings.getMountainRangeCount(),
+                             gameSettings.getFirstPassHillChance(), gameSettings.getSecondPassHillChance(),
+                             gameSettings.getForestChance(),
+                             gameSettings.getRiverChance());
         }
         
         game.run(window, timeElapsed);

@@ -18,7 +18,13 @@
 
       void switchPause();
 
-      void regenerateMap(int width, int height, int landmassCount, int landmassSize);
+      void regenerateMap(int width, int height, 
+                         int landmassCount, int landmassSize,
+                         double landToWaterChance, double waterToLandChance,
+                         int mountainRangeMaxLenght, int mountainRangeCountP,
+                         double firstPassHillChance, double secondPassHillChance,
+                         double forestChance,
+                         double riverChance);
       
     private:
       Map map{  }; 

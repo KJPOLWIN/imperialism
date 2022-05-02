@@ -403,7 +403,13 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
   }
 }
  
-void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize)
+void Map::regenerate(int sizeX, int sizeY, 
+                     int landmassCountP, int landmassMaxSize,
+                     double landToWaterChance, double waterToLandChance,
+                     int mountainRangeMaxLenght, int mountainRangeCountP,
+                     double firstPassHillChance, double secondPassHillChance,
+                     double forestChance,
+                     double riverChance)
 {
   this->sizeX = sizeX;
   this->sizeY = sizeY;
@@ -417,7 +423,8 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
       nodes.push_back(MapNode(x, y));
     }
   }
-    
+   
+  //Creating climate zones 
   for(auto& node : nodes)
   {
     int y{ node.getHexPosition().toCartesian().y };
@@ -457,28 +464,26 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     createLandmass(landmassX, landmassY, landmassSize);
   }
 
+  //Smudging landmasses
   for( auto& node : nodes )
   {
-    //Smudging landmasses
     if(node.getTerrainType() == TerrainType::plains
     && neighboursTerrain(node.getHexPosition(), 
                          TerrainType::water)
-    && Random::testForProbability(0.5))
+    && Random::testForProbability(landToWaterChance))
     {
       node.switchTerrainType(TerrainType::water);
     }
     else if(node.getTerrainType() == TerrainType::water
     && neighboursTerrain(node.getHexPosition(), 
                          TerrainType::plains)
-    && Random::testForProbability(0.5))
+    && Random::testForProbability(waterToLandChance))
     {
       node.switchTerrainType(TerrainType::plains);
     }
   }
 
   //Mountains generation
-  const int mountainRangeLenght{ 5 };
-  int mountainRangeCountP{ 1 };
   int mountainRangeCount{ static_cast<int>(mountainRangeCountP * nodes.size() / 100) };
 
   int rangeX{ 0 };
@@ -490,7 +495,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     rangeY = Random::getRandomInt(0, sizeY - 1);
     HexVector rangeHexPosition{ rangeX, rangeY };
   
-    for(int jjj{ 0 }; jjj < mountainRangeLenght; ++jjj)
+    for(int jjj{ 0 }; jjj < mountainRangeMaxLenght; ++jjj)
     {
       if(getNode(sf::Vector2i(rangeX, rangeY)).getTerrainType() != TerrainType::blank)
       {
@@ -509,7 +514,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   for(auto& node : nodes)
   {
     if(neighboursTerrain(node.getHexPosition(), TerrainType::mountains)
-    && Random::testForProbability(0.5))
+    && Random::testForProbability(firstPassHillChance))
     {
       node.switchTerrainType(TerrainType::hills);
     }
@@ -519,7 +524,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   {
     if(node.getTerrainType() == TerrainType::plains
     && neighboursTerrain(node.getHexPosition(), TerrainType::hills)
-    && Random::testForProbability(0.5))
+    && Random::testForProbability(secondPassHillChance))
     {
       node.switchTerrainType(TerrainType::hills);
     }
@@ -530,7 +535,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   {
     if((node.getClimateZone() == ClimateZone::temperate
      || node.getClimateZone() == ClimateZone::tropical)
-    && Random::testForProbability(0.25))
+    && Random::testForProbability(forestChance))
     {
       if(node.getTerrainType() == TerrainType::plains)
       {
@@ -542,35 +547,6 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
       }
 
     }
-
-    /*if((node.getTerrainType() == TerrainType::grassland
-     || node.getTerrainType() == TerrainType::grassHills)
-    && Random::testForProbability(0.25))
-    {
-      int y{ node.getHexPosition().toCartesian().y };
-      if((y >= 3 * sizeY / 7 && y <= 4 * sizeY / 7))
-      {
-        if(node.getTerrainType() == TerrainType::grassHills)
-        {
-          node.switchTerrainType(TerrainType::jungleHills);
-        }
-        else
-        {
-          node.switchTerrainType(TerrainType::jungle);
-        }
-      }
-      else
-      {
-        if(node.getTerrainType() == TerrainType::grassHills)
-        {
-          node.switchTerrainType(TerrainType::forestHills);
-        }
-        else
-        {
-          node.switchTerrainType(TerrainType::forest);
-        }
-      }
-    }*/
   }
 
   //River generation
@@ -583,7 +559,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     && (neighboursTerrain(node.getHexPosition(), TerrainType::mountains)
      || neighboursTerrain(node.getHexPosition(), TerrainType::hills)
      || neighboursTerrain(node.getHexPosition(), TerrainType::forestHills))
-    && Random::testForProbability(0.01))
+    && Random::testForProbability(riverChance))
     {
       node.switchTerrainType(TerrainType::river);
 

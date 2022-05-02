@@ -18,7 +18,13 @@
       //void switchNodeTerrain();
       void draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double zoom);
   
-      void regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSize);
+      void regenerate(int sizeX, int sizeY, 
+                      int landmassCountP, int landmassMaxSize,
+                      double landToWaterChance, double waterToLandChance,
+                      int mountainRangeMaxLenght, int mountainRangeCountP,
+                      double firstPassHillChance, double secondPassHillChance,
+                      double forestChance,
+                      double riverChance);
       std::string getSelectedNodeName();
       Unit& getSelectedUnit();
 

@@ -213,7 +213,19 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   }
 }
 
-void Game::regenerateMap(int width, int height, int landmassCount, int landmassSize)
+void Game::regenerateMap(int width, int height, 
+                         int landmassCount, int landmassSize,
+                         double landToWaterChance, double waterToLandChance,
+                         int mountainRangeMaxLenght, int mountainRangeCountP,
+                         double firstPassHillChance, double secondPassHillChance,
+                         double forestChance,
+                         double riverChance)
 {
-  map.regenerate(width, height, landmassCount, landmassSize);
+  map.regenerate(width, height, 
+                 landmassCount, landmassSize,
+                 landToWaterChance,  waterToLandChance,
+                 mountainRangeMaxLenght,  mountainRangeCountP,
+                 firstPassHillChance,  secondPassHillChance,
+                 forestChance,
+                 riverChance);
 }
