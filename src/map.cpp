@@ -163,7 +163,114 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     && node.getPosition().x < viewOffset.x + 1920 * zoom 
     && node.getPosition().y < viewOffset.y + 1080 * zoom)
     {
-      if(node.getTerrainType() == TerrainType::grassland)
+      switch(node.getTerrainType())
+      {
+        case TerrainType::water:
+          waterNode.setPosition(node.getPosition());
+          targetWindow.draw(waterNode);
+        break;
+
+        case TerrainType::plains:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::polar:
+              tundraNode.setPosition(node.getPosition());
+              targetWindow.draw(tundraNode);
+            break;
+
+            case ClimateZone::dry:
+              desertNode.setPosition(node.getPosition());
+              targetWindow.draw(desertNode);
+            break;
+
+            case ClimateZone::temperate:
+            case ClimateZone::tropical:
+              grassNode.setPosition(node.getPosition());
+              targetWindow.draw(grassNode);
+            break;
+          }
+        break;
+
+        case TerrainType::hills:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::polar:
+              tundraHillsNode.setPosition(node.getPosition());
+              targetWindow.draw(tundraHillsNode);
+            break;
+
+            case ClimateZone::dry:
+              desertHillsNode.setPosition(node.getPosition());
+              targetWindow.draw(desertHillsNode);
+            break;
+            
+            case ClimateZone::temperate:
+            case ClimateZone::tropical:
+              grassHillsNode.setPosition(node.getPosition());
+              targetWindow.draw(grassHillsNode);
+            break;
+          }
+        break;
+
+        case TerrainType::mountains:
+          mountainsNode.setPosition(node.getPosition());
+          targetWindow.draw(mountainsNode);
+        break;
+
+        case TerrainType::forest:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::temperate:
+              forestNode.setPosition(node.getPosition());
+              targetWindow.draw(forestNode);
+            break;
+
+            case ClimateZone::tropical:
+              jungleNode.setPosition(node.getPosition());
+              targetWindow.draw(jungleNode);
+            break;
+          }
+        break;
+
+        case TerrainType::forestHills:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::temperate:
+              forestHillsNode.setPosition(node.getPosition());
+              targetWindow.draw(forestHillsNode);
+            break;
+
+            case ClimateZone::tropical:
+              jungleHillsNode.setPosition(node.getPosition());
+              targetWindow.draw(jungleHillsNode);
+            break;
+          }
+        break;
+
+        case TerrainType::river:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::polar:
+              tundraRiverNode.setPosition(node.getPosition());
+              targetWindow.draw(tundraRiverNode);
+            break;
+
+            case ClimateZone::dry:
+              desertRiverNode.setPosition(node.getPosition());
+              targetWindow.draw(desertRiverNode);
+            break;
+            
+            case ClimateZone::temperate:
+            case ClimateZone::tropical:
+              grasslandRiverNode.setPosition(node.getPosition());
+              targetWindow.draw(grasslandRiverNode);
+            break;
+          }
+        break;
+      }
+      
+
+      /*if(node.getTerrainType() == TerrainType::grassland)
       {
         //Check how it should be done and change this
         grassNode.setPosition(node.getPosition());
@@ -238,7 +345,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       {
         tundraRiverNode.setPosition(node.getPosition());
         targetWindow.draw(tundraRiverNode);
-      }
+      }*/
     }
   }
 
@@ -310,6 +417,29 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
       nodes.push_back(MapNode(x, y));
     }
   }
+    
+  for(auto& node : nodes)
+  {
+    int y{ node.getHexPosition().toCartesian().y };
+    //Polar: 1st, 7th
+    if(y < sizeY / 7 || y > 6 * sizeY / 7)
+    { 
+      node.switchClimateZone(ClimateZone::polar);
+    }
+    //Temperate: 2nd, 6th
+    //Dry: 3rd, 5th
+    if((y >= 2 * sizeY / 7 && y <= 3 * sizeY / 7)
+    || (y >= 4 * sizeY / 7 && y <= 5 * sizeY / 7))
+    {
+      node.switchClimateZone(ClimateZone::dry);
+    }
+    //Tropical: 4th
+    if(y >= 3 * sizeY / 7 && y <= 4 * sizeY / 7)
+    {
+      node.switchClimateZone(ClimateZone::tropical);
+      
+    }
+  }
 
   //Landmass generation
   int landmassCount{ static_cast<int>(landmassCountP * nodes.size() / 100) };
@@ -330,7 +460,7 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
   for( auto& node : nodes )
   {
     //Smudging landmasses
-    if(node.getTerrainType() != TerrainType::water
+    if(node.getTerrainType() == TerrainType::plains
     && neighboursTerrain(node.getHexPosition(), 
                          TerrainType::water)
     && Random::testForProbability(0.5))
@@ -339,28 +469,10 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     }
     else if(node.getTerrainType() == TerrainType::water
     && neighboursTerrain(node.getHexPosition(), 
-                         TerrainType::grassland)
+                         TerrainType::plains)
     && Random::testForProbability(0.5))
     {
-      node.switchTerrainType(TerrainType::grassland);
-    }
-  
-    //Biome generation
-    if(node.getTerrainType() != TerrainType::water)
-    {
-      int y{ node.getHexPosition().toCartesian().y };
-      //Tundra: 1st, 7th
-      if(y < sizeY / 7 || y > 6 * sizeY / 7)
-      { 
-        node.switchTerrainType(TerrainType::tundra);
-      }
-      //Grasslands: 2nd, 4th, 6th
-      //Desert: 3rd, 5th
-      if((y >= 2 * sizeY / 7 && y <= 3 * sizeY / 7)
-      || (y >= 4 * sizeY / 7 && y <= 5 * sizeY / 7))
-      {
-        node.switchTerrainType(TerrainType::desert);
-      }
+      node.switchTerrainType(TerrainType::plains);
     }
   }
 
@@ -399,50 +511,39 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
     if(neighboursTerrain(node.getHexPosition(), TerrainType::mountains)
     && Random::testForProbability(0.5))
     {
-      if(node.getTerrainType() == TerrainType::grassland)
-      {
-        node.switchTerrainType(TerrainType::grassHills);
-      }
-      else if(node.getTerrainType() == TerrainType::desert)
-      {
-        node.switchTerrainType(TerrainType::desertHills);
-      }
-      else if(node.getTerrainType() == TerrainType::tundra)
-      {
-        node.switchTerrainType(TerrainType::tundraHills);
-      }
+      node.switchTerrainType(TerrainType::hills);
     }
   }
   
   for(auto& node : nodes)
   {
-    if((node.getTerrainType() == TerrainType::grassland
-     || node.getTerrainType() == TerrainType::desert
-     || node.getTerrainType() == TerrainType::tundra)
-    && (neighboursTerrain(node.getHexPosition(), TerrainType::grassHills)
-     || neighboursTerrain(node.getHexPosition(), TerrainType::tundraHills)
-     || neighboursTerrain(node.getHexPosition(), TerrainType::desertHills))
+    if(node.getTerrainType() == TerrainType::plains
+    && neighboursTerrain(node.getHexPosition(), TerrainType::hills)
     && Random::testForProbability(0.5))
     {
-      if(node.getTerrainType() == TerrainType::grassland)
-      {
-        node.switchTerrainType(TerrainType::grassHills);
-      }
-      else if(node.getTerrainType() == TerrainType::desert)
-      {
-        node.switchTerrainType(TerrainType::desertHills);
-      }
-      else if(node.getTerrainType() == TerrainType::tundra)
-      {
-        node.switchTerrainType(TerrainType::tundraHills);
-      }
+      node.switchTerrainType(TerrainType::hills);
     }
   }
 
   //Forest generation
   for(auto& node : nodes)
   {
-    if((node.getTerrainType() == TerrainType::grassland
+    if((node.getClimateZone() == ClimateZone::temperate
+     || node.getClimateZone() == ClimateZone::tropical)
+    && Random::testForProbability(0.25))
+    {
+      if(node.getTerrainType() == TerrainType::plains)
+      {
+        node.switchTerrainType(TerrainType::forest);
+      }
+      else if(node.getTerrainType() == TerrainType::hills)
+      {
+        node.switchTerrainType(TerrainType::forestHills);
+      }
+
+    }
+
+    /*if((node.getTerrainType() == TerrainType::grassland
      || node.getTerrainType() == TerrainType::grassHills)
     && Random::testForProbability(0.25))
     {
@@ -469,25 +570,22 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
           node.switchTerrainType(TerrainType::forest);
         }
       }
-    }
+    }*/
   }
 
   //River generation
   for(auto& node : nodes)
   {
     if(node.getTerrainType() != TerrainType::water 
-    && node.getTerrainType() != TerrainType::grasslandRiver
+    && node.getTerrainType() != TerrainType::river
     && node.getTerrainType() != TerrainType::mountains
-    && !neighboursTerrain(node.getHexPosition(), TerrainType::grasslandRiver)
+    && !neighboursTerrain(node.getHexPosition(), TerrainType::river)
     && (neighboursTerrain(node.getHexPosition(), TerrainType::mountains)
-     || neighboursTerrain(node.getHexPosition(), TerrainType::grassHills)
-     || neighboursTerrain(node.getHexPosition(), TerrainType::desertHills)
-     || neighboursTerrain(node.getHexPosition(), TerrainType::tundraHills)
-     || neighboursTerrain(node.getHexPosition(), TerrainType::forestHills)
-     || neighboursTerrain(node.getHexPosition(), TerrainType::jungleHills))
+     || neighboursTerrain(node.getHexPosition(), TerrainType::hills)
+     || neighboursTerrain(node.getHexPosition(), TerrainType::forestHills))
     && Random::testForProbability(0.01))
     {
-      node.switchTerrainType(TerrainType::grasslandRiver);
+      node.switchTerrainType(TerrainType::river);
 
       double shortestDistanceToWater{ 200.0 * static_cast<double>(sizeX) };
       MapNode* closestWaterNode{ nullptr };
@@ -530,12 +628,12 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
         }
         else if(neighboursTerrain(position, TerrainType::water))
         {
-          getNode(position).switchTerrainType(TerrainType::grasslandRiver);
+          getNode(position).switchTerrainType(TerrainType::river);
           break;
         }
         else
         {
-          getNode(position).switchTerrainType(TerrainType::grasslandRiver);
+          getNode(position).switchTerrainType(TerrainType::river);
         }
 
         direction = Random::getRandomInt(directionToWater - 1, directionToWater + 1);
@@ -575,26 +673,6 @@ void Map::regenerate(int sizeX, int sizeY, int landmassCountP, int landmassMaxSi
           break;
         }
       }
-    }
-  }
-
-  //River climate generation
-  for(auto& node : nodes)
-  if(node.getTerrainType() == TerrainType::grasslandRiver)
-  {
-    int y{ node.getHexPosition().toCartesian().y };
-    //Tundra: 1st, 7th
-    if(y < sizeY / 7 || y > 6 * sizeY / 7)
-    { 
-      node.switchTerrainType(TerrainType::tundraRiver);
-    }
-    //Grasslands: 2nd, 4th, 6th
-    //Desert: 3rd, 5th
-    if((y >= 2 * sizeY / 7 && y <= 3 * sizeY / 7)
-    || (y >= 4 * sizeY / 7 && y <= 5 * sizeY / 7))
-    {
-      node.switchTerrainType(TerrainType::desertRiver);
-
     }
   }
 }
@@ -650,7 +728,7 @@ void Map::createLandmass(int q, int r, int s, int size)
 
     if(abs(delta.q) <= size && abs(delta.r) <= size && abs(delta.s) <= size)
     {
-      node.switchTerrainType(TerrainType::grassland);
+      node.switchTerrainType(TerrainType::plains);
     }
   }
 }
@@ -673,65 +751,93 @@ std::string Map::getSelectedNodeName()
     {
       switch(node.getTerrainType())
       {
-        case TerrainType::grassland:
-          return "Grassland";
-        break;
-
         case TerrainType::water:
-          return "Water";
+          return "Sea";
         break;
 
-        case TerrainType::desert:
-          return "Desert";
+        case TerrainType::plains:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::polar:
+              return "Tundra";
+            break;
+
+            case ClimateZone::dry:
+              return "Desert";
+            break;
+
+            case ClimateZone::temperate:
+            case ClimateZone::tropical:
+              return "Grassland";
+            break;
+          }
         break;
 
-        case TerrainType::tundra:
-          return "Tundra";
+        case TerrainType::hills:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::polar:
+              return "Tundra hills";
+            break;
+
+            case ClimateZone::dry:
+              return "Desert hills";
+            break;
+            
+            case ClimateZone::temperate:
+            case ClimateZone::tropical:
+              return "Grassland hills";
+            break;
+          }
         break;
 
-        case TerrainType::grassHills:
-          return "Grassland hills";
-        break;
-
-        case TerrainType::desertHills:
-          return "Desert hills";
-        break;
-
-        case TerrainType::tundraHills:
-          return "Tundra hills";
-        break;
-
-        case TerrainType::forest:
-          return "Forest";
-        break;
-
-        case TerrainType::forestHills:
-          return "Forest hills";
-        break;
-        
-        case TerrainType::jungle:
-          return "Rainforest";
-        break;
-        
-        case TerrainType::jungleHills:
-          return "Rainforest hills";
-        break;
-        
         case TerrainType::mountains:
           return "Mountains";
         break;
-      
-        case TerrainType::grasslandRiver:
-          return "Grassland river";
-        break;  
-        
-        case TerrainType::desertRiver:
-          return "Desert river";
-        break;  
-        
-        case TerrainType::tundraRiver:
-          return "Tundra river";
-        break;  
+
+        case TerrainType::forest:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::temperate:
+              return "Forest";
+            break;
+
+            case ClimateZone::tropical:
+              return "Rainforest";
+            break;
+          }
+        break;
+
+        case TerrainType::forestHills:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::temperate:
+              return "Forest hills";
+            break;
+
+            case ClimateZone::tropical:
+              return "Rainforest hills";
+            break;
+          }
+        break;
+
+        case TerrainType::river:
+          switch(node.getClimateZone())
+          {
+            case ClimateZone::polar:
+              return "Tundra river";
+            break;
+
+            case ClimateZone::dry:
+              return "Desert river";
+            break;
+            
+            case ClimateZone::temperate:
+            case ClimateZone::tropical:
+              return "Grassland river";
+            break;
+          }
+        break;
       }
     }
   }

@@ -8,7 +8,15 @@
 
   enum class TerrainType
   {
-    grassland,
+    water,
+    plains,
+    hills,
+    mountains,
+    forest,
+    forestHills,
+    river,
+    
+    /*grassland,
     water,
     desert,
     tundra,
@@ -22,8 +30,16 @@
     mountains,
     grasslandRiver,
     desertRiver,
-    tundraRiver,
+    tundraRiver,*/
     blank
+  };
+
+  enum class ClimateZone
+  {
+    polar,
+    temperate,
+    dry,
+    tropical
   };
 
   class MapNode
@@ -37,9 +53,11 @@
       void disselect();
       void draw(sf::RenderWindow& targetWindow);
 
-      void switchTerrainType();
+      //void switchTerrainType();
       void switchTerrainType(TerrainType newTerrain);
       TerrainType getTerrainType();
+      void switchClimateZone(ClimateZone newClimate);
+      ClimateZone getClimateZone();
 
       sf::Vector2f getPosition();
       void setPosition(HexVector newPosition);
@@ -52,5 +70,6 @@
       HexVector hexPosition{  };
       //sf::Vector2i gridPosition{ 0, 0 };
       TerrainType terrain{ TerrainType::water };
+      ClimateZone climate{ ClimateZone::temperate };
   };
 #endif

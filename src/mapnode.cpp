@@ -60,7 +60,7 @@ void MapNode::draw(sf::RenderWindow& targetWindow)
   targetWindow.draw(&vertices.at(0), vertices.size(), sf::LineStrip);
 }
 
-void MapNode::switchTerrainType()
+/*void MapNode::switchTerrainType()
 {
   if(terrain == TerrainType::mountains)
   {
@@ -70,7 +70,7 @@ void MapNode::switchTerrainType()
   {
     terrain = static_cast<TerrainType>(static_cast<int>(terrain) + 1);
   }
-}
+}*/
 
 void MapNode::switchTerrainType(TerrainType newTerrain)
 {
@@ -80,6 +80,16 @@ void MapNode::switchTerrainType(TerrainType newTerrain)
 TerrainType MapNode::getTerrainType()
 {
   return terrain;
+}
+      
+void MapNode::switchClimateZone(ClimateZone newClimate)
+{
+  climate = newClimate;
+}
+
+ClimateZone MapNode::getClimateZone()
+{
+  return climate;
 }
 
 sf::Vector2f MapNode::getPosition()
