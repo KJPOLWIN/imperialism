@@ -166,7 +166,7 @@ void Unit::move(int sizeX)
 {
   if(moveQueue.size() > 0)
   {
-    int moveCost{ moveCostMap.at(moveQueue.back().toCartesian().y * sizeX + moveQueue.back().toCartesian().x) };
+    int moveCost{ priority.at(moveQueue.back().toCartesian().y * sizeX + moveQueue.back().toCartesian().x) };
     if(moveCost <= movePoints)
     {
       setPosition(moveQueue.back());
