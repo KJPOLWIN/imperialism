@@ -7,7 +7,7 @@
 
   #include <iostream>
 
-Map::Map()
+Map::Map(   sf::Font& font    )
 {
   clickmap.loadFromFile("clickmap.png");
 
@@ -48,7 +48,13 @@ Map::Map()
   tundraRiverNode.setTexture(tundraRiverNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
-  units.push_back(Unit(1, 1, "Riflemen", 3));
+  units.push_back(Unit(5, 5, "Riflemen", 
+                       3, { 10, 1, 2, 3, 2, 2, 3 }
+        ));
+
+  debugMoveCostText = sf::Text("", font, 16);
+  debugMoveCostText.setOutlineThickness(2);
+  debugMoveCostText.setOutlineColor(sf::Color::Black);
 }
       
 void Map::nextTurn()
@@ -65,14 +71,21 @@ void Map::moveUnits(HexVector position)
   {
     if(unit.isSelected)
     {
-      HexVector unitPos{ unit.getHexPosition() };
       int unitMP{ unit.getMovePoints() };
-      if(position.q >= unitPos.q - unitMP && position.q <= unitPos.q + unitMP
-      && position.r >= unitPos.r - unitMP && position.r <= unitPos.r + unitMP
-      && position.s >= unitPos.s - unitMP && position.s <= unitPos.s + unitMP)
+      int nodeCost{ unit.getMoveCostMap().at(position.toCartesian().y * sizeX + position.toCartesian().x) };
+      
+      if(nodeCost != 0
+      && nodeCost <= unitMP)
       {
-        unit.setPosition(position);
+        unit.calculatePath(position, sizeX, sizeY);
       }
+
+      while(unit.getMoveQueueLenght() > 0)
+      {
+        unit.move(sizeX);
+      }
+
+      unit.generateMCM(sizeX, sizeY, nodes);
     }
   }
 }
@@ -142,23 +155,11 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
   }
 }
 
-/*void Map::switchNodeTerrain()
-{
-  for( auto& node : nodes )
-  {
-    if(node.isSelected)
-    {
-      node.switchTerrainType();
-      break;
-    }
-  }
-}*/
-
 void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double zoom)
 {
   for( auto& node : nodes )
   {
-    if(node.getPosition().x > viewOffset.x - 80 
+    if(node.getPosition().x > viewOffset.x - 80
     && node.getPosition().y > viewOffset.y - 101
     && node.getPosition().x < viewOffset.x + 1920 * zoom 
     && node.getPosition().y < viewOffset.y + 1080 * zoom)
@@ -268,84 +269,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
           }
         break;
       }
-      
-
-      /*if(node.getTerrainType() == TerrainType::grassland)
-      {
-        //Check how it should be done and change this
-        grassNode.setPosition(node.getPosition());
-        targetWindow.draw(grassNode);
-      }
-      else if(node.getTerrainType() == TerrainType::water)
-      { 
-        waterNode.setPosition(node.getPosition());
-        targetWindow.draw(waterNode);
-      }
-      else if(node.getTerrainType() == TerrainType::desert)
-      {
-        desertNode.setPosition(node.getPosition());
-        targetWindow.draw(desertNode);
-      } 
-      else if(node.getTerrainType() == TerrainType::tundra)
-      {
-        tundraNode.setPosition(node.getPosition());
-        targetWindow.draw(tundraNode);
-      }
-      else if(node.getTerrainType() == TerrainType::grassHills)
-      {
-        grassHillsNode.setPosition(node.getPosition());
-        targetWindow.draw(grassHillsNode);
-      }
-      else if(node.getTerrainType() == TerrainType::desertHills)
-      {
-        desertHillsNode.setPosition(node.getPosition());
-        targetWindow.draw(desertHillsNode);
-      }
-      else if(node.getTerrainType() == TerrainType::tundraHills)
-      {
-        tundraHillsNode.setPosition(node.getPosition());
-        targetWindow.draw(tundraHillsNode);
-      }
-      else if(node.getTerrainType() == TerrainType::forest)
-      {
-        forestNode.setPosition(node.getPosition());
-        targetWindow.draw(forestNode);
-      }
-      else if(node.getTerrainType() == TerrainType::forestHills)
-      {
-        forestHillsNode.setPosition(node.getPosition());
-        targetWindow.draw(forestHillsNode);
-      }
-      else if(node.getTerrainType() == TerrainType::jungle)
-      {
-        jungleNode.setPosition(node.getPosition());
-        targetWindow.draw(jungleNode);
-      }
-      else if(node.getTerrainType() == TerrainType::jungleHills)
-      {
-        jungleHillsNode.setPosition(node.getPosition());
-        targetWindow.draw(jungleHillsNode);
-      }
-      else if(node.getTerrainType() == TerrainType::mountains)
-      {
-        mountainsNode.setPosition(node.getPosition());
-        targetWindow.draw(mountainsNode);
-      }
-      else if(node.getTerrainType() == TerrainType::grasslandRiver)
-      {
-        grasslandRiverNode.setPosition(node.getPosition());
-        targetWindow.draw(grasslandRiverNode);
-      }
-      else if(node.getTerrainType() == TerrainType::desertRiver)
-      {
-        desertRiverNode.setPosition(node.getPosition());
-        targetWindow.draw(desertRiverNode);
-      }
-      else if(node.getTerrainType() == TerrainType::tundraRiver)
-      {
-        tundraRiverNode.setPosition(node.getPosition());
-        targetWindow.draw(tundraRiverNode);
-      }*/
     }
   }
 
@@ -377,28 +300,51 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
   //Drawing units
   for( auto& unit : units )
   {
-    riflemenSprite.setPosition(unit.getPosition());
-    targetWindow.draw(riflemenSprite);
-  
-    if(unit.isSelected
-    && unit.getPosition().x > viewOffset.x - 80 
+    if(unit.getPosition().x > viewOffset.x - 80 
     && unit.getPosition().y > viewOffset.y - 101
     && unit.getPosition().x < viewOffset.x + 1920 * zoom 
     && unit.getPosition().y < viewOffset.y + 1080 * zoom)
     {
-      for( auto& node : nodes )
+      riflemenSprite.setPosition(unit.getPosition());
+      targetWindow.draw(riflemenSprite);
+    }
+
+    //Drawing possible moves
+    for( auto& node : nodes )
+    {
+      if(unit.isSelected
+      && node.getPosition().x > viewOffset.x - 80 
+      && node.getPosition().y > viewOffset.y - 101
+      && node.getPosition().x < viewOffset.x + 1920 * zoom 
+      && node.getPosition().y < viewOffset.y + 1080 * zoom)
       {
         HexVector nodePos{ node.getHexPosition() };
-        HexVector unitPos{ unit.getHexPosition() };
         int unitMP{ unit.getMovePoints() };
-        if(nodePos.q >= unitPos.q - unitMP && nodePos.q <= unitPos.q + unitMP
-        && nodePos.r >= unitPos.r - unitMP && nodePos.r <= unitPos.r + unitMP
-        && nodePos.s >= unitPos.s - unitMP && nodePos.s <= unitPos.s + unitMP)
+        int nodeCost{ unit.getMoveCostMap().at(nodePos.toCartesian().y * sizeX + nodePos.toCartesian().x) };
+        
+        if(nodeCost != 0
+        && nodeCost <= unitMP)
         {
           selectedNode.setPosition(node.getPosition());
           targetWindow.draw(selectedNode);
         }
       } 
+    }
+  }
+
+ for(auto& unit : units)
+  {
+    for(auto& node : nodes)  
+    {
+      if(node.getPosition().x > viewOffset.x - 80
+      && node.getPosition().x < viewOffset.x + 1920 * zoom
+      && node.getPosition().y > viewOffset.y - 101
+      && node.getPosition().y < viewOffset.y + 1080 * zoom)
+      {
+        debugMoveCostText.setPosition(node.getPosition().x + 30, node.getPosition().y + 30);
+        debugMoveCostText.setString(std::to_string(unit.getMoveCostMap().at(getNodeID(node.getHexPosition()))));
+        targetWindow.draw(debugMoveCostText);
+      }
     }
   }
 }
@@ -651,6 +597,11 @@ void Map::regenerate(int sizeX, int sizeY,
       }
     }
   }
+
+  for(auto& unit : units)
+  {
+    unit.generateMCM(sizeX, sizeY, nodes);
+  }
 }
 
 MapNode& Map::getNode(int q, int r, int s)
@@ -672,6 +623,79 @@ MapNode& Map::getNode(HexVector position)
 MapNode& Map::getNode(sf::Vector2i position)
 {
   return getNode(HexVector(position));
+}
+      
+int Map::getNodeID(HexVector position)
+{
+  for(int iii{  }; iii < nodes.size(); ++iii)
+  {
+    if(nodes.at(iii).getHexPosition() == position)
+    {
+      return iii;
+    }
+  } 
+  return 0;
+}
+
+int Map::getNodeID(int q, int r, int s)
+{
+  return getNodeID(HexVector(q, r, s));
+}
+      
+MapNode& Map::getNeighbour(int mainQ, int mainR, int mainS, int directionID)
+{
+  switch(directionID)
+  {
+    case 0: //NW
+      return getNode(mainQ,
+                     mainR - 1,
+                     mainS + 1);
+    break;
+
+    case 1: //NE
+      return getNode(mainQ + 1,
+                     mainR - 1,
+                     mainS    );
+       
+    break;
+
+    case 2: //E
+      return getNode(mainQ + 1,
+                     mainR,
+                     mainS - 1);
+       
+    break;
+
+    case 3: //SE
+      return getNode(mainQ,
+                     mainR + 1,
+                     mainS - 1);
+       
+    break;
+
+    case 4: //SW
+      return getNode(mainQ - 1,
+                     mainR + 1,
+                     mainS    );
+       
+    break;
+
+    case 5: //W
+      return getNode(mainQ - 1,
+                     mainR,
+                     mainS + 1);
+       
+    break;
+  }
+
+  return nothingness;
+}
+
+MapNode& Map::getNeighbour(HexVector mainNodePosition, int directionID)
+{
+  return getNeighbour(mainNodePosition.q, 
+                      mainNodePosition.r, 
+                      mainNodePosition.s, directionID);
 }
 
 bool Map::neighboursTerrain(int q, int r, int s, TerrainType terrain)

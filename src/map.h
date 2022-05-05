@@ -9,7 +9,7 @@
   class Map
   { 
     public:
-      Map();
+      Map(    sf::Font& font    );
    
       void nextTurn(); 
       void moveUnits(HexVector position); 
@@ -32,6 +32,10 @@
       MapNode& getNode(int q, int r, int s);
       MapNode& getNode(HexVector position);
       MapNode& getNode(sf::Vector2i position);
+      int getNodeID(HexVector position);
+      int getNodeID(int q, int r, int s);
+      MapNode& getNeighbour(int mainQ, int mainR, int mainS, int directionID);
+      MapNode& getNeighbour(HexVector mainNodePosition, int directionID);
       void createLandmass(int q, int r, int s, int size);
       void createLandmass(HexVector position, int size);
       void createLandmass(int x, int y, int size);
@@ -41,11 +45,13 @@
 
       std::vector<MapNode> nodes{  };
       MapNode nothingness{  };
-      Unit nobody{ 0, 0, "", 0 };
+      Unit nobody{ 0, 0, "", 0, { 0, 0, 0, 0, 0, 0, 0 } };
       std::vector<Unit> units{  };
       int sizeX{ 0 };
       int sizeY{ 0 };
       sf::Image clickmap{  };
+
+      sf::Text debugMoveCostText{  };
 
       sf::Texture selectedNodeTexture{  };
       sf::Texture grassNodeTexture{  };
