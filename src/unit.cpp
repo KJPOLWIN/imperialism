@@ -199,15 +199,8 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
   frontier.push_back(&nodes.at(positioningNode.getHexPosition().toCartesian().y * sizeX 
                              + positioningNode.getHexPosition().toCartesian().x));
 
-  int counter{ 0 };
   while(frontier.size() != 0)
   {
-    ++counter;
-    if(counter > 10000)
-    {
-      break;
-    }
-    
     HexVector currentNodeHexPos{ frontier.at(0)->getHexPosition() };
 
     //NW
@@ -282,9 +275,13 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
 
         moveCostMap.at(hexToID(hvNW, sizeX)) = minimalMC 
                                                + priority.at(hexToID(hvNW, sizeX));
+      
+        if(moveCostMap.at(hexToID(hvNW, sizeX)) <= maxMovePoints)
+        {
+          frontier.push_back(&nodes.at(hexToID(hvNW, sizeX)));
+        }
       }
 
-      frontier.push_back(&nodes.at(hexToID(hvNW, sizeX)));
     }
 
     //NE
@@ -360,9 +357,13 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
 
         moveCostMap.at(hexToID(hvNE, sizeX)) = minimalMC 
                                                + priority.at(hexToID(hvNE, sizeX));
+      
+        if(moveCostMap.at(hexToID(hvNE, sizeX)) <= maxMovePoints)
+        {
+          frontier.push_back(&nodes.at(hexToID(hvNE, sizeX)));
+        }
       }
 
-      frontier.push_back(&nodes.at(hexToID(hvNE, sizeX)));
     }
     
 
@@ -439,9 +440,13 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
 
         moveCostMap.at(hexToID(hvE, sizeX)) = minimalMC 
                                                + priority.at(hexToID(hvE, sizeX));
+      
+        if(moveCostMap.at(hexToID(hvE, sizeX)) <= maxMovePoints)
+        {
+          frontier.push_back(&nodes.at(hexToID(hvE, sizeX)));
+        }
       }
 
-      frontier.push_back(&nodes.at(hexToID(hvE, sizeX)));
     }
 
     //SE
@@ -516,9 +521,13 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
 
         moveCostMap.at(hexToID(hvSE, sizeX)) = minimalMC 
                                                + priority.at(hexToID(hvSE, sizeX));
+      
+        if(moveCostMap.at(hexToID(hvSE, sizeX)) <= maxMovePoints)
+        {
+          frontier.push_back(&nodes.at(hexToID(hvSE, sizeX)));
+        }
       }
 
-      frontier.push_back(&nodes.at(hexToID(hvSE, sizeX)));
     }
 
     //SW
@@ -593,9 +602,13 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
 
         moveCostMap.at(hexToID(hvSW, sizeX)) = minimalMC 
                                                + priority.at(hexToID(hvSW, sizeX));
+      
+        if(moveCostMap.at(hexToID(hvSW, sizeX)) <= maxMovePoints)
+        {
+          frontier.push_back(&nodes.at(hexToID(hvSW, sizeX)));
+        }
       }
 
-      frontier.push_back(&nodes.at(hexToID(hvSW, sizeX)));
     }
 
     //W
@@ -670,9 +683,13 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
 
         moveCostMap.at(hexToID(hvW, sizeX)) = minimalMC 
                                                + priority.at(hexToID(hvW, sizeX));
+      
+        if(moveCostMap.at(hexToID(hvW, sizeX)) <= maxMovePoints)
+        {
+          frontier.push_back(&nodes.at(hexToID(hvW, sizeX)));
+        }
       }
 
-      frontier.push_back(&nodes.at(hexToID(hvW, sizeX)));
     }
 
     
