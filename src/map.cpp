@@ -600,6 +600,7 @@ void Map::regenerate(int sizeX, int sizeY,
 
   for(auto& unit : units)
   {
+    unit.loadMoveCosts(sizeX, sizeY, nodes);
     unit.generateMCM(sizeX, sizeY, nodes);
   }
 }

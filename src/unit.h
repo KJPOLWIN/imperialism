@@ -13,6 +13,7 @@
 
       void calculatePath(HexVector position, int sizeX, int sizeY);
       void move(int sizeX);
+      void loadMoveCosts(int sizeX, int sizeY, std::vector<MapNode>& nodes);
       void generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes);      
 
       sf::Vector2f getPosition();

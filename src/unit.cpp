@@ -179,11 +179,9 @@ void Unit::move(int sizeX)
     }
   }
 }
-      
-void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
+
+void Unit::loadMoveCosts(int sizeX, int sizeY, std::vector<MapNode>& nodes)
 {
-  moveCostMap.clear();
-  frontier.clear();
   priority.clear();
   
   for(int y{ 0 }; y < sizeY; ++y)
@@ -191,13 +189,28 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
     for(int x{ 0 }; x < sizeX; ++x)
     {
       priority.push_back(moveCosts.at(static_cast<int>(nodes.at(y * sizeX + x).getTerrainType())));
+
+    }
+  }
+}
+      
+void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
+{
+  moveCostMap.clear();
+  frontier.clear();
+  //priority.clear();
+  
+  for(int y{ 0 }; y < sizeY; ++y)
+  {
+    for(int x{ 0 }; x < sizeX; ++x)
+    {
+    //  priority.push_back(moveCosts.at(static_cast<int>(nodes.at(y * sizeX + x).getTerrainType())));
       moveCostMap.push_back(0);
 
     }
   }
 
-  frontier.push_back(&nodes.at(positioningNode.getHexPosition().toCartesian().y * sizeX 
-                             + positioningNode.getHexPosition().toCartesian().x));
+  frontier.push_back(&nodes.at(hexToID(positioningNode.getHexPosition(), sizeX)));
 
   while(frontier.size() != 0)
   {
