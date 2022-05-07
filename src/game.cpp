@@ -19,9 +19,7 @@ Game::Game(sf::Font& font)
     unitNameLabel{ "", font, 24 },
     unitHealth{ "", font, 16 },
     unitMovePoints{ "", font, 16 },
-    nextTurnButton{ font, "Next turn", sf::Vector2f(1550, 950), 32 },
-
-    map{ font }
+    nextTurnButton{ font, "Next turn", sf::Vector2f(1550, 950), 32 }
 {
   shadeTexture.loadFromFile("texture/shade.png");
   shade.setTexture(shadeTexture);

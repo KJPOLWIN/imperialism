@@ -7,7 +7,7 @@
 
   #include <iostream>
 
-Map::Map(   sf::Font& font    )
+Map::Map()
 {
   clickmap.loadFromFile("clickmap.png");
 
@@ -52,9 +52,6 @@ Map::Map(   sf::Font& font    )
                        3, { 10, 1, 2, 3, 2, 2, 3 }
         ));
 
-  debugMoveCostText = sf::Text("", font, 16);
-  debugMoveCostText.setOutlineThickness(2);
-  debugMoveCostText.setOutlineColor(sf::Color::Black);
 }
       
 void Map::nextTurn()
@@ -155,14 +152,19 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
   }
 }
 
+bool isVisible(sf::Vector2f nodePosition, sf::Vector2f viewOffset, double zoom)
+{
+  return (nodePosition.x > viewOffset.x - 50 * sqrt(3)
+       && nodePosition.y > viewOffset.y - 100
+       && nodePosition.x < viewOffset.x + 1920 * zoom
+       && nodePosition.y < viewOffset.y + 1080 * zoom);
+}
+
 void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double zoom)
 {
   for( auto& node : nodes )
   {
-    if(node.getPosition().x > viewOffset.x - 80
-    && node.getPosition().y > viewOffset.y - 101
-    && node.getPosition().x < viewOffset.x + 1920 * zoom 
-    && node.getPosition().y < viewOffset.y + 1080 * zoom)
+    if(isVisible(node.getPosition(), viewOffset, zoom))
     {
       switch(node.getTerrainType())
       {
@@ -276,10 +278,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
   for( auto& node : nodes )
   {
     if(!node.isSelected
-    && node.getPosition().x > viewOffset.x - 80 
-    && node.getPosition().y > viewOffset.y - 101
-    && node.getPosition().x < viewOffset.x + 1920 * zoom 
-    && node.getPosition().y < viewOffset.y + 1080 * zoom)
+    && isVisible(node.getPosition(), viewOffset, zoom))
     {
       node.draw(targetWindow);
     }
@@ -288,10 +287,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
   for( auto& node : nodes )
   {
     if(node.isSelected
-    && node.getPosition().x > viewOffset.x - 80 
-    && node.getPosition().y > viewOffset.y - 101
-    && node.getPosition().x < viewOffset.x + 1920 * zoom 
-    && node.getPosition().y < viewOffset.y + 1080 * zoom)
+    && isVisible(node.getPosition(), viewOffset, zoom))
     {
       node.draw(targetWindow);
     }
@@ -300,10 +296,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
   //Drawing units
   for( auto& unit : units )
   {
-    if(unit.getPosition().x > viewOffset.x - 80 
-    && unit.getPosition().y > viewOffset.y - 101
-    && unit.getPosition().x < viewOffset.x + 1920 * zoom 
-    && unit.getPosition().y < viewOffset.y + 1080 * zoom)
+    if(isVisible(unit.getPosition(), viewOffset, zoom))
     {
       riflemenSprite.setPosition(unit.getPosition());
       targetWindow.draw(riflemenSprite);
@@ -313,10 +306,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     for( auto& node : nodes )
     {
       if(unit.isSelected
-      && node.getPosition().x > viewOffset.x - 80 
-      && node.getPosition().y > viewOffset.y - 101
-      && node.getPosition().x < viewOffset.x + 1920 * zoom 
-      && node.getPosition().y < viewOffset.y + 1080 * zoom)
+      && isVisible(node.getPosition(), viewOffset, zoom))
       {
         HexVector nodePos{ node.getHexPosition() };
         int unitMP{ unit.getMovePoints() };
@@ -329,22 +319,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
           targetWindow.draw(selectedNode);
         }
       } 
-    }
-  }
-
- for(auto& unit : units)
-  {
-    for(auto& node : nodes)  
-    {
-      if(node.getPosition().x > viewOffset.x - 80
-      && node.getPosition().x < viewOffset.x + 1920 * zoom
-      && node.getPosition().y > viewOffset.y - 101
-      && node.getPosition().y < viewOffset.y + 1080 * zoom)
-      {
-        debugMoveCostText.setPosition(node.getPosition().x + 30, node.getPosition().y + 30);
-        debugMoveCostText.setString(std::to_string(unit.getMoveCostMap().at(getNodeID(node.getHexPosition()))));
-        targetWindow.draw(debugMoveCostText);
-      }
     }
   }
 }

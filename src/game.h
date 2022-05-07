@@ -27,8 +27,7 @@
                          double riverChance);
       
     private:
-      sf::Font reee{  };
-      Map map{  reee   }; 
+      Map map{ }; 
       sf::View mapView{ sf::FloatRect(0, 0, 1920, 1080) };
       sf::View guiView{ sf::FloatRect(0, 0, 1920, 1080) };
       sf::Texture shadeTexture{  };

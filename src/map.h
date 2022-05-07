@@ -9,7 +9,7 @@
   class Map
   { 
     public:
-      Map(    sf::Font& font    );
+      Map();
    
       void nextTurn(); 
       void moveUnits(HexVector position); 
@@ -50,8 +50,6 @@
       int sizeX{ 0 };
       int sizeY{ 0 };
       sf::Image clickmap{  };
-
-      sf::Text debugMoveCostText{  };
 
       sf::Texture selectedNodeTexture{  };
       sf::Texture grassNodeTexture{  };
