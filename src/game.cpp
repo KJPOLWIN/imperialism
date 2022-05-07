@@ -93,14 +93,14 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
       nodeNameLabel.setString(map.getSelectedNodeName());
       GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
       unitNameLabel.setString(map.getSelectedUnit().getName());
-      unitHealth.setString("Health: "
+      /*unitHealth.setString("Health: "
                          + std::to_string(map.getSelectedUnit().getHealth()) 
                          + "/" 
                          + std::to_string(map.getSelectedUnit().getMaxHealth()));
       unitMovePoints.setString("Move points: "
                              + std::to_string(map.getSelectedUnit().getMovePoints()) 
                              + "/" 
-                             + std::to_string(map.getSelectedUnit().getMaxMovePoints()));
+                             + std::to_string(map.getSelectedUnit().getMaxMovePoints()));*/
     }
   }
   else
@@ -170,6 +170,16 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
       mapView.move(0.0, scrollSpeed * timeElapsed * zoomLevel);
     }
   }
+      
+  
+  unitHealth.setString("Health: "
+                     + std::to_string(map.getSelectedUnit().getHealth()) 
+                     + "/" 
+                     + std::to_string(map.getSelectedUnit().getMaxHealth()));
+  unitMovePoints.setString("Move points: "
+                         + std::to_string(map.getSelectedUnit().getMovePoints()) 
+                         + "/" 
+                         + std::to_string(map.getSelectedUnit().getMaxMovePoints()));
   
   window.setView(mapView);
   map.draw(window, 
