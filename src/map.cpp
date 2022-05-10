@@ -48,9 +48,6 @@ Map::Map()
   tundraRiverNode.setTexture(tundraRiverNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
     
-  units.push_back(Unit(5, 5, "Riflemen", 
-                       3, { 10, 1, 2, 3, 2, 2, 3 }
-        ));
 
 }
       
@@ -96,10 +93,6 @@ sf::Vector2i Map::getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOf
   int tileY{ static_cast<int>(point.y / (3 * hexSize)) };
   double xmod{ (point.x - tileX * hexSize * sqrt(3)) * zoom };
   double ymod{ (point.y - tileY * 3 * hexSize) * zoom };
-
-  std::cout << point.x << ", " << point.y << "\n";
-  std::cout << tileX << ", " << tileY << "\n";
-  std::cout << xmod << ", " << ymod << "\n\n";
 
   int x{ tileX };
   int y{ tileY * 2 };
@@ -579,6 +572,11 @@ void Map::regenerate(int sizeX, int sizeY,
       }
     }
   }
+
+  units.clear();
+  units.push_back(Unit(5, 5, "Riflemen", 
+                       3, { 10, 1, 2, 3, 2, 2, 3 }
+                      ));
 
   for(auto& unit : units)
   {

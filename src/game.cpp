@@ -231,6 +231,7 @@ void Game::regenerateMap(int width, int height,
                          double forestChance,
                          double riverChance)
 {
+  mapView = sf::View(sf::FloatRect(0, 0, 1920, 1080));
   map.regenerate(width, height, 
                  landmassCount, landmassSize,
                  landToWaterChance,  waterToLandChance,
