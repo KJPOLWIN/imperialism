@@ -89,36 +89,44 @@ void Map::moveUnits(HexVector position)
 
 sf::Vector2i Map::getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom)
 {
-  int x{ static_cast<int>(clickPosition.x * zoom + viewOffset.x) / 88 };  //Node width in px
-  int y{ 2 * (static_cast<int>(clickPosition.y * zoom + viewOffset.y) / 151) }; //Node height in px + 50 px below
-  
-  sf::Color area{ sf::Color::White }; 
-  if(clickPosition.x >= 0 && clickPosition.y >= 0)
+  sf::Vector2f point{ static_cast<float>(clickPosition.x + viewOffset.x / zoom),
+                      static_cast<float>(clickPosition.y + viewOffset.y / zoom) };
+  double hexSize{ 50 / zoom };
+  int tileX{ static_cast<int>(point.x / (hexSize * sqrt(3))) };
+  int tileY{ static_cast<int>(point.y / (3 * hexSize)) };
+  double xmod{ (point.x - tileX * hexSize * sqrt(3)) * zoom };
+  double ymod{ (point.y - tileY * 3 * hexSize) * zoom };
+
+  std::cout << point.x << ", " << point.y << "\n";
+  std::cout << tileX << ", " << tileY << "\n";
+  std::cout << xmod << ", " << ymod << "\n\n";
+
+  int x{ tileX };
+  int y{ tileY * 2 };
+
+  if(xmod >= 0 && ymod >= 0)
   {
-    area = clickmap.getPixel(static_cast<unsigned int>(clickPosition.x * zoom + viewOffset.x) % 88, 
-                             static_cast<unsigned int>(clickPosition.y * zoom + viewOffset.y) % 151);
+    sf::Color area{ clickmap.getPixel(static_cast<int>(xmod), static_cast<int>(ymod)) };
+    if(area == sf::Color::Red)
+    {
+      --x;
+      --y;
+    }
+    else if(area == sf::Color::Yellow)
+    {
+      --y;
+    }
+    else if(area == sf::Color::Green)
+    {
+      --x;
+      ++y;
+    }
+    else if(area == sf::Color::Blue)
+    {
+      ++y;
+    }
   }
-  
-  if(area == sf::Color::Red)
-  {
-    --x;
-    --y; 
-  }
-  else if(area == sf::Color::Yellow)
-  {
-    --y;
-  }
-  else if(area == sf::Color::Green)
-  {
-    --x;
-    ++y;
-  }
-  else if(area == sf::Color::Blue)
-  {
-    ++y;
-  }
-  
-  
+
   return sf::Vector2i(x, y);
 }
 
