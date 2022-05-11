@@ -78,9 +78,9 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
     else
     {
       sf::Vector2i posCartesian{ map.getClickedNode(window.mapPixelToCoords(sf::Mouse::getPosition(window)),    
-                                                 sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
-                                                              (mapView.getCenter().y - mapView.getSize().y / 2)),
-                                                 mapView.getSize().x / 1920) };
+                                                    sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
+                                                                 (mapView.getCenter().y - mapView.getSize().y / 2)),
+                                                    mapView.getSize().x / 1920) };
       HexVector newPos{ posCartesian };
       map.moveUnits(newPos);
 

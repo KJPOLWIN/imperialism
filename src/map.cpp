@@ -61,25 +61,29 @@ void Map::nextTurn()
 
 void Map::moveUnits(HexVector position)
 {
-  for( auto& unit : units )
+  if(position.toCartesian().x >= 0 && position.toCartesian().y >= 0
+  && position.toCartesian().x < sizeX && position.toCartesian().y < sizeY)
   {
-    if(unit.isSelected)
+    for( auto& unit : units )
     {
-      int unitMP{ unit.getMovePoints() };
-      int nodeCost{ unit.getMoveCostMap().at(position.toCartesian().y * sizeX + position.toCartesian().x) };
+      if(unit.isSelected)
+      {
+        int unitMP{ unit.getMovePoints() };
+        int nodeCost{ unit.getMoveCostMap().at(position.toCartesian().y * sizeX + position.toCartesian().x) };
       
-      if(nodeCost != 0
-      && nodeCost <= unitMP)
-      {
-        unit.calculatePath(position, sizeX, sizeY);
-      }
+        if(nodeCost != 0
+        && nodeCost <= unitMP)
+        {
+          unit.calculatePath(position, sizeX, sizeY);
+        }
 
-      while(unit.getMoveQueueLenght() > 0)
-      {
-        unit.move(sizeX);
-      }
+        while(unit.getMoveQueueLenght() > 0)
+        {
+          unit.move(sizeX);
+        }
 
-      unit.generateMCM(sizeX, sizeY, nodes);
+        unit.generateMCM(sizeX, sizeY, nodes);
+      }
     }
   }
 }
@@ -91,6 +95,16 @@ sf::Vector2i Map::getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOf
   double hexSize{ 50 / zoom };
   int tileX{ static_cast<int>(point.x / (hexSize * sqrt(3))) };
   int tileY{ static_cast<int>(point.y / (3 * hexSize)) };
+
+  if(point.x < 0)
+  {
+    --tileX;
+  }
+  if(point.y < 0)
+  {
+    --tileY;
+  }
+
   double xmod{ (point.x - tileX * hexSize * sqrt(3)) * zoom };
   double ymod{ (point.y - tileY * 3 * hexSize) * zoom };
 
