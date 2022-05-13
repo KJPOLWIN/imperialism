@@ -125,11 +125,12 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
 
 void Game::scrollInput(double direction)
 {
-  if(direction > 0)
+  double zoomLevel{ mapView.getSize().x / 1920 };
+  if(direction > 0 && zoomLevel >= maxZoom)
   {
     mapView.zoom(0.5);
   }
-  else
+  else if(direction < 0 && zoomLevel <= minZoom)
   {
     mapView.zoom(2);
   }

@@ -30,6 +30,8 @@
       Map map{ }; 
       sf::View mapView{ sf::FloatRect(0, 0, 1920, 1080) };
       sf::View guiView{ sf::FloatRect(0, 0, 1920, 1080) };
+      double maxZoom{ 0.5 };
+      double minZoom{ 2 };
       sf::Texture shadeTexture{  };
       sf::Sprite shade{  };
       bool paused{ false };
