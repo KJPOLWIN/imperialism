@@ -7,18 +7,6 @@
 GameSettings::GameSettings(sf::Font& buttonFont)
   : startButton{ buttonFont, "start", sf::Vector2f(1720.0f, 980.0f), 32 },
     backButton{ buttonFont, "back", sf::Vector2f(50.0f, 980.0f), 32 },
-    mapWidth{ buttonFont, "30", 24, sf::Vector2f(1000.0f, 50.0f) },
-    mapHeight{ buttonFont, "20", 24, sf::Vector2f(1000.0f, 100.0f) },
-    landmassCount{ buttonFont, "3", 24, sf::Vector2f(1000.0f, 150.0f) },
-    landmassSize{ buttonFont, "6", 24, sf::Vector2f(1000.f, 200.0f) },
-    landToWaterChance{ buttonFont, "0.4", 24, sf::Vector2f(1000.0f, 250.0f) },
-    waterToLandChance{ buttonFont, "0.4", 24, sf::Vector2f(1000.0f, 300.0f) },
-    mountainRangeMaxLenght{ buttonFont, "2", 24, sf::Vector2f(1000.0f, 350.0f) },
-    mountainRangeCount{ buttonFont, "5", 24, sf::Vector2f(1000.0f, 400.0f) },
-    firstPassHillChance{ buttonFont, "0.25", 24, sf::Vector2f(1000.0f, 450.0f) },
-    secondPassHillChance{ buttonFont, "0.25", 24, sf::Vector2f(1000.0f, 500.0f) },
-    forestChance{ buttonFont, "0.25", 24, sf::Vector2f(1000.0f, 550.0f) },
-    riverChance{ buttonFont, "0.02", 24, sf::Vector2f(1000.0f, 600.0f) },
     mapWidthLabel{ "Map width", buttonFont, 24 },
     mapHeightLabel{ "Map height", buttonFont, 24 },
     landmassCountLabel{ "Landmasses / 100 nodes", buttonFont, 24 },
@@ -32,6 +20,32 @@ GameSettings::GameSettings(sf::Font& buttonFont)
     forestChanceLabel{ "Chance for forest", buttonFont, 24 },
     riverChanceLabel{ "Chance for river source", buttonFont, 24 }
 {
+  inputs.push_back(TextInput(buttonFont, "30", 
+                             24, sf::Vector2f(1000.0f, 50.0f)));  //Map width
+  inputs.push_back(TextInput(buttonFont, "20", 
+                             24, sf::Vector2f(1000.0f, 100.0f)));  //Map height
+  inputs.push_back(TextInput(buttonFont, "3", 
+                             24, sf::Vector2f(1000.0f, 150.0f)));  //Landmass count
+  inputs.push_back(TextInput(buttonFont, "6", 
+                             24, sf::Vector2f(1000.f, 200.0f)));  //Landmass size
+  inputs.push_back(TextInput(buttonFont, "0.4", 
+                             24, sf::Vector2f(1000.0f, 250.0f)));  //LtW chance
+  inputs.push_back(TextInput(buttonFont, "0.4", 
+                             24, sf::Vector2f(1000.0f, 300.0f)));  //WtL chance
+  inputs.push_back(TextInput(buttonFont, "2", 
+                             24, sf::Vector2f(1000.0f, 350.0f)));  //Moun. range lenght
+  inputs.push_back(TextInput(buttonFont, "5", 
+                             24, sf::Vector2f(1000.0f, 400.0f)));  //Moun. range count
+  inputs.push_back(TextInput(buttonFont, "0.25", 
+                             24, sf::Vector2f(1000.0f, 450.0f)));  //1st pass hill chance
+  inputs.push_back(TextInput(buttonFont, "0.25", 
+                             24, sf::Vector2f(1000.0f, 500.0f)));  //2nd pass hill chance
+  inputs.push_back(TextInput(buttonFont, "0.25", 
+                             24, sf::Vector2f(1000.0f, 550.0f)));  //Forest chance
+  inputs.push_back(TextInput(buttonFont, "0.02", 
+                             24, sf::Vector2f(1000.0f, 600.0f)));  //River chance 
+
+
   mapWidthLabel.setPosition(sf::Vector2f(50.0f, 50.0f));
   mapHeightLabel.setPosition(sf::Vector2f(50.0f, 100.0f));
   landmassCountLabel.setPosition(sf::Vector2f(50.0f, 150.0f));
@@ -56,252 +70,91 @@ void GameSettings::mouseInput(GameState& state, sf::RenderWindow& window, sf::Ve
   {
     state = GameState::mainMenu;
   }
-  else if(mapWidth.isClicked(clickPosition))
-  {
-    mapWidth.active = true;
-    mapHeight.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(mapHeight.isClicked(clickPosition))
-  {
-    mapWidth.active = false;
-    mapHeight.active = true;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(landmassCount.isClicked(clickPosition))
-  {
-    mapWidth.active = false;
-    mapHeight.active = false;
-    landmassCount.active = true;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(landmassSize.isClicked(clickPosition))
-  {
-    mapWidth.active = false;
-    mapHeight.active = false;
-    landmassCount.active = false;
-    landmassSize.active = true;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(landToWaterChance.isClicked(clickPosition))
-  {
-    mapHeight.active = false;
-    mapWidth.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = true;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(waterToLandChance.isClicked(clickPosition))
-  {
-    mapHeight.active = false;
-    mapWidth.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = true;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(mountainRangeMaxLenght.isClicked(clickPosition))
-  {
-    mapHeight.active = false;
-    mapWidth.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = true;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(mountainRangeCount.isClicked(clickPosition))
-  {
-    mapHeight.active = false;
-    mapWidth.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = true;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(firstPassHillChance.isClicked(clickPosition))
-  {
-    mapHeight.active = false;
-    mapWidth.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = true;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(secondPassHillChance.isClicked(clickPosition))
-  {
-    mapHeight.active = false;
-    mapWidth.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = true;
-    forestChance.active = false;
-    riverChance.active = false;
-  }
-  else if(forestChance.isClicked(clickPosition))
-  {
-    mapHeight.active = false;
-    mapWidth.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = true;
-    riverChance.active = false;
-  }
-  else if(riverChance.isClicked(clickPosition))
-  {
-    mapHeight.active = false;
-    mapWidth.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = true;
-  }
   else
   {
-    mapWidth.active = false;
-    mapHeight.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
+    bool anyInputActive{ false };
+    for(std::size_t iii{ 0 }; iii < inputs.size(); ++iii)
+    {
+      if(inputs.at(iii).isClicked(clickPosition)
+      && !anyInputActive)
+      {
+        inputs.at(iii).active = true;
+        anyInputActive = true;
+        activeInputId = iii;
+      }
+      else
+      {
+        inputs.at(iii).active = false;
+      }
+    }
   }
-
 }
 
 void GameSettings::textInput(char input)
 {
-  mapWidth.updateText(input);
-  mapHeight.updateText(input);
-  landmassCount.updateText(input);
-  landmassSize.updateText(input);
-  landToWaterChance.updateText(input);
-  waterToLandChance.updateText(input);
-  mountainRangeMaxLenght.updateText(input);
-  mountainRangeCount.updateText(input);
-  firstPassHillChance.updateText(input);
-  secondPassHillChance.updateText(input);
-  forestChance.updateText(input);
-  riverChance.updateText(input);
+  for(auto& inputField : inputs)
+  {
+    inputField.updateText(input);
+  }
+}
+      
+void GameSettings::arrowUpPressed()
+{
+  --activeInputId;
+  for(auto& input : inputs)
+  {
+    input.active = false;
+  }
+  inputs.at(activeInputId).active = true;
+}
+
+void GameSettings::arrowRightPressed()
+{
+  ++activeInputId;
+  for(auto& input : inputs)
+  {
+    input.active = false;
+  }
+  inputs.at(activeInputId).active = true;
+}
+
+void GameSettings::arrowDownPressed()
+{
+  ++activeInputId;
+  for(auto& input : inputs)
+  {
+    input.active = false;
+  }
+  inputs.at(activeInputId).active = true;
+}
+
+void GameSettings::arrowLeftPressed()
+{
+  --activeInputId;
+  for(auto& input : inputs)
+  {
+    input.active = false;
+  }
+  inputs.at(activeInputId).active = true;
 }
 
 void GameSettings::run(sf::RenderWindow& window)
 {
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
   {
-    mapWidth.active = false;
-    mapHeight.active = false;
-    landmassCount.active = false;
-    landmassSize.active = false;
-    landToWaterChance.active = false;
-    waterToLandChance.active = false;
-    mountainRangeMaxLenght.active = false;
-    mountainRangeCount.active = false;
-    firstPassHillChance.active = false;
-    secondPassHillChance.active = false;
-    forestChance.active = false;
-    riverChance.active = false;
+    for(auto& inputField : inputs)
+    {
+      inputField.active = false;
+    }
   }
 
   startButton.draw(window);
   backButton.draw(window);
-  mapWidth.draw(window);
-  mapHeight.draw(window);
-  landToWaterChance.draw(window);
-  waterToLandChance.draw(window);
-  mountainRangeMaxLenght.draw(window);
-  mountainRangeCount.draw(window);
-  firstPassHillChance.draw(window);
-  secondPassHillChance.draw(window);
-  forestChance.draw(window);
-  riverChance.draw(window);
-  landmassCount.draw(window);
-  landmassSize.draw(window);
+
+  for(auto& inputField : inputs)
+  {
+    inputField.draw(window);
+  }
   window.draw(mapWidthLabel);
   window.draw(mapHeightLabel);
   window.draw(landmassCountLabel);
@@ -318,67 +171,60 @@ void GameSettings::run(sf::RenderWindow& window)
       
 int GameSettings::getMapWidth()
 {
-  return std::stoi(mapWidth.getText());
+  return std::stoi(inputs.at(0).getText());
 }
 
 int GameSettings::getMapHeight()
 {
-  return std::stoi(mapHeight.getText());
+  return std::stoi(inputs.at(1).getText());
 }
 
 int GameSettings::getLandmassCount()
 {
-  return std::stoi(landmassCount.getText());
+  return std::stoi(inputs.at(2).getText());
 }
 
 int GameSettings::getLandmassSize()
 {
-  return std::stoi(landmassSize.getText());
+  return std::stoi(inputs.at(3).getText());
 }
       
 double GameSettings::getLandToWaterChance()
 {
-  return std::stod(landToWaterChance.getText());
+  return std::stod(inputs.at(4).getText());
 }
 
 double GameSettings::getWaterToLandChance()
 {
-  return std::stod(waterToLandChance.getText());
-
+  return std::stod(inputs.at(5).getText());
 }
 
 int GameSettings::getMountainRangeMaxLenght()
 {
-  return std::stoi(mountainRangeMaxLenght.getText());
-
+  return std::stoi(inputs.at(6).getText());
 }
 
 int GameSettings::getMountainRangeCount()
 {
-  return std::stoi(mountainRangeCount.getText());
-
+  return std::stoi(inputs.at(7).getText());
 }
 
 double GameSettings::getFirstPassHillChance()
 {
-  return std::stod(firstPassHillChance.getText());
-
+  return std::stod(inputs.at(8).getText());
 }
 
 double GameSettings::getSecondPassHillChance()
 {
-
-  return std::stod(secondPassHillChance.getText());
+  return std::stod(inputs.at(9).getText());
 }
 
 double GameSettings::getForestChance()
 {
-  return std::stod(forestChance.getText());
-
+  return std::stod(inputs.at(10).getText());
 }
 
 double GameSettings::getRiverChance()
 {
-  return std::stod(riverChance.getText());
-
+  return std::stod(inputs.at(11).getText());
 }

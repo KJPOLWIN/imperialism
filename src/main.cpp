@@ -72,7 +72,7 @@ int main()
     options.toggleVSync();
   }
  
-  //Setting up  fps display
+  //Setting up fps display
   sf::Text fpsDisplay{ "e", pressStart2P, 16 };
   fpsDisplay.setPosition(5, 5);
   fpsDisplay.setFillColor(sf::Color::Red);
@@ -144,13 +144,44 @@ int main()
       {
         canClick = true;
       }
-      else if(event.type == sf::Event::KeyPressed
-           && event.key.code == sf::Keyboard::Escape)
+      else if(event.type == sf::Event::KeyPressed)
       {
-        if(state == GameState::game)
+        if(event.key.code == sf::Keyboard::Escape)
         {
-          game.switchPause();
+          if(state == GameState::game)
+          {
+            game.switchPause();
+          }
         }
+        else if(event.key.code == sf::Keyboard::Up)
+        {
+          if(state == GameState::gameSettings)
+          {
+            gameSettings.arrowUpPressed();
+          }
+        }
+        else if(event.key.code == sf::Keyboard::Right)
+        {
+          if(state == GameState::gameSettings)
+          {
+            gameSettings.arrowRightPressed();
+          }
+        }
+        else if(event.key.code == sf::Keyboard::Left)
+        {
+          if(state == GameState::gameSettings)
+          {
+            gameSettings.arrowLeftPressed();
+          }
+        }
+        else if(event.key.code == sf::Keyboard::Down)
+        {
+          if(state == GameState::gameSettings)
+          {
+            gameSettings.arrowDownPressed();
+          }
+        }
+
       }
       else if(event.type == sf::Event::MouseWheelScrolled)
       {

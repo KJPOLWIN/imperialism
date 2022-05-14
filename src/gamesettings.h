@@ -5,6 +5,7 @@
   #include "textinput.h"
   #include "gamestate.h"
   #include <SFML/Graphics.hpp>
+  #include <vector>
 
   class GameSettings
   {
@@ -13,6 +14,10 @@
       
       void mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition);
       void textInput(char input);
+      void arrowUpPressed();
+      void arrowRightPressed();
+      void arrowDownPressed();
+      void arrowLeftPressed();
       void run(sf::RenderWindow& window);
 
       int getMapWidth();
@@ -32,19 +37,9 @@
     private:
       TextButton startButton{  };
       TextButton backButton{  };
-
-      TextInput mapWidth{  };
-      TextInput mapHeight{  };
-      TextInput landmassCount{  };
-      TextInput landmassSize{  };
-      TextInput landToWaterChance{  };
-      TextInput waterToLandChance{  };
-      TextInput mountainRangeMaxLenght{  };
-      TextInput mountainRangeCount{  };
-      TextInput firstPassHillChance{  };
-      TextInput secondPassHillChance{  };
-      TextInput forestChance{  };
-      TextInput riverChance{  };
+      
+      std::vector<TextInput> inputs{  };
+      int activeInputId{ 0 };
 
       sf::Text mapWidthLabel{  };
       sf::Text mapHeightLabel{  };
