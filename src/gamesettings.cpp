@@ -140,7 +140,8 @@ void GameSettings::arrowLeftPressed()
 
 void GameSettings::run(sf::RenderWindow& window)
 {
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)
+  || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
   {
     for(auto& inputField : inputs)
     {

@@ -32,18 +32,6 @@ int main()
     optionsFile >> savedOptions;
   }
 
-  optionsFile.close();
-
-  /*if(!optionsFile.is_open())
-  {
-    optionsFile.open("options.json", std::ios::out);
-    optionsFile.close();
-    optionsFile.open("options.json", std::ios::in | std::ios::out | std::ios::trunc);
-  }
-  else
-  {
-  }*/
-
   //Loading fonts
   sf::Font pressStart2P{  };
   pressStart2P.loadFromFile("font/PressStart2P-Regular.ttf");
@@ -255,20 +243,13 @@ int main()
   //Saving options
   savedOptions["fpsDisplay"] = options.fpsDisplaySelected;
   savedOptions["vSync"] = options.vSyncSelected;
+  optionsFile.close();
   optionsFile.open("options.json", std::ios::out | std::ios::trunc);
   if(optionsFile.is_open())
   { 
     optionsFile << std::setw(4) << savedOptions << std::endl;
     optionsFile.close();
   }
-  /*else
-  {
-    if(optionsFile.is_open())
-    {
-      optionsFile << std::setw(4) << savedOptions << "\n";
-      optionsFile.close();
-    }
-  }*/
 
   return 0;
 }

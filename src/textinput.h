@@ -4,10 +4,17 @@
   #include <SFML/Graphics.hpp>
   #include <string>
 
+  enum class InputType
+  {
+    numeric,
+    text
+  };
+
   class TextInput
   {
     public:
-      TextInput(sf::Font& font, std::string string, unsigned int size, sf::Vector2f position);
+      TextInput(sf::Font& font, std::string string, unsigned int size, 
+                sf::Vector2f position, InputType type = InputType::numeric);
       TextInput() = default;
       
       bool isClicked(sf::Vector2i clickPosition);
@@ -21,7 +28,7 @@
       
       sf::Text text{  };
       sf::RectangleShape background{  };
-  
+      InputType type{ InputType::numeric }; 
 
   };
 
