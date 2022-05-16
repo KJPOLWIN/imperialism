@@ -4,7 +4,16 @@ A 4X turn-based strategy game.
 
 # Compiling
 ## Linux
-To compile this project you need to install SFML (instructions here: https://www.sfml-dev.org/tutorials/2.5/start-linux.php#introduction) and g++ compiler.
-After that run `make` command from project's directory. 
+To compile this project on Linux you need to install:
+- SFML 2.5.1 (instructions here: https://www.sfml-dev.org/tutorials/2.5/start-linux.php#introduction) 
+- g++ compiler
+- CMake 3.12 or higher
+
+After that run `cmake .` command in project's directory and then `make`.
 ## Windows
-Project in its current form can't be compiled on Windows, however since SFML is cross-platform library available also on Windows, project can be compiled after making changes in the Makefile. Makefile for Windows will be added in near future.
+To compile this project on Windows you need to install:
+- SFML 2.5.1 for MinGW (DW2) 32-bit (available here: https://www.sfml-dev.org/download/sfml/2.5.1/)
+- MinGW 7.3.0 compiler (available here: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.3.0/threads-posix/dwarf/)
+- CMake 3.12 or higher
+
+Add paths to SFML and MinGW to `PATH` environment variable. Next run `cmake -G "MinGW Makefiles" .` command from project's directory. After that run `mingw32-make` to compile the project.
