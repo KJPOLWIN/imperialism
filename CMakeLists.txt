@@ -4,6 +4,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(imperialism VERSION 0.2)
 
+IF(WIN32)
+  set(SFML_STATIC_LIBRARIES TRUE)
+ENDIF()
+
 find_package(SFML 2.5.1 REQUIRED network audio graphics window system)
 
 add_executable(imperialism src/credits.cpp src/game.cpp src/gamesettings.cpp 
