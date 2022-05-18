@@ -12,7 +12,7 @@
     public:
       GameSettings(sf::Font& buttonFont);
       
-      void mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition);
+      void mouseInput(GameState& state, sf::Vector2i clickPosition);
       void textInput(char input);
       void arrowUpPressed();
       void arrowRightPressed();
@@ -39,7 +39,7 @@
       TextButton backButton{  };
       
       std::vector<TextInput> inputs{  };
-      int activeInputId{ 0 };
+      std::size_t activeInputId{ 0 };
 
       sf::Text mapWidthLabel{  };
       sf::Text mapHeightLabel{  };

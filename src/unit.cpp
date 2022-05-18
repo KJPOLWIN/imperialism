@@ -15,9 +15,10 @@ Unit::Unit(int x, int y, std::string name, int movePoints, std::vector<int> move
 }
 
 
-int hexToID(HexVector vector, int sizeX)
+std::size_t hexToID(HexVector vector, int sizeX)
 {
-  return vector.toCartesian().y * sizeX + vector.toCartesian().x;
+  return static_cast<std::size_t>(vector.toCartesian().y * sizeX
+                                + vector.toCartesian().x);
 }
 
 HexVector neighbours(HexVector pos, int dir)
@@ -166,7 +167,8 @@ void Unit::move(int sizeX)
 {
   if(moveQueue.size() > 0)
   {
-    int moveCost{ priority.at(moveQueue.back().toCartesian().y * sizeX + moveQueue.back().toCartesian().x) };
+    int moveCost{ priority.at(hexToID(moveQueue.back(), sizeX)) };
+    
     if(moveCost <= movePoints)
     {
       setPosition(moveQueue.back());
@@ -188,7 +190,8 @@ void Unit::loadMoveCosts(int sizeX, int sizeY, std::vector<MapNode>& nodes)
   {
     for(int x{ 0 }; x < sizeX; ++x)
     {
-      priority.push_back(moveCosts.at(static_cast<int>(nodes.at(y * sizeX + x).getTerrainType())));
+      priority.push_back(moveCosts.at(static_cast<std::size_t>(
+                                      nodes.at(static_cast<std::size_t>(y * sizeX + x)).getTerrainType())));
 
     }
   }
@@ -204,7 +207,6 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
   {
     for(int x{ 0 }; x < sizeX; ++x)
     {
-    //  priority.push_back(moveCosts.at(static_cast<int>(nodes.at(y * sizeX + x).getTerrainType())));
       moveCostMap.push_back(0);
 
     }
@@ -240,44 +242,39 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
 
           minimalMC = 1000000;  //I assume nodes will have smaller MC
 
+          //hexToID(neighbours(hvNW, 0), sizeX) >= 0
 
-          if(hexToID(neighbours(hvNW, 0), sizeX) >= 0
-          && hexToID(neighbours(hvNW, 0), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNW, 0), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNW, 0), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNW, 0), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNW, 0), sizeX));
           }
-          if(hexToID(neighbours(hvNW, 1), sizeX) >= 0
-          && hexToID(neighbours(hvNW, 1), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNW, 1), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNW, 1), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNW, 1), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNW, 1), sizeX));
           }
-          if(hexToID(neighbours(hvNW, 2), sizeX) >= 0
-          && hexToID(neighbours(hvNW, 2), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNW, 2), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNW, 2), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNW, 2), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNW, 2), sizeX));
           }
-          if(hexToID(neighbours(hvNW, 3), sizeX) >= 0
-          && hexToID(neighbours(hvNW, 3), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNW, 3), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNW, 3), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNW, 3), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNW, 3), sizeX));
           }
-          if(hexToID(neighbours(hvNW, 4), sizeX) >= 0
-          && hexToID(neighbours(hvNW, 4), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNW, 4), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNW, 4), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNW, 4), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNW, 4), sizeX));
           }
-          if(hexToID(neighbours(hvNW, 5), sizeX) >= 0
-          && hexToID(neighbours(hvNW, 5), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNW, 5), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNW, 5), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNW, 5), sizeX)) < minimalMC)
           {
@@ -323,43 +320,37 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
           minimalMC = 1000000;  //I assume nodes will have smaller MC
 
 
-          if(hexToID(neighbours(hvNE, 0), sizeX) >= 0
-          && hexToID(neighbours(hvNE, 0), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNE, 0), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNE, 0), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNE, 0), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNE, 0), sizeX));
           }
-          if(hexToID(neighbours(hvNE, 1), sizeX) >= 0
-          && hexToID(neighbours(hvNE, 1), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNE, 1), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNE, 1), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNE, 1), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNE, 1), sizeX));
           }
-          if(hexToID(neighbours(hvNE, 2), sizeX) >= 0
-          && hexToID(neighbours(hvNE, 2), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNE, 2), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNE, 2), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNE, 2), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNE, 2), sizeX));
           }
-          if(hexToID(neighbours(hvNE, 3), sizeX) >= 0
-          && hexToID(neighbours(hvNE, 3), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNE, 3), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNE, 3), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNE, 3), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNE, 3), sizeX));
           }
-          if(hexToID(neighbours(hvNE, 4), sizeX) >= 0
-          && hexToID(neighbours(hvNE, 4), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNE, 4), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNE, 4), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNE, 4), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvNE, 4), sizeX));
           }
-          if(hexToID(neighbours(hvNE, 5), sizeX) >= 0
-          && hexToID(neighbours(hvNE, 5), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvNE, 5), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvNE, 5), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvNE, 5), sizeX)) < minimalMC)
           {
@@ -406,43 +397,37 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
           minimalMC = 1000000;  //I assume nodes will have smaller MC
 
 
-          if(hexToID(neighbours(hvE, 0), sizeX) >= 0
-          && hexToID(neighbours(hvE, 0), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvE, 0), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvE, 0), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvE, 0), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvE, 0), sizeX));
           }
-          if(hexToID(neighbours(hvE, 1), sizeX) >= 0
-          && hexToID(neighbours(hvE, 1), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvE, 1), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvE, 1), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvE, 1), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvE, 1), sizeX));
           }
-          if(hexToID(neighbours(hvE, 2), sizeX) >= 0
-          && hexToID(neighbours(hvE, 2), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvE, 2), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvE, 2), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvE, 2), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvE, 2), sizeX));
           }
-          if(hexToID(neighbours(hvE, 3), sizeX) >= 0
-          && hexToID(neighbours(hvE, 3), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvE, 3), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvE, 3), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvE, 3), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvE, 3), sizeX));
           }
-          if(hexToID(neighbours(hvE, 4), sizeX) >= 0
-          && hexToID(neighbours(hvE, 4), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvE, 4), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvE, 4), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvE, 4), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvE, 4), sizeX));
           }
-          if(hexToID(neighbours(hvE, 5), sizeX) >= 0
-          && hexToID(neighbours(hvE, 5), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvE, 5), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvE, 5), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvE, 5), sizeX)) < minimalMC)
           {
@@ -487,43 +472,37 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
           minimalMC = 1000000;  //I assume nodes will have smaller MC
 
 
-          if(hexToID(neighbours(hvSE, 0), sizeX) >= 0
-          && hexToID(neighbours(hvSE, 0), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSE, 0), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSE, 0), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSE, 0), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSE, 0), sizeX));
           }
-          if(hexToID(neighbours(hvSE, 1), sizeX) >= 0
-          && hexToID(neighbours(hvSE, 1), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSE, 1), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSE, 1), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSE, 1), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSE, 1), sizeX));
           }
-          if(hexToID(neighbours(hvSE, 2), sizeX) >= 0
-          && hexToID(neighbours(hvSE, 2), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSE, 2), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSE, 2), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSE, 2), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSE, 2), sizeX));
           }
-          if(hexToID(neighbours(hvSE, 3), sizeX) >= 0
-          && hexToID(neighbours(hvSE, 3), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSE, 3), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSE, 3), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSE, 3), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSE, 3), sizeX));
           }
-          if(hexToID(neighbours(hvSE, 4), sizeX) >= 0
-          && hexToID(neighbours(hvSE, 4), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSE, 4), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSE, 4), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSE, 4), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSE, 4), sizeX));
           }
-          if(hexToID(neighbours(hvSE, 5), sizeX) >= 0
-          && hexToID(neighbours(hvSE, 5), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSE, 5), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSE, 5), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSE, 5), sizeX)) < minimalMC)
           {
@@ -568,43 +547,37 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
           minimalMC = 1000000;  //I assume nodes will have smaller MC
 
 
-          if(hexToID(neighbours(hvSW, 0), sizeX) >= 0
-          && hexToID(neighbours(hvSW, 0), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSW, 0), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSW, 0), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSW, 0), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSW, 0), sizeX));
           }
-          if(hexToID(neighbours(hvSW, 1), sizeX) >= 0
-          && hexToID(neighbours(hvSW, 1), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSW, 1), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSW, 1), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSW, 1), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSW, 1), sizeX));
           }
-          if(hexToID(neighbours(hvSW, 2), sizeX) >= 0
-          && hexToID(neighbours(hvSW, 2), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSW, 2), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSW, 2), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSW, 2), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSW, 2), sizeX));
           }
-          if(hexToID(neighbours(hvSW, 3), sizeX) >= 0
-          && hexToID(neighbours(hvSW, 3), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSW, 3), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSW, 3), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSW, 3), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSW, 3), sizeX));
           }
-          if(hexToID(neighbours(hvSW, 4), sizeX) >= 0
-          && hexToID(neighbours(hvSW, 4), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSW, 4), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSW, 4), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSW, 4), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvSW, 4), sizeX));
           }
-          if(hexToID(neighbours(hvSW, 5), sizeX) >= 0
-          && hexToID(neighbours(hvSW, 5), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvSW, 5), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvSW, 5), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvSW, 5), sizeX)) < minimalMC)
           {
@@ -649,43 +622,37 @@ void Unit::generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes)
           minimalMC = 1000000;  //I assume nodes will have smaller MC
 
 
-          if(hexToID(neighbours(hvW, 0), sizeX) >= 0
-          && hexToID(neighbours(hvW, 0), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvW, 0), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvW, 0), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvW, 0), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvW, 0), sizeX));
           }
-          if(hexToID(neighbours(hvW, 1), sizeX) >= 0
-          && hexToID(neighbours(hvW, 1), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvW, 1), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvW, 1), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvW, 1), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvW, 1), sizeX));
           }
-          if(hexToID(neighbours(hvW, 2), sizeX) >= 0
-          && hexToID(neighbours(hvW, 2), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvW, 2), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvW, 2), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvW, 2), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvW, 2), sizeX));
           }
-          if(hexToID(neighbours(hvW, 3), sizeX) >= 0
-          && hexToID(neighbours(hvW, 3), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvW, 3), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvW, 3), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvW, 3), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvW, 3), sizeX));
           }
-          if(hexToID(neighbours(hvW, 4), sizeX) >= 0
-          && hexToID(neighbours(hvW, 4), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvW, 4), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvW, 4), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvW, 4), sizeX)) < minimalMC)
           {
             minimalMC = moveCostMap.at(hexToID(neighbours(hvW, 4), sizeX));
           }
-          if(hexToID(neighbours(hvW, 5), sizeX) >= 0
-          && hexToID(neighbours(hvW, 5), sizeX) < nodes.size()
+          if(hexToID(neighbours(hvW, 5), sizeX) < nodes.size()
           && moveCostMap.at(hexToID(neighbours(hvW, 5), sizeX)) != 0
           && moveCostMap.at(hexToID(neighbours(hvW, 5), sizeX)) < minimalMC)
           {

@@ -60,7 +60,7 @@ GameSettings::GameSettings(sf::Font& buttonFont)
   riverChanceLabel.setPosition(sf::Vector2f(50.0f, 600.0f));;
 }
 
-void GameSettings::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
+void GameSettings::mouseInput(GameState& state, sf::Vector2i clickPosition)
 {
   if(startButton.isClicked(clickPosition))
   {

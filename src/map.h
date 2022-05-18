@@ -32,8 +32,8 @@
       MapNode& getNode(int q, int r, int s);
       MapNode& getNode(HexVector position);
       MapNode& getNode(sf::Vector2i position);
-      int getNodeID(HexVector position);
-      int getNodeID(int q, int r, int s);
+      std::size_t getNodeID(HexVector position);
+      std::size_t getNodeID(int q, int r, int s);
       MapNode& getNeighbour(int mainQ, int mainR, int mainS, int directionID);
       MapNode& getNeighbour(HexVector mainNodePosition, int directionID);
       void createLandmass(int q, int r, int s, int size);

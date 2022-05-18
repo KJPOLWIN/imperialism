@@ -93,6 +93,12 @@ int main()
             case GameState::gameSettings:
               gameSettings.textInput(static_cast<char>(event.text.unicode));
             break;
+
+            case GameState::mainMenu:
+            case GameState::game:
+            case GameState::options:
+            case GameState::credits:
+            break;
           }
         }
       }
@@ -109,7 +115,7 @@ int main()
           break;
 
           case GameState::gameSettings:
-            gameSettings.mouseInput(state, window, clickPosition);
+            gameSettings.mouseInput(state, clickPosition);
           break;
 
           case GameState::game:

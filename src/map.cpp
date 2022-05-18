@@ -69,7 +69,9 @@ void Map::moveUnits(HexVector position)
       if(unit.isSelected)
       {
         int unitMP{ unit.getMovePoints() };
-        int nodeCost{ unit.getMoveCostMap().at(position.toCartesian().y * sizeX + position.toCartesian().x) };
+        int nodeCost{ unit.getMoveCostMap().at(
+                                static_cast<std::size_t>(position.toCartesian().y * sizeX 
+                                                       + position.toCartesian().x)) };
       
         if(nodeCost != 0
         && nodeCost <= unitMP)
@@ -113,7 +115,8 @@ sf::Vector2i Map::getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOf
 
   if(xmod >= 0 && ymod >= 0)
   {
-    sf::Color area{ clickmap.getPixel(static_cast<int>(xmod), static_cast<int>(ymod)) };
+    sf::Color area{ clickmap.getPixel(static_cast<unsigned int>(xmod), 
+                                      static_cast<unsigned int>(ymod)) };
     if(area == sf::Color::Red)
     {
       --x;
@@ -247,6 +250,10 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
               jungleNode.setPosition(node.getPosition());
               targetWindow.draw(jungleNode);
             break;
+
+            case ClimateZone::polar:
+            case ClimateZone::dry:
+            break;
           }
         break;
 
@@ -261,6 +268,10 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
             case ClimateZone::tropical:
               jungleHillsNode.setPosition(node.getPosition());
               targetWindow.draw(jungleHillsNode);
+            break;
+            
+            case ClimateZone::polar:
+            case ClimateZone::dry:
             break;
           }
         break;
@@ -284,6 +295,9 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
               targetWindow.draw(grasslandRiverNode);
             break;
           }
+        break;
+
+        case TerrainType::blank:
         break;
       }
     }
@@ -325,7 +339,9 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       {
         HexVector nodePos{ node.getHexPosition() };
         int unitMP{ unit.getMovePoints() };
-        int nodeCost{ unit.getMoveCostMap().at(nodePos.toCartesian().y * sizeX + nodePos.toCartesian().x) };
+        int nodeCost{ unit.getMoveCostMap().at(
+                                static_cast<std::size_t>(nodePos.toCartesian().y * sizeX 
+                                                       + nodePos.toCartesian().x)) };
         
         if(nodeCost != 0
         && nodeCost <= unitMP)
@@ -384,7 +400,7 @@ void Map::regenerate(int sizeX, int sizeY,
   }
 
   //Landmass generation
-  int landmassCount{ static_cast<int>(landmassCountP * nodes.size() / 100) };
+  int landmassCount{ landmassCountP * static_cast<int>(nodes.size()) / 100 };
 
   int landmassSize{  };
   int landmassX{  };
@@ -419,7 +435,7 @@ void Map::regenerate(int sizeX, int sizeY,
   }
 
   //Mountains generation
-  int mountainRangeCount{ static_cast<int>(mountainRangeCountP * nodes.size() / 100) };
+  int mountainRangeCount{ mountainRangeCountP * static_cast<int>(nodes.size()) / 100 };
 
   int rangeX{ 0 };
   int rangeY{ 0 };
@@ -620,9 +636,9 @@ MapNode& Map::getNode(sf::Vector2i position)
   return getNode(HexVector(position));
 }
       
-int Map::getNodeID(HexVector position)
+std::size_t Map::getNodeID(HexVector position)
 {
-  for(int iii{  }; iii < nodes.size(); ++iii)
+  for(std::size_t iii{  }; iii < nodes.size(); ++iii)
   {
     if(nodes.at(iii).getHexPosition() == position)
     {
@@ -632,7 +648,7 @@ int Map::getNodeID(HexVector position)
   return 0;
 }
 
-int Map::getNodeID(int q, int r, int s)
+std::size_t Map::getNodeID(int q, int r, int s)
 {
   return getNodeID(HexVector(q, r, s));
 }
@@ -800,6 +816,10 @@ std::string Map::getSelectedNodeName()
             case ClimateZone::tropical:
               return "Rainforest";
             break;
+
+            case ClimateZone::dry:
+            case ClimateZone::polar:
+            break;
           }
         break;
 
@@ -812,6 +832,10 @@ std::string Map::getSelectedNodeName()
 
             case ClimateZone::tropical:
               return "Rainforest hills";
+            break;
+
+            case ClimateZone::dry:
+            case ClimateZone::polar:
             break;
           }
         break;
@@ -832,6 +856,9 @@ std::string Map::getSelectedNodeName()
               return "Grassland river";
             break;
           }
+        break;
+
+        case TerrainType::blank:
         break;
       }
     }
