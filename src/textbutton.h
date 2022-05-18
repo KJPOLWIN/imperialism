@@ -20,6 +20,8 @@
 
       sf::Vector2f getSize();
 
+      void setText(std::string newText);
+
     private:
       sf::Text text{  };
 
