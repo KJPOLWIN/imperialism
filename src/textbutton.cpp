@@ -41,3 +41,8 @@ sf::Vector2f TextButton::getSize()
   return sf::Vector2f(text.getGlobalBounds().width, 
                       text.getGlobalBounds().height);
 }
+      
+void TextButton::setText(std::string newText)
+{
+  text.setString(newText);
+}

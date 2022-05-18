@@ -64,7 +64,25 @@ void GameSettings::mouseInput(GameState& state, sf::RenderWindow& window, sf::Ve
 {
   if(startButton.isClicked(clickPosition))
   {
-    state = GameState::game;
+    for(auto& input : inputs)
+    {
+      if(input.getText() == "")
+      {
+        canProceed = false;
+        break;
+      }
+    }
+    
+
+    if(canProceed)
+    {
+      state = GameState::game;
+    }
+    else
+    {
+      startButton.setText("Fill all input fields");
+      startButton.setPosition(1200.0f, 980.0f);
+    }
   }
   else if(backButton.isClicked(clickPosition))
   {
@@ -140,6 +158,25 @@ void GameSettings::arrowLeftPressed()
 
 void GameSettings::run(sf::RenderWindow& window)
 {
+  if(!canProceed)
+  {
+    canProceed = true;
+    for(auto& input : inputs)
+    {
+      if(input.getText() == "")
+      {
+        canProceed = false;
+        break;
+      }
+    }
+
+    if(canProceed)
+    {
+      startButton.setText("start");
+      startButton.setPosition(1720.0f, 980.0f);
+    }
+  }
+
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)
   || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
   {

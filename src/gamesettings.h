@@ -53,6 +53,8 @@
       sf::Text secondPassHillChanceLabel{  };
       sf::Text forestChanceLabel{  };
       sf::Text riverChanceLabel{  };
+
+      bool canProceed{ true };
   };
 
 #endif
