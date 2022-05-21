@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SFML=`dpkg -l | grep sfml | wc -l`
+SFML=`dpkg -l | grep libsfml-dev | wc -l`
 
 if [ $SFML -gt 0 ]
 then
