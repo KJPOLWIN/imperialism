@@ -4,9 +4,9 @@
 #include "imagebutton.h"
 #include "gamestate.h"
 #include "gui.h"
+#include "constant.h"
 #include <SFML/Graphics.hpp>
 
-    #include <iostream>
 
 Game::Game(sf::Font& font)
   : pauseMenuLabel{ "Game paused", font, 32 },
@@ -80,14 +80,14 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
       sf::Vector2i posCartesian{ map.getClickedNode(window.mapPixelToCoords(sf::Mouse::getPosition(window)),    
                                                     sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
                                                                  (mapView.getCenter().y - mapView.getSize().y / 2)),
-                                                    mapView.getSize().x / 1920) };
+                                                    mapView.getSize().x / Constant::windowWidth) };
       HexVector newPos{ posCartesian };
       map.moveUnits(newPos);
 
       map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
                               sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
                                            (mapView.getCenter().y - mapView.getSize().y / 2)),
-                              mapView.getSize().x / 1920);
+                              mapView.getSize().x / Constant::windowWidth);
       nodeNameLabel.setString(map.getSelectedNodeName());
       GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
       unitNameLabel.setString(map.getSelectedUnit().getName());
@@ -125,7 +125,7 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
 
 void Game::scrollInput(double direction)
 {
-  double zoomLevel{ mapView.getSize().x / 1920 };
+  double zoomLevel{ mapView.getSize().x / Constant::windowWidth };
   if(direction > 0 && zoomLevel >= maxZoom)
   {
     mapView.zoom(0.5);
@@ -145,28 +145,27 @@ void Game::switchPause()
 void Game::run(sf::RenderWindow& window, double timeElapsed)
 {
   sf::Vector2i mousePosition{ sf::Mouse::getPosition(window) };
-  double scrollSpeed{ 1000.0 };
 
-  double zoomLevel{ mapView.getSize().x / 1920 };
+  double zoomLevel{ mapView.getSize().x / Constant::windowWidth };
 
   if(!paused)
   {
     if(mousePosition.x < 10)
     {
-      mapView.move(-scrollSpeed * timeElapsed * zoomLevel, 0);
+      mapView.move(-Constant::scrollSpeed * timeElapsed * zoomLevel, 0);
     }
-    else if(mousePosition.x > 1910)
+    else if(mousePosition.x > Constant::windowWidth - 10)
     {
-      mapView.move(scrollSpeed * timeElapsed * zoomLevel, 0);
+      mapView.move(Constant::scrollSpeed * timeElapsed * zoomLevel, 0);
     }
   
     if(mousePosition.y < 10)
     {
-      mapView.move(0.0, -scrollSpeed * timeElapsed * zoomLevel);
+      mapView.move(0.0, -Constant::scrollSpeed * timeElapsed * zoomLevel);
     }
-    else if(mousePosition.y > 1070)
+    else if(mousePosition.y > Constant::windowHeight - 10)
     {
-      mapView.move(0.0, scrollSpeed * timeElapsed * zoomLevel);
+      mapView.move(0.0, Constant::scrollSpeed * timeElapsed * zoomLevel);
     }
   }
       
@@ -232,7 +231,7 @@ void Game::regenerateMap(int width, int height,
                          double forestChance,
                          double riverChance)
 {
-  mapView = sf::View(sf::FloatRect(0, 0, 1920, 1080));
+  mapView = sf::View(sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight));
   map.regenerate(width, height, 
                  landmassCount, landmassSize,
                  landToWaterChance,  waterToLandChance,

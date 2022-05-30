@@ -3,6 +3,7 @@
 
   #include "textbutton.h"
   #include "gamestate.h"
+  #include "constant.h"
   #include <SFML/Graphics.hpp>
 
   class Credits
@@ -15,7 +16,7 @@
 
     private:
       TextButton backButton{  };
-      sf::RectangleShape positioningField{ sf::Vector2f(1920, 1080) };
+      sf::RectangleShape positioningField{ sf::Vector2f(Constant::windowWidth, Constant::windowHeight) };
       sf::Text title{  };
       sf::Text version{  };
       

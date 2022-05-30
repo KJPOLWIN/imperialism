@@ -5,6 +5,7 @@
   #include "textbutton.h"
   #include "imagebutton.h"
   #include "gamestate.h"
+  #include "constant.h"
   #include <SFML/Graphics.hpp>
 
   class Game
@@ -28,8 +29,8 @@
       
     private:
       Map map{ }; 
-      sf::View mapView{ sf::FloatRect(0, 0, 1920, 1080) };
-      sf::View guiView{ sf::FloatRect(0, 0, 1920, 1080) };
+      sf::View mapView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
+      sf::View guiView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       double maxZoom{ 0.5 };
       double minZoom{ 2 };
       sf::Texture shadeTexture{  };

@@ -1,6 +1,7 @@
 #include "map.h"
 #include "mapnode.h"
 #include "random.h"
+#include "constant.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <cmath>
@@ -174,8 +175,8 @@ bool isVisible(sf::Vector2f nodePosition, sf::Vector2f viewOffset, double zoom)
 {
   return (nodePosition.x > viewOffset.x - 50 * sqrt(3)
        && nodePosition.y > viewOffset.y - 100
-       && nodePosition.x < viewOffset.x + 1920 * zoom
-       && nodePosition.y < viewOffset.y + 1080 * zoom);
+       && nodePosition.x < viewOffset.x + Constant::windowWidth  * zoom
+       && nodePosition.y < viewOffset.y + Constant::windowHeight * zoom);
 }
 
 void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double zoom)

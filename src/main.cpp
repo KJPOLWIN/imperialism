@@ -4,6 +4,7 @@
 #include "gamesettings.h"
 #include "options.h"
 #include "credits.h"
+#include "constant.h"
 #include <SFML/Graphics.hpp>
 #include "json.hpp"
 #include <fstream>
@@ -13,7 +14,8 @@
 int main()
 {
   //Setting up the window
-  sf::RenderWindow window(sf::VideoMode(1920, 1080), "Imperialism", sf::Style::Fullscreen);
+  sf::RenderWindow window(sf::VideoMode(Constant::windowWidth, Constant::windowHeight), 
+                          "Imperialism", sf::Style::Fullscreen);
   //window.setFramerateLimit(60);
   window.setKeyRepeatEnabled(false);
 
