@@ -15,22 +15,6 @@
     forest,
     forestHills,
     river,
-    
-    /*grassland,
-    water,
-    desert,
-    tundra,
-    grassHills,
-    desertHills,
-    tundraHills,
-    forest,
-    forestHills,
-    jungle,
-    jungleHills,
-    mountains,
-    grasslandRiver,
-    desertRiver,
-    tundraRiver,*/
     blank
   };
 
@@ -68,7 +52,6 @@
     private:
       std::array<sf::Vertex, 7> vertices{  };
       HexVector hexPosition{  };
-      //sf::Vector2i gridPosition{ 0, 0 };
       TerrainType terrain{ TerrainType::water };
       ClimateZone climate{ ClimateZone::temperate };
   };

@@ -95,7 +95,7 @@ sf::Vector2i Map::getClickedNode(sf::Vector2f clickPosition, sf::Vector2f viewOf
 {
   sf::Vector2f point{ static_cast<float>(clickPosition.x + viewOffset.x / zoom),
                       static_cast<float>(clickPosition.y + viewOffset.y / zoom) };
-  double hexSize{ 50 / zoom };
+  double hexSize{ Constant::nodeSideLength / zoom };
   int tileX{ static_cast<int>(point.x / (hexSize * sqrt(3))) };
   int tileY{ static_cast<int>(point.y / (3 * hexSize)) };
 
@@ -173,8 +173,8 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
 
 bool isVisible(sf::Vector2f nodePosition, sf::Vector2f viewOffset, double zoom)
 {
-  return (nodePosition.x > viewOffset.x - 50 * sqrt(3)
-       && nodePosition.y > viewOffset.y - 100
+  return (nodePosition.x > viewOffset.x - Constant::nodeSideLength * sqrt(3)
+       && nodePosition.y > viewOffset.y - Constant::nodeSideLength * 2
        && nodePosition.x < viewOffset.x + Constant::windowWidth  * zoom
        && nodePosition.y < viewOffset.y + Constant::windowHeight * zoom);
 }
