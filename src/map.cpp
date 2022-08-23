@@ -366,7 +366,7 @@ void Map::regenerate(int sizeX, int sizeY,
   {
     for(int x{ 0 }; x < sizeX; ++x)
     {
-      nodes.push_back(MapNode(x, y));
+      nodes.emplace_back(x, y);
     }
   }
    
@@ -568,9 +568,8 @@ void Map::regenerate(int sizeX, int sizeY,
   }
 
   units.clear();
-  units.push_back(Unit(5, 5, "Riflemen", 
-                       3, { 10, 1, 2, 3, 2, 2, 3 }
-                      ));
+  units.emplace_back(5, 5, "Riflemen", 
+                     3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 });
 
   for(auto& unit : units)
   {

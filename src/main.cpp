@@ -11,16 +11,6 @@
 
 int main()
 {
-  //Setting up the window
-  sf::RenderWindow window(sf::VideoMode(Constant::windowWidth, 
-                                        Constant::windowHeight), 
-                          "Imperialism", 
-                          //sf::Style::Fullscreen);
-                          sf::Style::None);
-  //window.setFramerateLimit(60);
-  window.setKeyRepeatEnabled(false);
-  window.setPosition(sf::Vector2i(0,0));
-
   //Reading JSON
   nlohmann::json savedOptions{  };
   std::fstream optionsFile{  };
@@ -35,6 +25,16 @@ int main()
   {
     optionsFile >> savedOptions;
   }
+  
+  //Setting up the window
+  sf::RenderWindow window(sf::VideoMode(Constant::windowWidth, 
+                                        Constant::windowHeight), 
+                          "Imperialism", 
+                          //sf::Style::Fullscreen);
+                          sf::Style::None);
+  window.setKeyRepeatEnabled(false);
+  window.setPosition(sf::Vector2i(0,0));
+
 
   //Loading fonts
   sf::Font pressStart2P{  };

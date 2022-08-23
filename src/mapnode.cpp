@@ -59,18 +59,6 @@ void MapNode::draw(sf::RenderWindow& targetWindow)
   targetWindow.draw(&vertices.at(0), vertices.size(), sf::LineStrip);
 }
 
-/*void MapNode::switchTerrainType()
-{
-  if(terrain == TerrainType::mountains)
-  {
-    terrain = TerrainType::grassland;
-  }
-  else
-  {
-    terrain = static_cast<TerrainType>(static_cast<int>(terrain) + 1);
-  }
-}*/
-
 void MapNode::switchTerrainType(TerrainType newTerrain)
 {
   MapNode::terrain = newTerrain;

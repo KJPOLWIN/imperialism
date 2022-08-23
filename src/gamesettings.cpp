@@ -20,31 +20,30 @@ GameSettings::GameSettings(sf::Font& buttonFont)
     forestChanceLabel{ "Chance for forest", buttonFont, 24 },
     riverChanceLabel{ "Chance for river source", buttonFont, 24 }
 {
-  inputs.push_back(TextInput(buttonFont, "30", 
-                             24, sf::Vector2f(1000.0f, 50.0f)));  //Map width
-  inputs.push_back(TextInput(buttonFont, "20", 
-                             24, sf::Vector2f(1000.0f, 100.0f)));  //Map height
-  inputs.push_back(TextInput(buttonFont, "3", 
-                             24, sf::Vector2f(1000.0f, 150.0f)));  //Landmass count
-  inputs.push_back(TextInput(buttonFont, "6", 
-                             24, sf::Vector2f(1000.f, 200.0f)));  //Landmass size
-  inputs.push_back(TextInput(buttonFont, "0.4", 
-                             24, sf::Vector2f(1000.0f, 250.0f)));  //LtW chance
-  inputs.push_back(TextInput(buttonFont, "0.4", 
-                             24, sf::Vector2f(1000.0f, 300.0f)));  //WtL chance
-  inputs.push_back(TextInput(buttonFont, "2", 
-                             24, sf::Vector2f(1000.0f, 350.0f)));  //Moun. range lenght
-  inputs.push_back(TextInput(buttonFont, "5", 
-                             24, sf::Vector2f(1000.0f, 400.0f)));  //Moun. range count
-  inputs.push_back(TextInput(buttonFont, "0.25", 
-                             24, sf::Vector2f(1000.0f, 450.0f)));  //1st pass hill chance
-  inputs.push_back(TextInput(buttonFont, "0.25", 
-                             24, sf::Vector2f(1000.0f, 500.0f)));  //2nd pass hill chance
-  inputs.push_back(TextInput(buttonFont, "0.25", 
-                             24, sf::Vector2f(1000.0f, 550.0f)));  //Forest chance
-  inputs.push_back(TextInput(buttonFont, "0.02", 
-                             24, sf::Vector2f(1000.0f, 600.0f)));  //River chance 
-
+  inputs.emplace_back(buttonFont, "30", 
+                             24, sf::Vector2f(1000.0f, 50.0f));  //Map width
+  inputs.emplace_back(buttonFont, "20", 
+                             24, sf::Vector2f(1000.0f, 100.0f));  //Map height
+  inputs.emplace_back(buttonFont, "3", 
+                             24, sf::Vector2f(1000.0f, 150.0f));  //Landmass count
+  inputs.emplace_back(buttonFont, "6", 
+                             24, sf::Vector2f(1000.f, 200.0f));  //Landmass size
+  inputs.emplace_back(buttonFont, "0.4", 
+                             24, sf::Vector2f(1000.0f, 250.0f));  //LtW chance
+  inputs.emplace_back(buttonFont, "0.4", 
+                             24, sf::Vector2f(1000.0f, 300.0f));  //WtL chance
+  inputs.emplace_back(buttonFont, "2", 
+                             24, sf::Vector2f(1000.0f, 350.0f));  //Moun. range lenght
+  inputs.emplace_back(buttonFont, "5", 
+                             24, sf::Vector2f(1000.0f, 400.0f));  //Moun. range count
+  inputs.emplace_back(buttonFont, "0.25", 
+                             24, sf::Vector2f(1000.0f, 450.0f));  //1st pass hill chance
+  inputs.emplace_back(buttonFont, "0.25", 
+                             24, sf::Vector2f(1000.0f, 500.0f));  //2nd pass hill chance
+  inputs.emplace_back(buttonFont, "0.25", 
+                             24, sf::Vector2f(1000.0f, 550.0f));  //Forest chance
+  inputs.emplace_back(buttonFont, "0.02", 
+                             24, sf::Vector2f(1000.0f, 600.0f));  //River chance 
 
   mapWidthLabel.setPosition(sf::Vector2f(50.0f, 50.0f));
   mapHeightLabel.setPosition(sf::Vector2f(50.0f, 100.0f));
@@ -72,7 +71,6 @@ void GameSettings::mouseInput(GameState& state, sf::Vector2i clickPosition)
         break;
       }
     }
-    
 
     if(canProceed)
     {
