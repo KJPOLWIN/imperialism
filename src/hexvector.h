@@ -24,6 +24,16 @@
       friend bool operator== (const HexVector& vector1, const HexVector& vector2);
 
       sf::Vector2i toCartesian();
+      std::size_t toID(int sizeX);
+      HexVector getNW();
+      HexVector getNE();
+      HexVector getE();
+      HexVector getSE();
+      HexVector getSW();
+      HexVector getW();
+      HexVector getNeighbour(int direction);
+      bool isInBoundaries(int sizeX, int sizeY);
+      bool isNextToNode(HexVector nodeHexCoords);
 
       int q{ 0 };
       int r{ 0 };

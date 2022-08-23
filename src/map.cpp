@@ -48,8 +48,6 @@ Map::Map()
   desertRiverNode.setTexture(desertRiverNodeTexture);
   tundraRiverNode.setTexture(tundraRiverNodeTexture);
   riflemenSprite.setTexture(riflemenTexture);
-    
-
 }
       
 void Map::nextTurn()
@@ -62,17 +60,14 @@ void Map::nextTurn()
 
 void Map::moveUnits(HexVector position)
 {
-  if(position.toCartesian().x >= 0 && position.toCartesian().y >= 0
-  && position.toCartesian().x < sizeX && position.toCartesian().y < sizeY)
+  if(position.isInBoundaries(sizeX, sizeY))
   {
     for( auto& unit : units )
     {
       if(unit.isSelected)
       {
         int unitMP{ unit.getMovePoints() };
-        int nodeCost{ unit.getMoveCostMap().at(
-                                static_cast<std::size_t>(position.toCartesian().y * sizeX 
-                                                       + position.toCartesian().x)) };
+        int nodeCost{ unit.getMoveCostMap().at(position.toID(sizeX)) };
       
         if(nodeCost != 0
         && nodeCost <= unitMP)
@@ -313,7 +308,8 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       node.draw(targetWindow);
     }
   }
-  
+ 
+  //Drawing selected nodes
   for( auto& node : nodes )
   {
     if(node.isSelected
@@ -340,9 +336,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       {
         HexVector nodePos{ node.getHexPosition() };
         int unitMP{ unit.getMovePoints() };
-        int nodeCost{ unit.getMoveCostMap().at(
-                                static_cast<std::size_t>(nodePos.toCartesian().y * sizeX 
-                                                       + nodePos.toCartesian().x)) };
+        int nodeCost{ unit.getMoveCostMap().at(nodePos.toID(sizeX)) };
         
         if(nodeCost != 0
         && nodeCost <= unitMP)
@@ -568,38 +562,7 @@ void Map::regenerate(int sizeX, int sizeY,
         if(direction == -1) direction = 5;
         else if(direction == 6) direction = 0;
 
-        switch(direction)
-        {
-          case 0: //NW
-            position.r -= 1;
-            position.s += 1;
-          break;
-          
-          case 1: //NE
-            position.q += 1;
-            position.r -= 1;
-          break;
-          
-          case 2: //E
-            position.q += 1;
-            position.s -= 1;
-          break;
-          
-          case 3: //SE
-            position.r += 1;
-            position.s -= 1;
-          break;
-          
-          case 4: //SW
-            position.q -= 1;
-            position.r += 1;
-          break;
-          
-          case 5: //W
-            position.q -= 1;
-            position.s += 1;
-          break;
-        }
+        position = position.getNeighbour(direction);
       }
     }
   }
@@ -618,18 +581,17 @@ void Map::regenerate(int sizeX, int sizeY,
 
 MapNode& Map::getNode(int q, int r, int s)
 {
-  HexVector pos{ q, r, s };
-  if(pos.toCartesian().x >= 0 && pos.toCartesian().y >= 0 && pos.toCartesian().x < sizeX && pos.toCartesian().y < sizeY)
-  {
-    return nodes.at(static_cast<std::size_t>(pos.toCartesian().y * sizeX + pos.toCartesian().x));
-  }
-
-  return nothingness;
+  return getNode(HexVector(q, r, s)); 
 }
       
 MapNode& Map::getNode(HexVector position)
 {
-  return getNode(position.q, position.r, position.s);
+  if(position.isInBoundaries(sizeX, sizeY))
+  {
+    return nodes.at(position.toID(sizeX));
+  }
+
+  return nothingness;
 }
 
 MapNode& Map::getNode(sf::Vector2i position)
@@ -637,92 +599,32 @@ MapNode& Map::getNode(sf::Vector2i position)
   return getNode(HexVector(position));
 }
       
-std::size_t Map::getNodeID(HexVector position)
-{
-  for(std::size_t iii{  }; iii < nodes.size(); ++iii)
-  {
-    if(nodes.at(iii).getHexPosition() == position)
-    {
-      return iii;
-    }
-  } 
-  return 0;
-}
-
-std::size_t Map::getNodeID(int q, int r, int s)
-{
-  return getNodeID(HexVector(q, r, s));
-}
-      
 MapNode& Map::getNeighbour(int mainQ, int mainR, int mainS, int directionID)
 {
-  switch(directionID)
-  {
-    case 0: //NW
-      return getNode(mainQ,
-                     mainR - 1,
-                     mainS + 1);
-    break;
-
-    case 1: //NE
-      return getNode(mainQ + 1,
-                     mainR - 1,
-                     mainS    );
-       
-    break;
-
-    case 2: //E
-      return getNode(mainQ + 1,
-                     mainR,
-                     mainS - 1);
-       
-    break;
-
-    case 3: //SE
-      return getNode(mainQ,
-                     mainR + 1,
-                     mainS - 1);
-       
-    break;
-
-    case 4: //SW
-      return getNode(mainQ - 1,
-                     mainR + 1,
-                     mainS    );
-       
-    break;
-
-    case 5: //W
-      return getNode(mainQ - 1,
-                     mainR,
-                     mainS + 1);
-       
-    break;
-  }
-
-  return nothingness;
+  return getNeighbour(HexVector(mainQ, mainR, mainS), directionID);
 }
 
 MapNode& Map::getNeighbour(HexVector mainNodePosition, int directionID)
 {
-  return getNeighbour(mainNodePosition.q, 
-                      mainNodePosition.r, 
-                      mainNodePosition.s, directionID);
+  return getNode(mainNodePosition.getNeighbour(directionID));
 }
 
 bool Map::neighboursTerrain(int q, int r, int s, TerrainType terrain)
 {
-  return (getNode(q,     r - 1, s + 1).getTerrainType() == terrain    //NW
-       || getNode(q + 1, r - 1, s    ).getTerrainType() == terrain    //NE
-       || getNode(q + 1, r,     s - 1).getTerrainType() == terrain    //E
-       || getNode(q,     r + 1, s - 1).getTerrainType() == terrain    //SE
-       || getNode(q - 1, r + 1, s    ).getTerrainType() == terrain    //SW
-       || getNode(q - 1, r,     s + 1).getTerrainType() == terrain);  //W
+  return neighboursTerrain(HexVector(q, r, s), terrain);
 }
 
 bool Map::neighboursTerrain(HexVector position, TerrainType terrain)
 {
-  return neighboursTerrain(position.q, position.r, position.s, terrain);
+  for(int dir{ 0 }; dir <= 5; ++dir)
+  {
+    if(getNode(position.getNeighbour(dir)).getTerrainType() == terrain)
+    {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 bool Map::neighboursTerrain(int x, int y, TerrainType terrain)
