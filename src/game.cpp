@@ -43,6 +43,52 @@ Game::Game(sf::Font& font)
   nodeWidgetBackground.setFillColor(sf::Color::Black);
   nodeWidgetBackground.setOutlineColor(sf::Color::White);
   nodeWidgetBackground.setOutlineThickness(10);
+  seaTerrainTexture.loadFromFile("texture/terrainsea.png");
+  tundraTerrainTexture.loadFromFile("texture/terraintundra.png");
+  desertTerrainTexture.loadFromFile("texture/terraindesert.png");
+  grasslandTerrainTexture.loadFromFile("texture/terraingrass.png");
+  tundraHillsTerrainTexture.loadFromFile("texture/terraintundrahills.png");
+  desertHillsTerrainTexture.loadFromFile("texture/terraindeserthills.png");
+  grasslandHillsTerrainTexture.loadFromFile("texture/terraingrasshills.png");
+  mountainsTerrainTexture.loadFromFile("texture/terrainmountains.png");
+  forestTerrainTexture.loadFromFile("texture/terrainforest.png");
+  rainforestTerrainTexture.loadFromFile("texture/terrainrainforest.png");
+  forestHillsTerrainTexture.loadFromFile("texture/terrainforesthills.png");
+  rainforestHillsTerrainTexture.loadFromFile("texture/terrainrainforesthills.png");
+  tundraRiverTerrainTexture.loadFromFile("texture/terraintundrariver.png");
+  desertRiverTerrainTexture.loadFromFile("texture/terraindesertriver.png");
+  grasslandRiverTerrainTexture.loadFromFile("texture/terraingrassriver.png");
+  seaTerrain.setTexture(seaTerrainTexture);
+  tundraTerrain.setTexture(tundraTerrainTexture);
+  desertTerrain.setTexture(desertTerrainTexture);
+  grasslandTerrain.setTexture(grasslandTerrainTexture);
+  tundraHillsTerrain.setTexture(tundraHillsTerrainTexture);
+  desertHillsTerrain.setTexture(desertHillsTerrainTexture);
+  grasslandHillsTerrain.setTexture(grasslandHillsTerrainTexture);
+  mountainsTerrain.setTexture(mountainsTerrainTexture);
+  forestTerrain.setTexture(forestTerrainTexture);
+  rainforestTerrain.setTexture(rainforestTerrainTexture);
+  forestHillsTerrain.setTexture(forestHillsTerrainTexture);
+  rainforestHillsTerrain.setTexture(rainforestHillsTerrainTexture);
+  tundraRiverTerrain.setTexture(tundraRiverTerrainTexture);
+  desertRiverTerrain.setTexture(desertRiverTerrainTexture);
+  grasslandRiverTerrain.setTexture(grasslandRiverTerrainTexture);
+  seaTerrain.setPosition(1470, 200);
+  tundraTerrain.setPosition(1470, 200);
+  desertTerrain.setPosition(1470, 200);
+  grasslandTerrain.setPosition(1470, 200);
+  tundraHillsTerrain.setPosition(1470, 200);
+  desertHillsTerrain.setPosition(1470, 200);
+  grasslandHillsTerrain.setPosition(1470, 200);
+  mountainsTerrain.setPosition(1470, 200);
+  forestTerrain.setPosition(1470, 200);
+  rainforestTerrain.setPosition(1470, 200);
+  forestHillsTerrain.setPosition(1470, 200);
+  rainforestHillsTerrain.setPosition(1470, 200);
+  tundraRiverTerrain.setPosition(1470, 200);
+  desertRiverTerrain.setPosition(1470, 200);
+  grasslandRiverTerrain.setPosition(1470, 200);
+  terrainTest.setPosition(1470, 200);
 
   nodeNameLabel.setPosition(0, 125);
 
@@ -190,6 +236,67 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   {
     window.draw(nodeWidgetBackground);
     window.draw(nodeNameLabel);
+
+    if(nodeNameLabel.getString() == "Sea")
+    {
+        window.draw(seaTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Tundra")
+    {
+        window.draw(tundraTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Desert")
+    {
+        window.draw(desertTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Grassland")
+    {
+        window.draw(grasslandTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Tundra hills")
+    {
+        window.draw(tundraHillsTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Desert hills")
+    {
+        window.draw(desertHillsTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Grassland hills")
+    {
+        window.draw(grasslandHillsTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Mountains")
+    {
+        window.draw(mountainsTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Forest")
+    {
+        window.draw(forestTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Rainforest")
+    {
+        window.draw(rainforestTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Forest hills")
+    {
+        window.draw(forestHillsTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Rainforest hills")
+    {
+        window.draw(rainforestHillsTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Tundra river")
+    {
+        window.draw(tundraRiverTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Desert river")
+    {
+        window.draw(desertRiverTerrain);
+    }
+    else if(nodeNameLabel.getString() == "Grassland river")
+    {
+        window.draw(grasslandRiverTerrain);
+    }
   }
   
   if(unitNameLabel.getString() != "")

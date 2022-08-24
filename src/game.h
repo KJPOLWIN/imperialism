@@ -36,24 +36,60 @@
       sf::Texture shadeTexture{  };
       sf::Sprite shade{  };
       bool paused{ false };
-    
+   
+      //Pause menu
       sf::RectangleShape pauseMenuBackground{ sf::Vector2f(400, 600) };
       sf::Text pauseMenuLabel{  };
       TextButton menuButton{  };
       TextButton optionsButton{  };
       TextButton exitToDesktopButton{  };
 
+      //Pause button
       sf::Texture pauseButtonTexture{  };
       sf::Sprite pauseButtonSprite{  };
       ImageButton pauseButton{  };
 
+      //Unpause button
       sf::Texture unpauseButtonTexture{  };
       sf::Sprite unpauseButtonSprite{  };
       ImageButton unpauseButton{  };
   
+      //Node widget
       sf::RectangleShape nodeWidgetBackground{ sf::Vector2f(400, 200) };
       sf::Text nodeNameLabel{  };
+      sf::Texture seaTerrainTexture{  };
+      sf::Texture tundraTerrainTexture{  };
+      sf::Texture desertTerrainTexture{  };
+      sf::Texture grasslandTerrainTexture{  };
+      sf::Texture tundraHillsTerrainTexture{  };
+      sf::Texture desertHillsTerrainTexture{  };
+      sf::Texture grasslandHillsTerrainTexture{  };
+      sf::Texture mountainsTerrainTexture{  };
+      sf::Texture forestTerrainTexture{  };
+      sf::Texture rainforestTerrainTexture{  };
+      sf::Texture forestHillsTerrainTexture{  };
+      sf::Texture rainforestHillsTerrainTexture{  };
+      sf::Texture tundraRiverTerrainTexture{  };
+      sf::Texture desertRiverTerrainTexture{  };
+      sf::Texture grasslandRiverTerrainTexture{  };
+      sf::Sprite seaTerrain{  };
+      sf::Sprite tundraTerrain{  };
+      sf::Sprite desertTerrain{  };
+      sf::Sprite grasslandTerrain{  };
+      sf::Sprite tundraHillsTerrain{  };
+      sf::Sprite desertHillsTerrain{  };
+      sf::Sprite grasslandHillsTerrain{  };
+      sf::Sprite mountainsTerrain{  };
+      sf::Sprite forestTerrain{  };
+      sf::Sprite rainforestTerrain{  };
+      sf::Sprite forestHillsTerrain{  };
+      sf::Sprite rainforestHillsTerrain{  };
+      sf::Sprite tundraRiverTerrain{  };
+      sf::Sprite desertRiverTerrain{  };
+      sf::Sprite grasslandRiverTerrain{  };
+      sf::RectangleShape terrainTest{ sf::Vector2f(300, 80) };
 
+      //Unit widget
       sf::RectangleShape unitWidgetBackground{ sf::Vector2f(800, 200) };
       sf::Text unitNameLabel{  };
       sf::Text unitHealth{  };
@@ -61,6 +97,7 @@
       sf::Texture riflemenLargeTexture{  };
       sf::Sprite riflemenLarge{  };
 
+      //Next turn button
       TextButton nextTurnButton{  };
   };
 
