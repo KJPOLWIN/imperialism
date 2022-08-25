@@ -68,6 +68,21 @@ int main()
   sf::Text fpsDisplay{ "e", pressStart2P, 16 };
   fpsDisplay.setPosition(5, 5);
   fpsDisplay.setFillColor(sf::Color::Red);
+      
+  //Loading splash screen
+  sf::Texture backgroundTexture{  };
+  sf::Texture shadeTexture{  };
+  sf::Sprite background{  };
+  sf::Sprite shade{  };
+  sf::Text mainTitle{ "imperialism", pressStart2P, 72 };
+  sf::Text loadingText{ "loading...", pressStart2P, 32 };
+  
+  backgroundTexture.loadFromFile("texture/loadingbackground.png");
+  shadeTexture.loadFromFile("texture/loadingshade.png");
+  background.setTexture(backgroundTexture);
+  shade.setTexture(shadeTexture);
+  mainTitle.setPosition(sf::Vector2f(75.0f,830.0f));
+  loadingText.setPosition(sf::Vector2f(75.0f,950.0f));
 
   //Setting up clock, click control and events
   sf::Clock clock{  };
@@ -204,6 +219,12 @@ int main()
       case GameState::game:
         if(lastFrameState == GameState::gameSettings)
         {
+          window.draw(background);
+          window.draw(shade);
+          window.draw(mainTitle);
+          window.draw(loadingText);
+          window.display();
+
           game.regenerateMap(gameSettings.getMapWidth(), gameSettings.getMapHeight(), 
                              gameSettings.getLandmassCount(), gameSettings.getLandmassSize(),
                              gameSettings.getLandToWaterChance(), gameSettings.getWaterToLandChance(),

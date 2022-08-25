@@ -33,7 +33,6 @@
       double getForestChance();
       double getRiverChance();
 
-
     private:
       TextButton startButton{  };
       TextButton backButton{  };
