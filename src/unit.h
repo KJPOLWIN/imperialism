@@ -9,11 +9,15 @@
   class Unit
   {
     public:
-      Unit(int x, int y, std::string name, int movePoints, std::vector<int> moveCosts);
+      Unit(int x, int y, 
+           std::string name, 
+           int movePoints, std::vector<int> moveCosts,
+           int faction);
+      Unit() = default;
 
       void calculatePath(HexVector position, int sizeX, int sizeY);
       void move(int sizeX);
-      void loadMoveCosts(int sizeX, int sizeY, std::vector<MapNode>& nodes);
+      void loadMoveCosts(int sizeX, int sizeY, std::vector<MapNode>& nodes, std::vector<Unit>& units);
       void generateMCM(int sizeX, int sizeY, std::vector<MapNode>& nodes);      
 
       sf::Vector2f getPosition();
@@ -29,6 +33,7 @@
       std::vector<int>& getMoveCosts();
       std::vector<int>& getMoveCostMap();
       int getMoveQueueLenght();
+      int getFaction();
 
       bool isSelected{ false };
 
@@ -49,7 +54,9 @@
       std::vector<int> moveCostMap{  };
 
       std::vector<MapNode*> frontier{  };
-      std::vector<int> priority{  }; 
+      std::vector<int> priority{  };
+
+      int faction{  };
   };
 
 #endif

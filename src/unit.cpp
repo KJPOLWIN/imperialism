@@ -4,12 +4,16 @@
 
   #include <iostream>
 
-Unit::Unit(int x, int y, std::string name, int movePoints, std::vector<int> moveCosts)
+Unit::Unit(int x, int y, 
+           std::string name, 
+           int movePoints, std::vector<int> moveCosts, 
+           int faction)
    : positioningNode{ x, y },
      movePoints{ movePoints },
      maxMovePoints{ movePoints },
      moveCosts{ moveCosts },
-     name{ name }
+     name{ name },
+     faction{ faction }
 {
 
 }
@@ -82,7 +86,8 @@ void Unit::move(int sizeX)
   }
 }
 
-void Unit::loadMoveCosts(int sizeX, int sizeY, std::vector<MapNode>& nodes)
+void Unit::loadMoveCosts(int sizeX, int sizeY, 
+                         std::vector<MapNode>& nodes, std::vector<Unit>& units)
 {
   priority.clear();
   
@@ -90,9 +95,19 @@ void Unit::loadMoveCosts(int sizeX, int sizeY, std::vector<MapNode>& nodes)
   {
     for(int x{ 0 }; x < sizeX; ++x)
     {
-      priority.push_back(moveCosts.at(static_cast<std::size_t>(
-                                      nodes.at(static_cast<std::size_t>(y * sizeX + x)).getTerrainType())));
+      priority.push_back(
+        moveCosts.at(
+          static_cast<std::size_t>(
+            nodes.at(
+              static_cast<std::size_t>(y * sizeX + x)).getTerrainType())));
+    }
+  }
 
+  for(auto& unit : units)
+  {
+    if(!(unit.getHexPosition() == getHexPosition()))
+    {
+      priority.at(unit.getHexPosition().toID(sizeX)) = 1000;
     }
   }
 }
@@ -232,4 +247,9 @@ std::vector<int>& Unit::getMoveCostMap()
 int Unit::getMoveQueueLenght()
 {
   return moveQueue.size();
+}
+      
+int Unit::getFaction()
+{
+  return faction;
 }

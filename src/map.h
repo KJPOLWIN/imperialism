@@ -45,7 +45,8 @@
 
       std::vector<MapNode> nodes{  };
       MapNode nothingness{  };
-      Unit nobody{ 0, 0, "", 0, { 0, 0, 0, 0, 0, 0, 0 } };
+      //Unit nobody{ 0, 0, "", 0, { 0, 0, 0, 0, 0, 0, 0 }, 0 };
+      Unit nobody{  };
       std::vector<Unit> units{  };
       int sizeX{ 0 };
       int sizeY{ 0 };

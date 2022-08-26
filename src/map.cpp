@@ -64,7 +64,7 @@ void Map::moveUnits(HexVector position)
   {
     for( auto& unit : units )
     {
-      if(unit.isSelected)
+      if(unit.isSelected && unit.getFaction() == 0)
       {
         int unitMP{ unit.getMovePoints() };
         int nodeCost{ unit.getMoveCostMap().at(position.toID(sizeX)) };
@@ -80,6 +80,7 @@ void Map::moveUnits(HexVector position)
           unit.move(sizeX);
         }
 
+        unit.loadMoveCosts(sizeX, sizeY, nodes, units);
         unit.generateMCM(sizeX, sizeY, nodes);
       }
     }
@@ -160,6 +161,8 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
       if(unit.getHexPosition() == HexVector(selectedNodeCartesian))
       {
         unit.isSelected = true;
+        unit.loadMoveCosts(sizeX, sizeY, nodes, units);
+        unit.generateMCM(sizeX, sizeY, nodes);
         break;
       }
     }
@@ -568,12 +571,22 @@ void Map::regenerate(int sizeX, int sizeY,
   }
 
   units.clear();
-  units.emplace_back(5, 5, "Riflemen", 
-                     3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 });
+  units.emplace_back(5, 5,  //Debug riflemen 
+                     "Riflemen", 
+                     3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 },
+                     0);
+  units.emplace_back(5, 6,  //Another debug riflemen
+                     "Riflemen", 
+                     3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 },
+                     0);
+  units.emplace_back(7, 7,  //Debug enemy riflemen
+                     "Riflemen", 
+                     3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 },
+                     1);
 
   for(auto& unit : units)
   {
-    unit.loadMoveCosts(sizeX, sizeY, nodes);
+    unit.loadMoveCosts(sizeX, sizeY, nodes, units);
     unit.generateMCM(sizeX, sizeY, nodes);
   }
 }
