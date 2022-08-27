@@ -7,6 +7,7 @@
   #include "gamestate.h"
   #include "constant.h"
   #include <SFML/Graphics.hpp>
+  #include <string>
 
   class Game
   {
@@ -26,6 +27,7 @@
                          double firstPassHillChance, double secondPassHillChance,
                          double forestChance,
                          double riverChance);
+      void loadMapFromFile(std::string filename);
       
     private:
       Map map{ }; 

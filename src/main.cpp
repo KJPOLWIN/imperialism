@@ -4,6 +4,7 @@
 #include "gamesettings.h"
 #include "options.h"
 #include "credits.h"
+#include "maploading.h"
 #include "constant.h"
 #include <SFML/Graphics.hpp>
 #include "json.hpp"
@@ -51,6 +52,7 @@ int main()
   Game game{ pressStart2P };
   Options options{ pressStart2P };
   Credits credits{ pressStart2P };
+  MapLoading mapLoading{ pressStart2P };
 
   //Uploading saved options
   options.fpsDisplaySelected = savedOptions["fpsDisplay"];
@@ -117,6 +119,7 @@ int main()
             case GameState::game:
             case GameState::options:
             case GameState::credits:
+            case GameState::mapLoading:
             break;
           }
         }
@@ -147,6 +150,11 @@ int main()
 
           case GameState::credits:
             credits.mouseInput(state, clickPosition);
+          break;
+
+          case GameState::mapLoading:
+            mapLoading.mouseInput(state, clickPosition);
+          break;
         }
 
         canClick = false;
@@ -233,6 +241,16 @@ int main()
                              gameSettings.getForestChance(),
                              gameSettings.getRiverChance());
         }
+        else if(lastFrameState == GameState::mapLoading)
+        {
+          window.draw(background);
+          window.draw(shade);
+          window.draw(mainTitle);
+          window.draw(loadingText);
+          window.display();
+
+          game.loadMapFromFile(mapLoading.getMapFilename());
+        }
         
         game.run(window, timeElapsed);
       break;
@@ -243,6 +261,10 @@ int main()
 
       case GameState::credits:
         credits.run(window);
+      break;
+
+      case GameState::mapLoading:
+        mapLoading.run(window);
       break;
     }
 

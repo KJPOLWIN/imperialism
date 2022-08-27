@@ -353,29 +353,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     }
   }
 }
-      
-void Map::saveToFile(std::string filename)
-{
-  nlohmann::json mapData{  };
-  mapData["sizeX"] = sizeX;
-  mapData["sizeY"] = sizeX;
-  std::vector<std::array<int, 2>> nodeData{  };
-  for(auto& node : nodes)
-  {
-    nodeData.push_back(std::array<int, 2>{ static_cast<int>(node.getTerrainType()), static_cast<int>(node.getClimateZone()) });
-  }
-  mapData["nodes"] = nodeData;
-
-  std::fstream saveFile{  };
-  saveFile.open("saves/" + filename, std::ios::out | std::ios::trunc);
-
-  if(saveFile.is_open())
-  {
-    saveFile << std::setw(4) << mapData << std::endl;
-    saveFile.close();
-  }
-  //std::cout << mapData.dump(2) << "\n";
-}
  
 void Map::regenerate(int sizeX, int sizeY, 
                      int landmassCountP, int landmassMaxSize,
@@ -613,6 +590,57 @@ void Map::regenerate(int sizeX, int sizeY,
   {
     unit.loadMoveCosts(sizeX, sizeY, nodes, units);
     unit.generateMCM(sizeX, sizeY, nodes);
+  }
+}
+      
+void Map::saveToFile(std::string filename)
+{
+  nlohmann::json mapData{  };
+  mapData["sizeX"] = sizeX;
+  mapData["sizeY"] = sizeY;
+  std::vector<std::array<int, 2>> nodeData{  };
+  for(auto& node : nodes)
+  {
+    nodeData.push_back(std::array<int, 2>{ static_cast<int>(node.getTerrainType()), static_cast<int>(node.getClimateZone()) });
+  }
+  mapData["nodes"] = nodeData;
+
+  std::fstream saveFile{  };
+  saveFile.open("saves/" + filename, std::ios::out | std::ios::trunc);
+
+  if(saveFile.is_open())
+  {
+    saveFile << std::setw(4) << mapData << std::endl;
+    saveFile.close();
+  }
+}
+
+void Map::loadFromFile(std::string filename)
+{
+  nodes.clear();
+  units.clear();
+
+  nlohmann::json savedMap{  };
+  std::fstream saveFile{  };
+  saveFile.open("saves/" + filename, std::ios::in);
+
+  saveFile >> savedMap;
+
+  sizeX = savedMap["sizeX"];
+  sizeY = savedMap["sizeY"];
+
+  for(int y{ 0 }; y < sizeY; ++y)
+  {
+    for(int x{ 0 }; x < sizeX; ++x)
+    {
+      nodes.emplace_back(x, y);
+      nodes.at(static_cast<std::size_t>(y * sizeX + x))
+        .switchTerrainType(static_cast<TerrainType>(
+          savedMap["nodes"][static_cast<std::size_t>(y * sizeX + x)][0]));
+      nodes.at(static_cast<std::size_t>(y * sizeX + x))
+        .switchClimateZone(static_cast<ClimateZone>(
+          savedMap["nodes"][static_cast<std::size_t>(y * sizeX + x)][1]));
+    }
   }
 }
 

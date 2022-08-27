@@ -22,7 +22,7 @@ void MainMenu::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector
   } 
   else if(loadGameButton.isClicked(clickPosition)) 
   {
-
+    state = GameState::mapLoading;
   } 
   else if(optionsButton.isClicked(clickPosition))
   {

@@ -6,6 +6,7 @@
 #include "gui.h"
 #include "constant.h"
 #include <SFML/Graphics.hpp>
+#include <string>
 
 
 Game::Game(sf::Font& font)
@@ -353,4 +354,10 @@ void Game::regenerateMap(int width, int height,
                  firstPassHillChance,  secondPassHillChance,
                  forestChance,
                  riverChance);
+}
+
+void Game::loadMapFromFile(std::string filename)
+{
+  mapView = sf::View(sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight));
+  map.loadFromFile(filename);
 }

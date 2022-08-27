@@ -7,7 +7,8 @@
     gameSettings,
     game,
     options,
-    credits
+    credits,
+    mapLoading
   };
 
 #endif
