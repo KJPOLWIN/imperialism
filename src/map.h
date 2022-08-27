@@ -4,6 +4,7 @@
   #include "mapnode.h"
   #include "unit.h"
   #include <SFML/Graphics.hpp>
+  #include "json.hpp"
   #include <vector>
 
   class Map
@@ -17,6 +18,7 @@
       void selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffset, double zoom);
       //void switchNodeTerrain();
       void draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double zoom);
+      void saveToFile(std::string filename); 
   
       void regenerate(int sizeX, int sizeY, 
                       int landmassCountP, int landmassMaxSize,
@@ -45,7 +47,6 @@
 
       std::vector<MapNode> nodes{  };
       MapNode nothingness{  };
-      //Unit nobody{ 0, 0, "", 0, { 0, 0, 0, 0, 0, 0, 0 }, 0 };
       Unit nobody{  };
       std::vector<Unit> units{  };
       int sizeX{ 0 };

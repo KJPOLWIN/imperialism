@@ -15,7 +15,8 @@
 
     private:
       sf::Text title{  };
-      TextButton startButton{  }; 
+      TextButton newGameButton{  }; 
+      TextButton loadGameButton{  }; 
       TextButton optionsButton{  };
       TextButton creditsButton{  };
       TextButton exitButton{  };

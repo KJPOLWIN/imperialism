@@ -42,6 +42,7 @@
       sf::Text pauseMenuLabel{  };
       TextButton menuButton{  };
       TextButton optionsButton{  };
+      TextButton saveGameButton{  };
       TextButton exitToDesktopButton{  };
 
       //Pause button

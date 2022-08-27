@@ -3,8 +3,10 @@
 #include "random.h"
 #include "constant.h"
 #include <SFML/Graphics.hpp>
+#include "json.hpp"
 #include <vector>
 #include <cmath>
+#include <fstream>
 
   #include <iostream>
 
@@ -350,6 +352,29 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       } 
     }
   }
+}
+      
+void Map::saveToFile(std::string filename)
+{
+  nlohmann::json mapData{  };
+  mapData["sizeX"] = sizeX;
+  mapData["sizeY"] = sizeX;
+  std::vector<std::array<int, 2>> nodeData{  };
+  for(auto& node : nodes)
+  {
+    nodeData.push_back(std::array<int, 2>{ static_cast<int>(node.getTerrainType()), static_cast<int>(node.getClimateZone()) });
+  }
+  mapData["nodes"] = nodeData;
+
+  std::fstream saveFile{  };
+  saveFile.open("saves/" + filename, std::ios::out | std::ios::trunc);
+
+  if(saveFile.is_open())
+  {
+    saveFile << std::setw(4) << mapData << std::endl;
+    saveFile.close();
+  }
+  //std::cout << mapData.dump(2) << "\n";
 }
  
 void Map::regenerate(int sizeX, int sizeY, 

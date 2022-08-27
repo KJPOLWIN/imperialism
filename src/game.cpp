@@ -12,6 +12,7 @@ Game::Game(sf::Font& font)
   : pauseMenuLabel{ "Game paused", font, 32 },
     menuButton{ font, "Main menu", sf::Vector2f(300, 375), 24 },
     optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
+    saveGameButton{ font, "Save game", sf::Vector2f(300, 475), 24 },
     exitToDesktopButton{ font, "Exit to desktop", sf::Vector2f(300, 800), 24 },
     pauseButton{ &pauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
     unpauseButton{ &unpauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
@@ -37,6 +38,7 @@ Game::Game(sf::Font& font)
   GUI::centerTextInField(pauseMenuLabel, pauseMenuBackground);
   GUI::centerTextInField(menuButton, pauseMenuBackground);
   GUI::centerTextInField(optionsButton, pauseMenuBackground);
+  GUI::centerTextInField(saveGameButton, pauseMenuBackground);
   GUI::centerTextInField(exitToDesktopButton, pauseMenuBackground);
 
   nodeWidgetBackground.setPosition(1420, 100); 
@@ -157,6 +159,10 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
     else if(optionsButton.isClicked(clickPosition))
     {
       state = GameState::options;
+    }
+    else if(saveGameButton.isClicked(clickPosition))
+    {
+      map.saveToFile("test.json");
     }
     else if(unpauseButton.isClicked(clickPosition))
     {
@@ -321,6 +327,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     window.draw(pauseMenuLabel); 
     menuButton.draw(window);
     optionsButton.draw(window);
+    saveGameButton.draw(window);
     unpauseButton.draw(window);
     exitToDesktopButton.draw(window);
   }
