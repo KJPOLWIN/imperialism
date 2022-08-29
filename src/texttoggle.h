@@ -15,12 +15,15 @@
       void draw(sf::RenderWindow& targetWindow);
 
       void toggle();
+      void setState(bool state);
 
       void setPosition(sf::Vector2f newPosition);
       void setPosition(double x, double y);
       sf::Vector2f getPosition();
 
       sf::Vector2f getSize();
+      
+      void setFont(sf::Font& font);
 
     private:
       sf::Text text{  };

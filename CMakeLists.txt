@@ -13,9 +13,9 @@ find_package(SFML 2.5.1 REQUIRED network audio graphics window system)
 add_executable(imperialism src/credits.cpp src/game.cpp src/gamesettings.cpp 
                            src/gui.cpp src/hexvector.cpp src/imagebutton.cpp 
                            src/main.cpp src/mainmenu.cpp src/map.cpp src/mapnode.cpp 
-                           src/options.cpp src/textbutton.cpp src/textinput.cpp 
-                           src/texttoggle.cpp src/unit.cpp src/maploading.cpp)
-target_compile_options(imperialism PUBLIC -pedantic-errors -Wall -Weffc++ -Wextra -Wsign-conversion)
+                           src/options.cpp src/textbutton.cpp src/textinput.cpp src/scrollarea.cpp
+                           src/texttoggle.cpp src/unit.cpp src/maploading.cpp )
+target_compile_options(imperialism PUBLIC -pedantic-errors -Wall -Weffc++ -Wextra -Wsign-conversion -g -O0)
 target_include_directories(imperialism PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${SFML_INCLUDE_DIR})
 target_link_libraries(imperialism PUBLIC ${SFML_LIBRARIES} sfml-graphics sfml-system sfml-window)
 

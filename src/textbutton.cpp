@@ -46,3 +46,8 @@ void TextButton::setText(std::string newText)
 {
   text.setString(newText);
 }
+      
+void TextButton::setFont(sf::Font& font)
+{
+  text.setFont(font);
+}

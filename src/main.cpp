@@ -206,10 +206,27 @@ int main()
       }
       else if(event.type == sf::Event::MouseWheelScrolled)
       {
-        if(state == GameState::game)
+        switch(state)
+        {
+          case GameState::game:
+            game.scrollInput(event.mouseWheelScroll.delta);
+          break;
+          
+          case GameState::mapLoading:
+            mapLoading.scrollInput(event.mouseWheelScroll.delta);
+          break;
+
+          case GameState::mainMenu:
+          case GameState::gameSettings:
+          case GameState::options:
+          case GameState::credits:
+          break;
+        }
+        /*if(state == GameState::game)
         {
           game.scrollInput(event.mouseWheelScroll.delta);
-        }
+        }*/
+
       }
     }
 

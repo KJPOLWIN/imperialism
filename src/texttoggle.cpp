@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
+  #include <iostream>
+
 TextToggle::TextToggle(sf::Font& font, std::string text, 
                        sf::Vector2f position, unsigned int characterSize)
 {
@@ -46,7 +48,20 @@ void TextToggle::toggle()
     background.setFillColor(sf::Color::Black);
     text.setFillColor(sf::Color::White);
   }
-
+}
+      
+void TextToggle::setState(bool state)
+{
+  if(state)
+  {
+    background.setFillColor(sf::Color(30, 30, 30));
+    text.setFillColor(sf::Color::Yellow);
+  }
+  else
+  {
+    background.setFillColor(sf::Color::Black);
+    text.setFillColor(sf::Color::White);
+  }
 }
       
 void TextToggle::setPosition(sf::Vector2f newPosition)
@@ -70,4 +85,9 @@ sf::Vector2f TextToggle::getSize()
 {
   return sf::Vector2f(text.getGlobalBounds().width, 
                       text.getGlobalBounds().height);
+}
+
+void TextToggle::setFont(sf::Font& font)
+{
+  text.setFont(font);
 }

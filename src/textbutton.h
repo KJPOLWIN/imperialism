@@ -22,6 +22,8 @@
 
       void setText(std::string newText);
 
+      void setFont(sf::Font& font);
+
     private:
       sf::Text text{  };
 
