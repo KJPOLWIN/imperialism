@@ -10,6 +10,8 @@
 #include "json.hpp"
 #include <fstream>
 
+  #include <iostream>
+
 int main()
 {
   //Reading JSON
@@ -124,7 +126,7 @@ int main()
           }
         }
       }
-      else if(canClick
+      else if(canClick    //Single click
           && event.type == sf::Event::MouseButtonPressed
           && event.mouseButton.button == sf::Mouse::Left)
       {
@@ -164,6 +166,20 @@ int main()
            && event.mouseButton.button == sf::Mouse::Left)
       {
         canClick = true;
+
+        switch(state)
+        {
+          case GameState::mapLoading:
+            mapLoading.releaseInput();
+          break;
+
+          case GameState::mainMenu:
+          case GameState::gameSettings:
+          case GameState::game:
+          case GameState::options:
+          case GameState::credits:
+          break;
+        }
       }
       else if(event.type == sf::Event::KeyPressed)
       {
@@ -222,13 +238,28 @@ int main()
           case GameState::credits:
           break;
         }
-        /*if(state == GameState::game)
-        {
-          game.scrollInput(event.mouseWheelScroll.delta);
-        }*/
-
       }
     }
+
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) //Continuous click
+    {
+      sf::Vector2i clickPosition{ sf::Mouse::getPosition(window) };
+      
+      switch(state)
+      {
+        case GameState::mapLoading:
+          mapLoading.holdInput(clickPosition);
+        break;
+          
+        case GameState::mainMenu:
+        case GameState::gameSettings:
+        case GameState::game:
+        case GameState::options:
+        case GameState::credits:
+        break;
+      }
+    }
+
 
     //Updating and drawing
     switch(state)

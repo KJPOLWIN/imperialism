@@ -40,6 +40,8 @@ void MapLoading::mouseInput(GameState& state, sf::Vector2i clickPosition)
   }
   else
   {
+    saveSelect.clickInput(clickPosition);
+
     for(std::size_t id{ 0 }; id < saveButtons.size(); ++id)
     {
       if(saveButtons.at(id).isClicked(clickPosition))
@@ -55,6 +57,17 @@ void MapLoading::mouseInput(GameState& state, sf::Vector2i clickPosition)
     saveButtons.at(id).setState(id == selectedSave);
   } 
 }
+
+void MapLoading::holdInput(sf::Vector2i clickPosition)
+{
+  saveSelect.holdInput(clickPosition);
+}
+
+void MapLoading::releaseInput()
+{
+  saveSelect.releaseInput();
+}
+
       
 void MapLoading::scrollInput(double scroll)
 {
@@ -63,9 +76,9 @@ void MapLoading::scrollInput(double scroll)
 
 void MapLoading::run(sf::RenderWindow& window)
 {
+  saveSelect.draw(window);
   backButton.draw(window);
   loadMapButton.draw(window);
-  saveSelect.draw(window);
 }
       
 std::string MapLoading::getMapFilename()

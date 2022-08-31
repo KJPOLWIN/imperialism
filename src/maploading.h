@@ -13,7 +13,10 @@
       MapLoading(sf::Font& font);
 
       void mouseInput(GameState& state, sf::Vector2i clickPosition);
+      void holdInput(sf::Vector2i clickPosition);
       void scrollInput(double scroll);
+      void releaseInput();
+
       void run(sf::RenderWindow& window);
 
       std::string getMapFilename();
