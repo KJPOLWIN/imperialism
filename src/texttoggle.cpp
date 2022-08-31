@@ -18,16 +18,12 @@ TextToggle::TextToggle(sf::Font& font, std::string text,
   background.setFillColor(sf::Color::Black);
 }
 
-bool TextToggle::isClicked(sf::Vector2i clickPosition)
+void TextToggle::clickInput(sf::Vector2i clickPosition)
 {
   if(text.getGlobalBounds().contains(clickPosition.x, clickPosition.y))
   {
     toggle();
-
-    return true;
   }
-
-  return false;
 }
 
 void TextToggle::draw(sf::RenderWindow& targetWindow)
@@ -62,6 +58,11 @@ void TextToggle::setState(bool state)
     background.setFillColor(sf::Color::Black);
     text.setFillColor(sf::Color::White);
   }
+}
+      
+bool TextToggle::getState()
+{
+  return (text.getFillColor() == sf::Color::Yellow);
 }
       
 void TextToggle::setPosition(sf::Vector2f newPosition)

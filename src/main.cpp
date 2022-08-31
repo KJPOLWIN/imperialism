@@ -10,8 +10,6 @@
 #include "json.hpp"
 #include <fstream>
 
-  #include <iostream>
-
 int main()
 {
   //Reading JSON
@@ -59,14 +57,16 @@ int main()
   //Uploading saved options
   options.fpsDisplaySelected = savedOptions["fpsDisplay"];
   options.vSyncSelected = savedOptions["vSync"];
-  if(options.fpsDisplaySelected)
+  options.setFPSDisplay(savedOptions["fpsDisplay"]);
+  options.setVSync(savedOptions["vSync"]);
+  /*if(options.fpsDisplaySelected)
   {
     options.toggleFPSDisplay();
   }
   if(options.vSyncSelected)
   {
     options.toggleVSync();
-  }
+  }*/
  
   //Setting up fps display
   sf::Text fpsDisplay{ "e", pressStart2P, 16 };

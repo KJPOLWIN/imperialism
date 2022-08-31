@@ -11,11 +11,12 @@
                  sf::Vector2f position, unsigned int characterSize);
       TextToggle();
 
-      bool isClicked(sf::Vector2i clickPosition);
+      void clickInput(sf::Vector2i clickPosition);
       void draw(sf::RenderWindow& targetWindow);
 
       void toggle();
       void setState(bool state);
+      bool getState();
 
       void setPosition(sf::Vector2f newPosition);
       void setPosition(double x, double y);

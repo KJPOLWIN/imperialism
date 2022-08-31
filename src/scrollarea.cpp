@@ -163,18 +163,18 @@ void ScrollArea::clickInput(sf::Vector2i clickPosition)
 
     mousePosDelta = clickPosition.y - scrollbar.getPosition().y;
   }
-  /*else
+  else
   {
-    for(auto& button : textButtons)
+    /*for(auto& button : textButtons)
     {
       button.isClciked(clickPosition);
-    }
+    }*/
     
     for(auto& button : toggleButtons)
     {
-      button.isClciked(clickPosition);
+      button.clickInput(clickPosition);
     }
-  }*/
+  }
 }
 
 void ScrollArea::releaseInput()

@@ -17,14 +17,22 @@ void Options::mouseInput(GameState& state, GameState previousState, sf::Vector2i
   {
     state = previousState;
   }
-  else if(fpsDisplay.isClicked(clickPosition))
+  else
+  {
+    fpsDisplay.clickInput(clickPosition);
+    vSync.clickInput(clickPosition);
+  }
+  /*else if(fpsDisplay.isClicked(clickPosition))
   {
     fpsDisplaySelected = !fpsDisplaySelected;
   }
   else if(vSync.isClicked(clickPosition))
   {
     vSyncSelected = !vSyncSelected;
-  }
+  }*/
+
+  fpsDisplaySelected = fpsDisplay.getState();
+  vSyncSelected = vSync.getState();
 }
  
 void Options::run(sf::RenderWindow& window)
@@ -34,7 +42,7 @@ void Options::run(sf::RenderWindow& window)
   vSync.draw(window);
 }
       
-void Options::toggleFPSDisplay()
+/*void Options::toggleFPSDisplay()
 {
   fpsDisplay.toggle();
 }
@@ -42,4 +50,14 @@ void Options::toggleFPSDisplay()
 void Options::toggleVSync()
 {
   vSync.toggle();
+}*/
+
+void Options::setFPSDisplay(bool state)
+{
+  fpsDisplay.setState(state);
+}
+
+void Options::setVSync(bool state)
+{
+  vSync.setState(state);
 }
