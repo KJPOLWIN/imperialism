@@ -9,7 +9,8 @@
   class ScrollArea
   {
     public:
-      ScrollArea(sf::Vector2f position, double height);
+      ScrollArea(sf::Vector2f position, sf::Vector2f size, 
+                 double scrollingSpeed);
       ScrollArea() = default;
 
       void addButton(sf::Font& font, std::string text, 
@@ -42,10 +43,11 @@
       double areaHeight{  };
       int scrollLevel{ 0 };
       int maxScrollLevel{ 0 };
+      double scrollingSpeed{  };
 
       bool activatedForMove{ false };
       double mousePosDelta{  };
-
+  
   };
 
 #endif

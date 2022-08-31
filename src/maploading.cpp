@@ -8,7 +8,8 @@
 MapLoading::MapLoading(sf::Font& font)
   : backButton{ font, "back", sf::Vector2f(50.0f, 980.0f), 32 },
     loadMapButton{ font, "load map", sf::Vector2f(1620.0f, 980.0f), 32 },
-    saveSelect{ sf::Vector2f(100.0f, 100.0f), 500.0f }
+    saveSelect{ sf::Vector2f(100.0f, 100.0f), sf::Vector2f(1720.0f, 800.0f), 
+                50.0 }
 {
   saveSelect.addToggle(font, "test1", sf::Vector2f(100, 100), 32);
   saveSelect.addToggle(font, "test2", sf::Vector2f(100, 200), 32);
@@ -21,11 +22,6 @@ MapLoading::MapLoading(sf::Font& font)
   saveSelect.addToggle(font, "test9", sf::Vector2f(100, 900), 32);
   saveSelect.addToggle(font, "test10", sf::Vector2f(100, 1000), 32);
   saveSelect.addToggle(font, "test11", sf::Vector2f(100, 1100), 32);
-
-  /*for(std::size_t id{ 0 }; id < saveButtons.size(); ++id)
-  {
-    saveSelect.bindButton(saveButtons.at(id), font);
-  }*/
 }
 
 void MapLoading::mouseInput(GameState& state, sf::Vector2i clickPosition)
@@ -41,21 +37,7 @@ void MapLoading::mouseInput(GameState& state, sf::Vector2i clickPosition)
   else
   {
     saveSelect.clickInput(clickPosition);
-
-    /*for(std::size_t id{ 0 }; id < saveButtons.size(); ++id)
-    {
-      if(saveButtons.at(id).isClicked(clickPosition))
-      {
-        selectedSave = id;
-        break;
-      }
-    }*/
   }
-
-  /*for(std::size_t id{ 0 }; id < saveButtons.size(); ++id)
-  {
-    saveButtons.at(id).setState(id == selectedSave);
-  }*/
 }
 
 void MapLoading::holdInput(sf::Vector2i clickPosition)
