@@ -27,6 +27,48 @@ ScrollArea::ScrollArea(sf::Vector2f position, double height)
   areaStart.setPosition(sf::Vector2f(0, position.y - areaStart.getSize().y));
   areaEnd.setPosition(sf::Vector2f(0, position.y + height));
 }
+
+void ScrollArea::addButton(sf::Font& font, std::string text,
+                           sf::Vector2f position, unsigned int size)
+{
+  textButtons.emplace_back(font, text, position, size);
+  
+  if(textButtons.back().getPosition().y 
+   + textButtons.back().getSize().y > areaHeight)
+  {
+    areaHeight = textButtons.back().getPosition().y 
+               + textButtons.back().getSize().y;
+    
+    //Scrollbar should be (drawHeight/areaHeight) of drawHeight
+    scrollbar.setSize(sf::Vector2f(scrollbar.getSize().x, 
+                                   pow(drawingHeight, 2) / areaHeight));
+
+    maxScrollLevel = ((areaHeight - drawingHeight) / 100) + 1;
+
+    if(maxScrollLevel < 1) maxScrollLevel = 1;
+  }
+}
+
+void ScrollArea::addToggle(sf::Font& font, std::string text,
+                           sf::Vector2f position, unsigned int size)
+{
+  toggleButtons.emplace_back(font, text, position, size);
+  
+  if(toggleButtons.back().getPosition().y 
+   + toggleButtons.back().getSize().y > areaHeight)
+  {
+    areaHeight = toggleButtons.back().getPosition().y 
+               + toggleButtons.back().getSize().y;
+    
+    //Scrollbar should be (drawHeight/areaHeight) of drawHeight
+    scrollbar.setSize(sf::Vector2f(scrollbar.getSize().x, 
+                                   pow(drawingHeight, 2) / areaHeight));
+
+    maxScrollLevel = ((areaHeight - drawingHeight) / 100) + 1;
+
+    if(maxScrollLevel < 1) maxScrollLevel = 1;
+  }
+}
      
 void ScrollArea::scroll(int direction)
 {
@@ -44,17 +86,20 @@ void ScrollArea::scroll(int direction)
     
     for(auto& button : textButtons)
     {
-      button->setPosition(
-        sf::Vector2f(button->getPosition().x, 
-                     button->getPosition().y 
-                     - (scrollbar.getPosition().y - oldPos) * areaHeight/drawingHeight));
+      button.setPosition(
+        sf::Vector2f(button.getPosition().x, 
+                     button.getPosition().y 
+                     - (scrollbar.getPosition().y - oldPos) 
+                       * areaHeight / drawingHeight));
     }
     
     for(auto& button : toggleButtons)
     {
-      button->setPosition(
-        sf::Vector2f(button->getPosition().x, 
-                     button->getPosition().y - (scrollbar.getPosition().y - oldPos) * areaHeight/drawingHeight));
+      button.setPosition(
+        sf::Vector2f(button.getPosition().x, 
+                     button.getPosition().y 
+                     - (scrollbar.getPosition().y - oldPos) 
+                       * areaHeight / drawingHeight));
     }
   }
 }
@@ -87,17 +132,20 @@ void ScrollArea::holdInput(sf::Vector2i clickPosition)
 
     for(auto& button : textButtons)
     {
-      button->setPosition(
-        sf::Vector2f(button->getPosition().x, 
-                     button->getPosition().y 
-                     - (scrollbar.getPosition().y - oldPos) * areaHeight/drawingHeight));
+      button.setPosition(
+        sf::Vector2f(button.getPosition().x, 
+                     button.getPosition().y 
+                     - (scrollbar.getPosition().y - oldPos) 
+                       * areaHeight/drawingHeight));
     }
     
     for(auto& button : toggleButtons)
     {
-      button->setPosition(
-        sf::Vector2f(button->getPosition().x, 
-                     button->getPosition().y - (scrollbar.getPosition().y - oldPos) * areaHeight/drawingHeight));
+      button.setPosition(
+        sf::Vector2f(button.getPosition().x, 
+                     button.getPosition().y 
+                     - (scrollbar.getPosition().y - oldPos) 
+                       * areaHeight/drawingHeight));
     }
 
     scrollLevel = static_cast<int>(
@@ -115,6 +163,18 @@ void ScrollArea::clickInput(sf::Vector2i clickPosition)
 
     mousePosDelta = clickPosition.y - scrollbar.getPosition().y;
   }
+  /*else
+  {
+    for(auto& button : textButtons)
+    {
+      button.isClciked(clickPosition);
+    }
+    
+    for(auto& button : toggleButtons)
+    {
+      button.isClciked(clickPosition);
+    }
+  }*/
 }
 
 void ScrollArea::releaseInput()
@@ -124,22 +184,21 @@ void ScrollArea::releaseInput()
 
 void ScrollArea::draw(sf::RenderWindow& window)
 {
-
-  for(const auto& button : textButtons)
+  for(auto& button : textButtons)
   {
-    if(button->getPosition().y + button->getSize().y >= position.y 
-    && button->getPosition().y < position.y + drawingHeight)
+    if(button.getPosition().y + button.getSize().y >= position.y 
+    && button.getPosition().y < position.y + drawingHeight)
     {
-      button->draw(window);
+      button.draw(window);
     }
   }
   
-  for(const auto& button : toggleButtons)
+  for(auto& button : toggleButtons)
   {
-    if(button->getPosition().y + button->getSize().y >= position.y 
-    && button->getPosition().y < position.y + drawingHeight)
+    if(button.getPosition().y + button.getSize().y >= position.y 
+    && button.getPosition().y < position.y + drawingHeight)
     {
-      button->draw(window);
+      button.draw(window);
     }
   }
 
@@ -150,16 +209,16 @@ void ScrollArea::draw(sf::RenderWindow& window)
   window.draw(scrollbar);
 }
 
-void ScrollArea::bindButton(TextButton& button, sf::Font& font)
+/*void ScrollArea::bindButton(TextButton& button, sf::Font& font)
 {
   textButtons.push_back(&button);
-  textButtons.back()->setFont(font);
+  textButtons.back().setFont(font);
 
-  if(textButtons.back()->getPosition().y 
-   + textButtons.back()->getSize().y > areaHeight)
+  if(textButtons.back().getPosition().y 
+   + textButtons.back().getSize().y > areaHeight)
   {
-    areaHeight = textButtons.back()->getPosition().y 
-               + textButtons.back()->getSize().y;
+    areaHeight = textButtons.back().getPosition().y 
+               + textButtons.back().getSize().y;
     
     //Scrollbar should be drawHeight/areaHeight of drawHeight
     scrollbar.setSize(sf::Vector2f(scrollbar.getSize().x, 
@@ -173,13 +232,13 @@ void ScrollArea::bindButton(TextButton& button, sf::Font& font)
 void ScrollArea::bindButton(TextToggle& button, sf::Font& font)
 {
   toggleButtons.push_back(&button);
-  toggleButtons.back()->setFont(font);
+  toggleButtons.back().setFont(font);
   
-  if(toggleButtons.back()->getPosition().y 
-   + toggleButtons.back()->getSize().y > areaHeight)
+  if(toggleButtons.back().getPosition().y 
+   + toggleButtons.back().getSize().y > areaHeight)
   {
-    areaHeight = toggleButtons.back()->getPosition().y 
-               + toggleButtons.back()->getSize().y;
+    areaHeight = toggleButtons.back().getPosition().y 
+               + toggleButtons.back().getSize().y;
     
     //Scrollbar should be drawHeight/areaHeight of drawHeight
     scrollbar.setSize(sf::Vector2f(scrollbar.getSize().x, 
@@ -189,4 +248,14 @@ void ScrollArea::bindButton(TextToggle& button, sf::Font& font)
 
     if(maxScrollLevel < 1) maxScrollLevel = 1;
   }
+}*/
+
+std::vector<TextButton>& ScrollArea::getButtons()
+{
+  return textButtons;
+}
+
+std::vector<TextToggle>& ScrollArea::getToggles()
+{
+  return toggleButtons;
 }

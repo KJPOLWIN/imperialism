@@ -4,6 +4,7 @@
   #include "textbutton.h"
   #include "texttoggle.h"
   #include <SFML/Graphics.hpp>
+  #include <string>
 
   class ScrollArea
   {
@@ -11,18 +12,23 @@
       ScrollArea(sf::Vector2f position, double height);
       ScrollArea() = default;
 
+      void addButton(sf::Font& font, std::string text, 
+                     sf::Vector2f position, unsigned int size);
+      void addToggle(sf::Font& font, std::string text, 
+                     sf::Vector2f position, unsigned int size);
+
       void scroll(int direction);
       void holdInput(sf::Vector2i clickPosition);
       void clickInput(sf::Vector2i clickPosition);
       void releaseInput();
       void draw(sf::RenderWindow& window);
 
-      void bindButton(TextButton& button, sf::Font& font);
-      void bindButton(TextToggle& button, sf::Font& font);
+      std::vector<TextButton>& getButtons();
+      std::vector<TextToggle>& getToggles();
 
     private:
-      std::vector<TextButton*> textButtons{  };
-      std::vector<TextToggle*> toggleButtons{  };
+      std::vector<TextButton> textButtons{  };
+      std::vector<TextToggle> toggleButtons{  };
 
       sf::RectangleShape scrollbar{  };
 

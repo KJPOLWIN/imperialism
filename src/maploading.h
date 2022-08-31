@@ -25,8 +25,6 @@
       TextButton backButton{  };
       TextButton loadMapButton{  };
       
-      std::vector<TextToggle> saveButtons{  };
-      
       ScrollArea saveSelect{  };
 
       int selectedSave{ 0 };
