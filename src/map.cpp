@@ -596,8 +596,12 @@ void Map::regenerate(int sizeX, int sizeY,
 void Map::saveToFile(std::string filename)
 {
   nlohmann::json mapData{  };
+
+  //Map size
   mapData["sizeX"] = sizeX;
   mapData["sizeY"] = sizeY;
+
+  //Node data
   std::vector<std::array<int, 2>> nodeData{  };
   for(auto& node : nodes)
   {
@@ -605,6 +609,19 @@ void Map::saveToFile(std::string filename)
   }
   mapData["nodes"] = nodeData;
 
+  //Unit data
+  mapData["unitCount"] = units.size();
+  for(std::size_t iii{ 0 }; iii < units.size(); ++iii)
+  {
+    mapData["units"][iii]["x"] = units.at(iii).getHexPosition().toCartesian().x;
+    mapData["units"][iii]["y"] = units.at(iii).getHexPosition().toCartesian().y;
+    mapData["units"][iii]["name"] = units.at(iii).getName();
+    mapData["units"][iii]["mp"] = units.at(iii).getMaxMovePoints();
+    mapData["units"][iii]["mc"] = units.at(iii).getMoveCosts();
+    mapData["units"][iii]["faction"] = units.at(iii).getFaction();
+  }
+
+  //Saving to file
   std::fstream saveFile{  };
   saveFile.open("saves/" + filename, std::ios::out | std::ios::trunc);
 
@@ -641,6 +658,14 @@ void Map::loadFromFile(std::string filename)
         .switchClimateZone(static_cast<ClimateZone>(
           savedMap["nodes"][static_cast<std::size_t>(y * sizeX + x)][1]));
     }
+  }
+
+  for(std::size_t iii{ 0 }; iii < savedMap["unitCount"]; ++iii)
+  {
+    units.emplace_back(savedMap["units"][iii]["x"], savedMap["units"][iii]["y"],
+                       savedMap["units"][iii]["name"],
+                       savedMap["units"][iii]["mp"], savedMap["units"][iii]["mc"],
+                       savedMap["units"][iii]["faction"]);
   }
 }
 
