@@ -26,6 +26,8 @@
       
       void setFont(sf::Font& font);
 
+      std::string getString();
+
     private:
       sf::Text text{  };
       sf::RectangleShape background{  };

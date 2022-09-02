@@ -622,7 +622,7 @@ void Map::loadFromFile(std::string filename)
 
   nlohmann::json savedMap{  };
   std::fstream saveFile{  };
-  saveFile.open("saves/" + filename, std::ios::in);
+  saveFile.open(filename, std::ios::in);
 
   saveFile >> savedMap;
 

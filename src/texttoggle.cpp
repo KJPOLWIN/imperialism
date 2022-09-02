@@ -92,3 +92,8 @@ void TextToggle::setFont(sf::Font& font)
 {
   text.setFont(font);
 }
+      
+std::string TextToggle::getString()
+{
+  return text.getString();
+}

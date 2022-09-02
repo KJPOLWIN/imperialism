@@ -19,6 +19,8 @@
 
       void run(sf::RenderWindow& window);
 
+      void loadFilenames(sf::Font& font);
+
       std::string getMapFilename();
 
     private:
@@ -27,7 +29,7 @@
       
       ScrollArea saveSelect{  };
 
-      int selectedSave{ 0 };
+      std::size_t selectedSave{ 0 };
   };
 
 #endif

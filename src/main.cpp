@@ -10,6 +10,8 @@
 #include "json.hpp"
 #include <fstream>
 
+  #include <iostream>
+
 int main()
 {
   //Reading JSON
@@ -297,6 +299,8 @@ int main()
           window.draw(loadingText);
           window.display();
 
+          //std::cout << mapLoading.getMapFilename() << "\n";
+
           game.loadMapFromFile(mapLoading.getMapFilename());
         }
         
@@ -312,6 +316,11 @@ int main()
       break;
 
       case GameState::mapLoading:
+        if(lastFrameState != GameState::mapLoading)
+        {
+          mapLoading.loadFilenames(pressStart2P);
+        }
+        
         mapLoading.run(window);
       break;
     }
