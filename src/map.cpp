@@ -324,15 +324,8 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     }
   }
 
-  //Drawing units
   for( auto& unit : units )
   {
-    if(isVisible(unit.getPosition(), viewOffset, zoom))
-    {
-      riflemenSprite.setPosition(unit.getPosition());
-      targetWindow.draw(riflemenSprite);
-    }
-
     //Drawing possible moves
     for( auto& node : nodes )
     {
@@ -350,6 +343,13 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
           targetWindow.draw(selectedNode);
         }
       } 
+    }
+
+    //Drawing units
+    if(isVisible(unit.getPosition(), viewOffset, zoom))
+    {
+      riflemenSprite.setPosition(unit.getPosition());
+      targetWindow.draw(riflemenSprite);
     }
   }
 }
