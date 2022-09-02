@@ -6,6 +6,8 @@
 #include <filesystem>
 #include <vector>
 
+  #include <iostream>
+
 
 MapLoading::MapLoading(sf::Font& font)
   : backButton{ font, "back", sf::Vector2f(50.0f, 980.0f), 32 },
@@ -13,18 +15,6 @@ MapLoading::MapLoading(sf::Font& font)
     saveSelect{ sf::Vector2f(100.0f, 100.0f), sf::Vector2f(1720.0f, 800.0f), 
                 50.0 }
 {
-  /*saveSelect.addToggle(font, "test1", sf::Vector2f(100, 100), 32);
-  saveSelect.addToggle(font, "test2", sf::Vector2f(100, 200), 32);
-  saveSelect.addToggle(font, "test3", sf::Vector2f(100, 300), 32);
-  saveSelect.addToggle(font, "test4", sf::Vector2f(100, 400), 32);
-  saveSelect.addToggle(font, "test5", sf::Vector2f(100, 500), 32);
-  saveSelect.addToggle(font, "test6", sf::Vector2f(100, 600), 32);
-  saveSelect.addToggle(font, "test7", sf::Vector2f(100, 700), 32);
-  saveSelect.addToggle(font, "test8", sf::Vector2f(100, 800), 32);
-  saveSelect.addToggle(font, "test9", sf::Vector2f(100, 900), 32);
-  saveSelect.addToggle(font, "test10", sf::Vector2f(100, 1000), 32);
-  saveSelect.addToggle(font, "test11", sf::Vector2f(100, 1100), 32);*/
-
   //Filenames loaded before entering state
 }
 
@@ -36,7 +26,15 @@ void MapLoading::mouseInput(GameState& state, sf::Vector2i clickPosition)
   }
   else if(loadMapButton.isClicked(clickPosition))
   {
-    state = GameState::game;
+    if(saveSelect.getToggles().at(selectedSave).getState())
+    {
+      state = GameState::game;
+    }
+    else
+    {
+      loadMapButton.setPosition(1360.0f, 980.0f);
+      loadMapButton.setText("choose save file"); 
+    }
   }
   else
   {
@@ -70,6 +68,12 @@ void MapLoading::scrollInput(double scroll)
 
 void MapLoading::run(sf::RenderWindow& window)
 {
+  if(saveSelect.getToggles().at(selectedSave).getState())
+  {
+    loadMapButton.setPosition(1620.0f, 980.0f);
+    loadMapButton.setText("load map"); 
+  }
+
   saveSelect.draw(window);
   backButton.draw(window);
   loadMapButton.draw(window);
