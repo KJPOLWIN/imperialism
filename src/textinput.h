@@ -17,12 +17,14 @@
                 sf::Vector2f position, InputType type = InputType::numeric);
       TextInput() = default;
       
-      bool isClicked(sf::Vector2i clickPosition);
+      bool clickInput(sf::Vector2i clickPosition);
       void updateText(char newString);
       std::string getText();
+      void setText(std::string text);
       void draw(sf::RenderWindow& window);
-      
-      bool active{ false };
+      bool isActive(); 
+      void deactivate();
+      void activate();
 
     private:
       
@@ -30,6 +32,7 @@
       sf::RectangleShape background{  };
       InputType type{ InputType::numeric }; 
 
+      bool active{ false };
   };
 
 #endif

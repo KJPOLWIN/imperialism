@@ -105,11 +105,11 @@ int main()
     //Input
     while(window.pollEvent(event))
     {
-      if(event.type == sf::Event::Closed)
+      if(event.type == sf::Event::Closed) //Close window
       {
         window.close();
       }
-      else if(event.type == sf::Event::TextEntered)
+      else if(event.type == sf::Event::TextEntered) //Text is entered
       {
         if(event.text.unicode < 128)
         {
@@ -119,8 +119,11 @@ int main()
               gameSettings.textInput(static_cast<char>(event.text.unicode));
             break;
 
-            case GameState::mainMenu:
             case GameState::game:
+              game.textInput(static_cast<char>(event.text.unicode));
+            break;
+            
+            case GameState::mainMenu:
             case GameState::options:
             case GameState::credits:
             case GameState::mapLoading:
@@ -145,7 +148,7 @@ int main()
           break;
 
           case GameState::game:
-            game.mouseInput(state, window, clickPosition);
+            game.mouseInput(state, window, clickPosition, pressStart2P);
           break;
 
           case GameState::options:
@@ -163,7 +166,7 @@ int main()
 
         canClick = false;
       }
-      else if(!canClick
+      else if(!canClick   //Mouse button is released
            && event.type == sf::Event::MouseButtonReleased
            && event.mouseButton.button == sf::Mouse::Left)
       {
@@ -185,35 +188,35 @@ int main()
       }
       else if(event.type == sf::Event::KeyPressed)
       {
-        if(event.key.code == sf::Keyboard::Escape)
+        if(event.key.code == sf::Keyboard::Escape)  //Enter pressed
         {
           if(state == GameState::game)
           {
             game.switchPause();
           }
         }
-        else if(event.key.code == sf::Keyboard::Up)
+        else if(event.key.code == sf::Keyboard::Up) //Up arrow pressed
         {
           if(state == GameState::gameSettings)
           {
             gameSettings.arrowUpPressed();
           }
         }
-        else if(event.key.code == sf::Keyboard::Right)
+        else if(event.key.code == sf::Keyboard::Right)  //Right arrow pressed
         {
           if(state == GameState::gameSettings)
           {
             gameSettings.arrowRightPressed();
           }
         }
-        else if(event.key.code == sf::Keyboard::Left)
+        else if(event.key.code == sf::Keyboard::Left) //Left arrow pressed
         {
           if(state == GameState::gameSettings)
           {
             gameSettings.arrowLeftPressed();
           }
         }
-        else if(event.key.code == sf::Keyboard::Down)
+        else if(event.key.code == sf::Keyboard::Down) //Down arrow pressed
         {
           if(state == GameState::gameSettings)
           {
@@ -222,7 +225,7 @@ int main()
         }
 
       }
-      else if(event.type == sf::Event::MouseWheelScrolled)
+      else if(event.type == sf::Event::MouseWheelScrolled)  //Mouse wheel scrolled
       {
         switch(state)
         {
@@ -252,10 +255,13 @@ int main()
         case GameState::mapLoading:
           mapLoading.holdInput(clickPosition);
         break;
-          
+        
+        case GameState::game:
+          game.holdInput(clickPosition);
+        break;
+
         case GameState::mainMenu:
         case GameState::gameSettings:
-        case GameState::game:
         case GameState::options:
         case GameState::credits:
         break;

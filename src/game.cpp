@@ -7,7 +7,9 @@
 #include "constant.h"
 #include <SFML/Graphics.hpp>
 #include <string>
-
+#include <filesystem>
+  
+  #include <iostream>
 
 Game::Game(sf::Font& font)
   : pauseMenuLabel{ "Game paused", font, 32 },
@@ -21,8 +23,13 @@ Game::Game(sf::Font& font)
     unitNameLabel{ "", font, 24 },
     unitHealth{ "", font, 16 },
     unitMovePoints{ "", font, 16 },
-    nextTurnButton{ font, "Next turn", sf::Vector2f(1550, 950), 32 }
+    nextTurnButton{ font, "Next turn", sf::Vector2f(1550, 950), 32 },
+    backButton{ font, "back", sf::Vector2f(690, 790), 24 },
+    saveButton{ font, "save", sf::Vector2f(1140, 790), 24 },
+    saveSelect{ sf::Vector2f(690, 340), sf::Vector2f(550, 350), 50.0 },
+    filenameInput{ font, "Enter save name", 24, sf::Vector2f(690, 270), InputType::text }
 {
+  //Pause menu setup
   shadeTexture.loadFromFile("texture/shade.png");
   shade.setTexture(shadeTexture);
   pauseButtonTexture.loadFromFile("texture/pause.png");
@@ -42,6 +49,7 @@ Game::Game(sf::Font& font)
   GUI::centerTextInField(saveGameButton, pauseMenuBackground);
   GUI::centerTextInField(exitToDesktopButton, pauseMenuBackground);
 
+  //Node widget setup
   nodeWidgetBackground.setPosition(1420, 100); 
   nodeWidgetBackground.setFillColor(sf::Color::Black);
   nodeWidgetBackground.setOutlineColor(sf::Color::White);
@@ -95,6 +103,7 @@ Game::Game(sf::Font& font)
 
   nodeNameLabel.setPosition(0, 125);
 
+  //Unit widget setup
   unitWidgetBackground.setPosition(100, 780);
   unitWidgetBackground.setFillColor(sf::Color::Black);
   unitWidgetBackground.setOutlineColor(sf::Color::White);
@@ -110,89 +119,182 @@ Game::Game(sf::Font& font)
   riflemenLarge.setTexture(riflemenLargeTexture);
   riflemenLarge.setPosition(125, 805);
 
+  //Save menu setup
+  saveMenuBackground.setPosition(660, 240);
+  saveMenuBackground.setFillColor(sf::Color::Black);
+  saveMenuBackground.setOutlineColor(sf::Color::White);
+  saveMenuBackground.setOutlineThickness(10);
 }
 
-void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition)
+void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition, sf::Font& font)
 {
-  if(!paused)
+  switch(mode)
   {
-    if(nextTurnButton.isClicked(clickPosition))
-    {
-      map.nextTurn();
-    }
-    else if(pauseButton.isClicked(clickPosition))
-    {
-      paused = true;
-    }
-    else
-    {
-      sf::Vector2i posCartesian{ map.getClickedNode(window.mapPixelToCoords(sf::Mouse::getPosition(window)),    
-                                                    sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
-                                                                 (mapView.getCenter().y - mapView.getSize().y / 2)),
-                                                    mapView.getSize().x / Constant::windowWidth) };
-      HexVector newPos{ posCartesian };
-      map.moveUnits(newPos);
-
-      map.selectNodesAndUnits(window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
-                              sf::Vector2f((mapView.getCenter().x - mapView.getSize().x / 2), 
-                                           (mapView.getCenter().y - mapView.getSize().y / 2)),
-                              mapView.getSize().x / Constant::windowWidth);
-      nodeNameLabel.setString(map.getSelectedNodeName());
-      GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
-      unitNameLabel.setString(map.getSelectedUnit().getName());
-      if(map.getSelectedUnit().getFaction() == 0)
+    case DisplayMode::game:
+      if(nextTurnButton.isClicked(clickPosition))
       {
-        unitNameLabel.setFillColor(sf::Color::Blue);
+        map.nextTurn();
+      }
+      else if(pauseButton.isClicked(clickPosition))
+      {
+        mode = DisplayMode::pauseMenu;
       }
       else
       {
-        unitNameLabel.setFillColor(sf::Color::Red);
+        sf::Vector2i posCartesian{ 
+          map.getClickedNode(
+            window.mapPixelToCoords(sf::Mouse::getPosition(window)),    
+                                    sf::Vector2f((mapView.getCenter().x 
+                                    - mapView.getSize().x / 2), 
+                                    (mapView.getCenter().y 
+                                    - mapView.getSize().y / 2)),
+                                    mapView.getSize().x 
+                                    / Constant::windowWidth) };
+
+        HexVector newPos{ posCartesian };
+        map.moveUnits(newPos);
+
+        map.selectNodesAndUnits(
+          window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
+                                  sf::Vector2f((mapView.getCenter().x 
+                                  - mapView.getSize().x / 2), 
+                                  (mapView.getCenter().y 
+                                  - mapView.getSize().y / 2)),
+                                  mapView.getSize().x / Constant::windowWidth);
+
+        nodeNameLabel.setString(map.getSelectedNodeName());
+        GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
+        unitNameLabel.setString(map.getSelectedUnit().getName());
+
+        if(map.getSelectedUnit().getFaction() == 0)
+        {
+          unitNameLabel.setFillColor(sf::Color::Blue);
+        }
+        else
+        {
+          unitNameLabel.setFillColor(sf::Color::Red);
+        }
       }
-    }
+    break;
+
+    case DisplayMode::pauseMenu:
+      if(menuButton.isClicked(clickPosition))
+      {
+        state = GameState::mainMenu;
+        mode = DisplayMode::game;
+      }
+      else if(optionsButton.isClicked(clickPosition))
+      {
+        state = GameState::options;
+      }
+      else if(saveGameButton.isClicked(clickPosition))
+      {
+        mode = DisplayMode::saveMenu;
+
+        //filename list is updated
+        int buttonCounter{ 0 };
+        for(auto& file : std::filesystem::directory_iterator("saves/"))
+        {
+          std::string filename{ file.path().u8string() };
+          filename.erase(filename.begin(),
+                         filename.begin() + filename.find_first_of("/") + 1);
+          filename.erase(filename.begin() + filename.find_last_of("."),
+                         filename.end());
+          saveSelect.addButton(font, filename,
+                               sf::Vector2f(690, 340 + buttonCounter * 50.0f), 24);
+          ++buttonCounter;
+        }
+      }
+      else if(unpauseButton.isClicked(clickPosition))
+      {
+        mode = DisplayMode::game;
+      }
+      else if(exitToDesktopButton.isClicked(clickPosition))
+      {
+        window.close();
+      }
+    break;
+
+    case DisplayMode::saveMenu:
+      if(backButton.isClicked(clickPosition))
+      {
+        mode = DisplayMode::pauseMenu;
+      }
+      else if(saveButton.isClicked(clickPosition))
+      {
+        //map is saved
+        map.saveToFile("saves/" + filenameInput.getText() + ".json");
+
+        mode = DisplayMode::pauseMenu;
+        textInputUnclicked = true;
+      }
+      else
+      {
+        if(filenameInput.clickInput(clickPosition)
+        && textInputUnclicked)
+        {
+          textInputUnclicked = false;
+          filenameInput.setText("");
+        }
+
+        saveSelect.clickInput(clickPosition);
+
+        for(auto& button : saveSelect.getButtons())
+        {
+          if(button.isClicked(clickPosition))
+          {
+            textInputUnclicked = true;
+            filenameInput.setText(button.getText());
+          }
+        }
+      }
+    break;
   }
-  else
-  {
-    if(menuButton.isClicked(clickPosition))
-    {
-      state = GameState::mainMenu;
-      paused = false;
-    }
-    else if(optionsButton.isClicked(clickPosition))
-    {
-      state = GameState::options;
-    }
-    else if(saveGameButton.isClicked(clickPosition))
-    {
-      map.saveToFile("test.json");
-    }
-    else if(unpauseButton.isClicked(clickPosition))
-    {
-      paused = false;
-    }
-    else if(exitToDesktopButton.isClicked(clickPosition))
-    {
-      window.close();
-    }
-  }
+}
+
+void Game::holdInput(sf::Vector2i clickPosition)
+{
+  saveSelect.holdInput(clickPosition);
 }
 
 void Game::scrollInput(double direction)
 {
-  double zoomLevel{ mapView.getSize().x / Constant::windowWidth };
-  if(direction > 0 && zoomLevel >= maxZoom)
+  if(mode == DisplayMode::game)
   {
-    mapView.zoom(0.5);
+    double zoomLevel{ mapView.getSize().x / Constant::windowWidth };
+    if(direction > 0 && zoomLevel >= maxZoom)
+    {
+      mapView.zoom(0.5);
+    }
+    else if(direction < 0 && zoomLevel <= minZoom)
+    { 
+      mapView.zoom(2);
+    }
   }
-  else if(direction < 0 && zoomLevel <= minZoom)
+  else if(mode == DisplayMode::saveMenu)
   {
-    mapView.zoom(2);
+    saveSelect.scroll(direction);
   }
+}
 
+void Game::textInput(char input)
+{
+  if(mode == DisplayMode::saveMenu)
+  {
+    filenameInput.updateText(input);
+  }
 }
 
 void Game::switchPause()
 {
-  paused = !paused;
+  if(mode == DisplayMode::game) 
+  {
+    mode = DisplayMode::pauseMenu;
+  }
+  else 
+  {
+    mode = DisplayMode::game;
+  }
 }
 
 void Game::run(sf::RenderWindow& window, double timeElapsed)
@@ -201,26 +303,32 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
 
   double zoomLevel{ mapView.getSize().x / Constant::windowWidth };
 
-  if(!paused)
+  //Update
+  switch(mode)
   {
-    if(mousePosition.x < 10)
-    {
-      mapView.move(-Constant::scrollSpeed * timeElapsed * zoomLevel, 0);
-    }
-    else if(mousePosition.x > Constant::windowWidth - 10)
-    {
-      mapView.move(Constant::scrollSpeed * timeElapsed * zoomLevel, 0);
-    }
+    case DisplayMode::game:
+  //if(!paused)
+  //{
+      if(mousePosition.x < 10)
+      {
+        mapView.move(-Constant::scrollSpeed * timeElapsed * zoomLevel, 0);
+      }
+      else if(mousePosition.x > Constant::windowWidth - 10)
+      {
+        mapView.move(Constant::scrollSpeed * timeElapsed * zoomLevel, 0);
+      }
   
-    if(mousePosition.y < 10)
-    {
-      mapView.move(0.0, -Constant::scrollSpeed * timeElapsed * zoomLevel);
-    }
-    else if(mousePosition.y > Constant::windowHeight - 10)
-    {
-      mapView.move(0.0, Constant::scrollSpeed * timeElapsed * zoomLevel);
-    }
-  }
+      if(mousePosition.y < 10)
+      {
+        mapView.move(0.0, -Constant::scrollSpeed * timeElapsed * zoomLevel);
+      }
+      else if(mousePosition.y > Constant::windowHeight - 10)
+      {
+        mapView.move(0.0, Constant::scrollSpeed * timeElapsed * zoomLevel);
+      }
+  //}
+    case DisplayMode::pauseMenu:
+    case DisplayMode::saveMenu:
       
   
   unitHealth.setString("Health: "
@@ -231,7 +339,10 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
                          + std::to_string(map.getSelectedUnit().getMovePoints()) 
                          + "/" 
                          + std::to_string(map.getSelectedUnit().getMaxMovePoints()));
+  break;
+  }
   
+  //Draw
   window.setView(mapView);
   map.draw(window, 
            sf::Vector2f(mapView.getCenter().x - mapView.getSize().x / 2,
@@ -321,7 +432,8 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
 
   nextTurnButton.draw(window);
 
-  if(paused)
+  //if(paused)
+  if(mode == DisplayMode::pauseMenu)
   {
     window.draw(shade);
     window.draw(pauseMenuBackground); 
@@ -332,9 +444,17 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     unpauseButton.draw(window);
     exitToDesktopButton.draw(window);
   }
-  else
+  else if(mode == DisplayMode::game)
   {
     pauseButton.draw(window);
+  }
+  else if(mode == DisplayMode::saveMenu)
+  {
+    window.draw(saveMenuBackground);
+    saveSelect.draw(window);
+    backButton.draw(window);
+    saveButton.draw(window);
+    filenameInput.draw(window);
   }
 }
 

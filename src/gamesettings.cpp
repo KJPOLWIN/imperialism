@@ -91,7 +91,14 @@ void GameSettings::mouseInput(GameState& state, sf::Vector2i clickPosition)
     bool anyInputActive{ false };
     for(std::size_t iii{ 0 }; iii < inputs.size(); ++iii)
     {
-      if(inputs.at(iii).isClicked(clickPosition)
+      inputs.at(iii).clickInput(clickPosition);
+      if(inputs.at(iii).isActive())
+      {
+        anyInputActive = true;
+        activeInputId = iii;
+      }
+
+      /*if(inputs.at(iii).isClicked(clickPosition)
       && !anyInputActive)
       {
         inputs.at(iii).active = true;
@@ -101,7 +108,7 @@ void GameSettings::mouseInput(GameState& state, sf::Vector2i clickPosition)
       else
       {
         inputs.at(iii).active = false;
-      }
+      }*/
     }
   }
 }
@@ -119,9 +126,9 @@ void GameSettings::arrowUpPressed()
   --activeInputId;
   for(auto& input : inputs)
   {
-    input.active = false;
+    input.deactivate();
   }
-  inputs.at(activeInputId).active = true;
+  inputs.at(activeInputId).activate();
 }
 
 void GameSettings::arrowRightPressed()
@@ -129,9 +136,9 @@ void GameSettings::arrowRightPressed()
   ++activeInputId;
   for(auto& input : inputs)
   {
-    input.active = false;
+    input.deactivate();
   }
-  inputs.at(activeInputId).active = true;
+  inputs.at(activeInputId).activate();
 }
 
 void GameSettings::arrowDownPressed()
@@ -139,9 +146,9 @@ void GameSettings::arrowDownPressed()
   ++activeInputId;
   for(auto& input : inputs)
   {
-    input.active = false;
+    input.deactivate();
   }
-  inputs.at(activeInputId).active = true;
+  inputs.at(activeInputId).activate();
 }
 
 void GameSettings::arrowLeftPressed()
@@ -149,9 +156,9 @@ void GameSettings::arrowLeftPressed()
   --activeInputId;
   for(auto& input : inputs)
   {
-    input.active = false;
+    input.deactivate();
   }
-  inputs.at(activeInputId).active = true;
+  inputs.at(activeInputId).activate();
 }
 
 void GameSettings::run(sf::RenderWindow& window)
@@ -180,7 +187,7 @@ void GameSettings::run(sf::RenderWindow& window)
   {
     for(auto& inputField : inputs)
     {
-      inputField.active = false;
+      inputField.deactivate();
     }
   }
 

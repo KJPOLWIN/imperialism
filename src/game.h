@@ -4,18 +4,29 @@
   #include "map.h"
   #include "textbutton.h"
   #include "imagebutton.h"
+  #include "scrollarea.h"
+  #include "textinput.h"
   #include "gamestate.h"
   #include "constant.h"
   #include <SFML/Graphics.hpp>
   #include <string>
+
+  enum class DisplayMode
+  {
+    game,
+    pauseMenu,
+    saveMenu
+  };
 
   class Game
   {
     public:
       Game(sf::Font& font);
 
-      void mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition);
+      void mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition, sf::Font& font);
+      void holdInput(sf::Vector2i clickPosition);
       void scrollInput(double scroll);
+      void textInput(char input);
       void run(sf::RenderWindow& window, double timeElapsed);
 
       void switchPause();
@@ -37,7 +48,8 @@
       double minZoom{ 2 };
       sf::Texture shadeTexture{  };
       sf::Sprite shade{  };
-      bool paused{ false };
+      //bool paused{ false };
+      DisplayMode mode{ DisplayMode::game };
    
       //Pause menu
       sf::RectangleShape pauseMenuBackground{ sf::Vector2f(400, 600) };
@@ -102,6 +114,14 @@
 
       //Next turn button
       TextButton nextTurnButton{  };
+
+      //Map saving menu
+      sf::RectangleShape saveMenuBackground{ sf::Vector2f(600, 600) };
+      TextButton backButton{  };
+      TextButton saveButton{  };
+      ScrollArea saveSelect{  };
+      TextInput filenameInput{  };
+      bool textInputUnclicked{ true };
   };
 
 #endif

@@ -20,6 +20,7 @@
 
       sf::Vector2f getSize();
 
+      std::string getText();
       void setText(std::string newText);
 
       void setFont(sf::Font& font);

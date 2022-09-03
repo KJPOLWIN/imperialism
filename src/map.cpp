@@ -623,7 +623,7 @@ void Map::saveToFile(std::string filename)
 
   //Saving to file
   std::fstream saveFile{  };
-  saveFile.open("saves/" + filename, std::ios::out | std::ios::trunc);
+  saveFile.open(filename, std::ios::out | std::ios::trunc);
 
   if(saveFile.is_open())
   {

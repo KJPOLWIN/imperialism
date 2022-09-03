@@ -13,9 +13,19 @@ TextInput::TextInput(sf::Font& font, std::string string, unsigned int size,
   background.setFillColor(sf::Color::Green);
 }
 
-bool TextInput::isClicked(sf::Vector2i clickPosition)
+bool TextInput::clickInput(sf::Vector2i clickPosition)
 {
-  return background.getGlobalBounds().contains(clickPosition.x, clickPosition.y);
+  if(background.getGlobalBounds().contains(clickPosition.x, clickPosition.y))
+  {
+    active = true;
+    return true;
+  }
+  else 
+  {
+    active = false;
+  }
+
+  return false;
 }
 
 void TextInput::updateText(char newString)
@@ -51,6 +61,11 @@ std::string TextInput::getText()
   return text.getString();
 }
 
+void TextInput::setText(std::string text)
+{
+  TextInput::text.setString(text);
+}
+
 void TextInput::draw(sf::RenderWindow& window)
 {
   if(text.getString() == "")
@@ -78,4 +93,19 @@ void TextInput::draw(sf::RenderWindow& window)
   }
 
   window.draw(text);
+}
+
+bool TextInput::isActive()
+{
+  return active;
+}
+
+void TextInput::deactivate()
+{
+  active = false;
+}
+
+void TextInput::activate()
+{
+  active = true;
 }
