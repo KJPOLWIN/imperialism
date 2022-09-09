@@ -192,6 +192,7 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
         mode = DisplayMode::saveMenu;
 
         //filename list is updated
+        saveSelect.getButtons().clear();
         int buttonCounter{ 0 };
         for(auto& file : std::filesystem::directory_iterator("saves/"))
         {
@@ -222,11 +223,23 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
       }
       else if(saveButton.isClicked(clickPosition))
       {
-        //map is saved
-        map.saveToFile("saves/" + filenameInput.getText() + ".json");
-
-        mode = DisplayMode::pauseMenu;
-        textInputUnclicked = true;
+        if(filenameInput.getText() != "" 
+        && filenameInput.getText() != "Enter save name")
+        {
+          saveButton.setPosition(1140, 790);
+          saveButton.setText("save");
+          
+          //map is saved
+          map.saveToFile("saves/" + filenameInput.getText() + ".json");
+          
+          mode = DisplayMode::pauseMenu;
+          textInputUnclicked = true;
+        }
+        else
+        {
+          saveButton.setPosition(885, 790);
+          saveButton.setText("choose filename");
+        }
       }
       else
       {
@@ -307,8 +320,6 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   switch(mode)
   {
     case DisplayMode::game:
-  //if(!paused)
-  //{
       if(mousePosition.x < 10)
       {
         mapView.move(-Constant::scrollSpeed * timeElapsed * zoomLevel, 0);
@@ -326,20 +337,19 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
       {
         mapView.move(0.0, Constant::scrollSpeed * timeElapsed * zoomLevel);
       }
-  //}
+
     case DisplayMode::pauseMenu:
     case DisplayMode::saveMenu:
       
-  
-  unitHealth.setString("Health: "
-                     + std::to_string(map.getSelectedUnit().getHealth()) 
-                     + "/" 
-                     + std::to_string(map.getSelectedUnit().getMaxHealth()));
-  unitMovePoints.setString("Move points: "
-                         + std::to_string(map.getSelectedUnit().getMovePoints()) 
-                         + "/" 
-                         + std::to_string(map.getSelectedUnit().getMaxMovePoints()));
-  break;
+      unitHealth.setString("Health: "
+                       + std::to_string(map.getSelectedUnit().getHealth()) 
+                       + "/" 
+                       + std::to_string(map.getSelectedUnit().getMaxHealth()));
+      unitMovePoints.setString("Move points: "
+                       + std::to_string(map.getSelectedUnit().getMovePoints()) 
+                       + "/" 
+                       + std::to_string(map.getSelectedUnit().getMaxMovePoints()));
+    break;
   }
   
   //Draw
@@ -432,7 +442,6 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
 
   nextTurnButton.draw(window);
 
-  //if(paused)
   if(mode == DisplayMode::pauseMenu)
   {
     window.draw(shade);
@@ -450,6 +459,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   }
   else if(mode == DisplayMode::saveMenu)
   {
+    window.draw(shade);
     window.draw(saveMenuBackground);
     saveSelect.draw(window);
     backButton.draw(window);

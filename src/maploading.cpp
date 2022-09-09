@@ -15,7 +15,7 @@ MapLoading::MapLoading(sf::Font& font)
     saveSelect{ sf::Vector2f(100.0f, 100.0f), sf::Vector2f(1720.0f, 800.0f), 
                 50.0 }
 {
-  //Filenames loaded before entering state
+
 }
 
 void MapLoading::mouseInput(GameState& state, sf::Vector2i clickPosition)
@@ -24,7 +24,7 @@ void MapLoading::mouseInput(GameState& state, sf::Vector2i clickPosition)
   {
     state = GameState::mainMenu;
   }
-  else if(loadMapButton.isClicked(clickPosition))
+  else if(loadMapButton.isClicked(clickPosition) && saveSelect.getToggles().size() > 0)
   {
     if(saveSelect.getToggles().at(selectedSave).getState())
     {
@@ -68,15 +68,18 @@ void MapLoading::scrollInput(double scroll)
 
 void MapLoading::run(sf::RenderWindow& window)
 {
-  if(saveSelect.getToggles().at(selectedSave).getState())
+  if(saveSelect.getToggles().size() > 0 && saveSelect.getToggles().at(selectedSave).getState())
   {
     loadMapButton.setPosition(1620.0f, 980.0f);
     loadMapButton.setText("load map"); 
   }
 
   saveSelect.draw(window);
+  if(saveSelect.getToggles().size() > 0)
+  {
+    loadMapButton.draw(window);
+  }
   backButton.draw(window);
-  loadMapButton.draw(window);
 }
       
 void MapLoading::loadFilenames(sf::Font& font)
