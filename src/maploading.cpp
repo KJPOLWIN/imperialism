@@ -3,7 +3,8 @@
 #include "gamestate.h"
 #include <SFML/Graphics.hpp>
 #include <string>
-#include <filesystem>
+#include <dirent.h>
+//#include <filesystem>
 #include <vector>
 
   #include <iostream>
@@ -84,7 +85,36 @@ void MapLoading::run(sf::RenderWindow& window)
       
 void MapLoading::loadFilenames(sf::Font& font)
 {
-  int buttonCounter{ 1 };
+  saveSelect.getButtons().clear();
+  int buttonCounter{ 0 };
+
+  DIR *dir;
+  struct dirent *diread;
+  if((dir = opendir("./saves")) != nullptr)
+  {
+    while((diread = readdir(dir)) != nullptr)
+    {
+      std::string filename{ diread->d_name };
+      if(filename != "." && filename != "..")
+      {
+        filename.erase(filename.begin(),
+                       filename.begin() + filename.find_first_of("/") + 1);
+        filename.erase(filename.begin() + filename.find_last_of("."),
+                       filename.end());
+        saveSelect.addToggle(font, filename, 
+                             sf::Vector2f(100.0f, buttonCounter * 100.0f), 32);
+        ++buttonCounter;
+      }
+    }
+    closedir(dir);
+  }
+  else
+  {
+    perror("opendir");
+    std::cout << "directory not opened or something\n";
+  }
+
+  /*int buttonCounter{ 1 };
   for(auto& file : std::filesystem::directory_iterator("saves/"))
   {
     std::string filename{ file.path().u8string() };
@@ -95,7 +125,7 @@ void MapLoading::loadFilenames(sf::Font& font)
     saveSelect.addToggle(font, filename, 
                          sf::Vector2f(100.0f, buttonCounter * 100.0f), 32);
     ++buttonCounter;
-  }
+  }*/
 }
       
 std::string MapLoading::getMapFilename()

@@ -7,8 +7,8 @@
 #include "constant.h"
 #include <SFML/Graphics.hpp>
 #include <string>
-#include <filesystem>
-  
+#include <dirent.h>
+
   #include <iostream>
 
 Game::Game(sf::Font& font)
@@ -192,7 +192,7 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
         mode = DisplayMode::saveMenu;
 
         //filename list is updated
-        saveSelect.getButtons().clear();
+        /*saveSelect.getButtons().clear();
         int buttonCounter{ 0 };
         for(auto& file : std::filesystem::directory_iterator("saves/"))
         {
@@ -204,6 +204,36 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
           saveSelect.addButton(font, filename,
                                sf::Vector2f(690, 340 + buttonCounter * 50.0f), 24);
           ++buttonCounter;
+        }*/
+        
+        saveSelect.getButtons().clear();
+        int buttonCounter{ 0 };
+
+        DIR *dir;
+        struct dirent *diread;
+        if((dir = opendir("./saves")) != nullptr)
+        {
+          while((diread = readdir(dir)) != nullptr)
+          {
+            std::string filename{ diread->d_name };
+
+            if(filename != "." && filename != "..")
+            {
+              filename.erase(filename.begin(),
+                             filename.begin() + filename.find_first_of("/") + 1);
+              filename.erase(filename.begin() + filename.find_last_of("."),
+                             filename.end());
+              saveSelect.addButton(font, filename,
+                                   sf::Vector2f(690, 340 + buttonCounter * 50.0f), 24);
+              ++buttonCounter;
+            }
+          }
+          closedir(dir);
+        }
+        else
+        {
+          perror("opendir");
+          std::cout << "directory not opened or something\n";
         }
       }
       else if(unpauseButton.isClicked(clickPosition))
