@@ -42,13 +42,16 @@
       
     private:
       Map map{ }; 
+      int turn{ 0 };
+
       sf::View mapView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       sf::View guiView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       double maxZoom{ 0.5 };
       double minZoom{ 2 };
+      
       sf::Texture shadeTexture{  };
       sf::Sprite shade{  };
-      //bool paused{ false };
+      
       DisplayMode mode{ DisplayMode::game };
    
       //Pause menu
@@ -122,6 +125,10 @@
       ScrollArea saveSelect{  };
       TextInput filenameInput{  };
       bool textInputUnclicked{ true };
+
+      //Yields widget
+      sf::RectangleShape yieldWidgetBackground{ sf::Vector2f(1810, 50) };
+      sf::Text turnCounter{  };
   };
 
 #endif

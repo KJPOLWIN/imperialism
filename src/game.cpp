@@ -27,7 +27,8 @@ Game::Game(sf::Font& font)
     backButton{ font, "back", sf::Vector2f(690, 790), 24 },
     saveButton{ font, "save", sf::Vector2f(1140, 790), 24 },
     saveSelect{ sf::Vector2f(690, 340), sf::Vector2f(550, 350), 50.0 },
-    filenameInput{ font, "Enter save name", 24, sf::Vector2f(690, 270), InputType::text }
+    filenameInput{ font, "Enter save name", 24, sf::Vector2f(690, 270), InputType::text },
+    turnCounter{"Turn 1", font, 24 }
 {
   //Pause menu setup
   shadeTexture.loadFromFile("texture/shade.png");
@@ -124,6 +125,14 @@ Game::Game(sf::Font& font)
   saveMenuBackground.setFillColor(sf::Color::Black);
   saveMenuBackground.setOutlineColor(sf::Color::White);
   saveMenuBackground.setOutlineThickness(10);
+
+  //Yields widget setup
+  yieldWidgetBackground.setPosition(0, 0);
+  yieldWidgetBackground.setFillColor(sf::Color::Black);
+  yieldWidgetBackground.setOutlineColor(sf::Color::White);
+  yieldWidgetBackground.setOutlineThickness(10); 
+  turnCounter.setPosition(sf::Vector2f(70, 12));
+
 }
 
 void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition, sf::Font& font)
@@ -134,6 +143,8 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
       if(nextTurnButton.isClicked(clickPosition))
       {
         map.nextTurn();
+        ++turn;
+        turnCounter.setString("Turn " + std::to_string(turn + 1));
       }
       else if(pauseButton.isClicked(clickPosition))
       {
@@ -192,20 +203,6 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
         mode = DisplayMode::saveMenu;
 
         //filename list is updated
-        /*saveSelect.getButtons().clear();
-        int buttonCounter{ 0 };
-        for(auto& file : std::filesystem::directory_iterator("saves/"))
-        {
-          std::string filename{ file.path().u8string() };
-          filename.erase(filename.begin(),
-                         filename.begin() + filename.find_first_of("/") + 1);
-          filename.erase(filename.begin() + filename.find_last_of("."),
-                         filename.end());
-          saveSelect.addButton(font, filename,
-                               sf::Vector2f(690, 340 + buttonCounter * 50.0f), 24);
-          ++buttonCounter;
-        }*/
-        
         saveSelect.getButtons().clear();
         int buttonCounter{ 0 };
 
@@ -390,6 +387,8 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
            zoomLevel);
 
   window.setView(guiView);
+  window.draw(yieldWidgetBackground);
+  window.draw(turnCounter);
   if(nodeNameLabel.getString() != "")
   {
     window.draw(nodeWidgetBackground);
