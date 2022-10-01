@@ -56,6 +56,10 @@
       sf::Image clickmap{  };
 
       sf::Texture selectedNodeTexture{  };
+      sf::Texture nodeBorderTexture{  };
+      sf::Texture nodeBorderSelectedTexture{  };
+      sf::Texture nodeBorderAllyTexture{  };
+      sf::Texture nodeBorderEnemyTexture{  };
       sf::Texture grassNodeTexture{  };
       sf::Texture waterNodeTexture{  };
       sf::Texture desertNodeTexture{  };
@@ -74,6 +78,10 @@
       sf::Texture riflemenTexture{  };
       
       sf::Sprite selectedNode{  };
+      sf::Sprite nodeBorder{  };
+      sf::Sprite nodeBorderSelected{  };
+      sf::Sprite nodeBorderAlly{  };
+      sf::Sprite nodeBorderEnemy{  };
       sf::Sprite grassNode{  };
       sf::Sprite waterNode{  };
       sf::Sprite desertNode{  };

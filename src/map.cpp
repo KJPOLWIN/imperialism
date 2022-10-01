@@ -16,6 +16,10 @@ Map::Map()
 
   //loading textures and sprites
   selectedNodeTexture.loadFromFile("texture/selectednode.png");
+  nodeBorderTexture.loadFromFile("texture/nodeborder.png");
+  nodeBorderSelectedTexture.loadFromFile("texture/nodeborderselected.png");
+  nodeBorderAllyTexture.loadFromFile("texture/nodeborderally.png");
+  nodeBorderEnemyTexture.loadFromFile("texture/nodeborderenemy.png");
   grassNodeTexture.loadFromFile("texture/nodegrass.png");
   waterNodeTexture.loadFromFile("texture/nodewater.png");
   desertNodeTexture.loadFromFile("texture/nodedesert.png");
@@ -34,6 +38,10 @@ Map::Map()
   riflemenTexture.loadFromFile("texture/riflemen.png");
 
   selectedNode.setTexture(selectedNodeTexture);
+  nodeBorder.setTexture(nodeBorderTexture);
+  nodeBorderSelected.setTexture(nodeBorderSelectedTexture);
+  nodeBorderAlly.setTexture(nodeBorderAllyTexture);
+  nodeBorderEnemy.setTexture(nodeBorderEnemyTexture);
   grassNode.setTexture(grassNodeTexture);
   waterNode.setTexture(waterNodeTexture);
   desertNode.setTexture(desertNodeTexture);
@@ -310,7 +318,26 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     if(!node.isSelected
     && isVisible(node.getPosition(), viewOffset, zoom))
     {
-      node.draw(targetWindow);
+      nodeBorder.setPosition(node.getPosition());
+      targetWindow.draw(nodeBorder);
+      //node.draw(targetWindow);
+    }
+  }
+  
+  for( auto& unit : units )
+  {
+    if(isVisible(unit.getPosition(), viewOffset, zoom))
+    {
+      if(unit.getFaction() == 0)
+      {
+        nodeBorderAlly.setPosition(unit.getPosition());
+        targetWindow.draw(nodeBorderAlly);
+      }
+      else
+      {
+        nodeBorderEnemy.setPosition(unit.getPosition());
+        targetWindow.draw(nodeBorderEnemy);
+      }
     }
   }
  
@@ -320,13 +347,15 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     if(node.isSelected
     && isVisible(node.getPosition(), viewOffset, zoom))
     {
-      node.draw(targetWindow);
+      nodeBorderSelected.setPosition(node.getPosition());
+      targetWindow.draw(nodeBorderSelected);
+      //node.draw(targetWindow);
     }
   }
 
+  //Drawing possible moves
   for( auto& unit : units )
   {
-    //Drawing possible moves
     for( auto& node : nodes )
     {
       if(unit.isSelected
@@ -344,8 +373,11 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
         }
       } 
     }
+  }
 
-    //Drawing units
+  //Drawing units
+  for( auto& unit : units )
+  {
     if(isVisible(unit.getPosition(), viewOffset, zoom))
     {
       riflemenSprite.setPosition(unit.getPosition());
