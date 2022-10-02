@@ -608,14 +608,17 @@ void Map::regenerate(int sizeX, int sizeY,
   units.emplace_back(5, 5,  //Debug riflemen 
                      "Riflemen", 
                      3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 },
-                     0);
+                     0,
+                     1);
   units.emplace_back(5, 6,  //Another debug riflemen
                      "Riflemen", 
                      3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 },
-                     0);
+                     0,
+                     1);
   units.emplace_back(7, 7,  //Debug enemy riflemen
                      "Riflemen", 
                      3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 },
+                     1,
                      1);
 
   for(auto& unit : units)
@@ -637,7 +640,8 @@ void Map::saveToFile(std::string filename)
   std::vector<std::array<int, 2>> nodeData{  };
   for(auto& node : nodes)
   {
-    nodeData.push_back(std::array<int, 2>{ static_cast<int>(node.getTerrainType()), static_cast<int>(node.getClimateZone()) });
+    nodeData.push_back(std::array<int, 2>{ static_cast<int>(node.getTerrainType()), 
+                                           static_cast<int>(node.getClimateZone()) });
   }
   mapData["nodes"] = nodeData;
 
@@ -651,6 +655,7 @@ void Map::saveToFile(std::string filename)
     mapData["units"][iii]["mp"] = units.at(iii).getMaxMovePoints();
     mapData["units"][iii]["mc"] = units.at(iii).getMoveCosts();
     mapData["units"][iii]["faction"] = units.at(iii).getFaction();
+    mapData["units"][iii]["unkeep"] = units.at(iii).getUnkeep();
   }
 
   //Saving to file
@@ -697,7 +702,8 @@ void Map::loadFromFile(std::string filename)
     units.emplace_back(savedMap["units"][iii]["x"], savedMap["units"][iii]["y"],
                        savedMap["units"][iii]["name"],
                        savedMap["units"][iii]["mp"], savedMap["units"][iii]["mc"],
-                       savedMap["units"][iii]["faction"]);
+                       savedMap["units"][iii]["faction"],
+                       savedMap["units"][iii]["unkeep"]);
   }
 }
       

@@ -24,6 +24,8 @@ void Faction::updateResources(std::vector<Unit>& units)
     if(unit.getFaction() == id)
     {
       //Unkeep
+      --food;
+      money -= unit.getUnkeep();
     }
   }
 }
