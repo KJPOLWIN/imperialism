@@ -7,14 +7,14 @@
 Unit::Unit(int x, int y, 
            std::string name, 
            int movePoints, std::vector<int> moveCosts, 
-           int faction, int moneyUnkeep)
+           int faction, int moneyUpkeep)
    : positioningNode{ x, y },
      movePoints{ movePoints },
      maxMovePoints{ movePoints },
      moveCosts{ moveCosts },
      name{ name },
      faction{ faction },
-     unkeep{ moneyUnkeep }
+     upkeep{ moneyUpkeep }
 {
 
 }
@@ -255,7 +255,7 @@ int Unit::getFaction()
   return faction;
 }
       
-int Unit::getUnkeep()
+int Unit::getUpkeep()
 {
-  return unkeep;
+  return upkeep;
 }

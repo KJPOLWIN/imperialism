@@ -655,7 +655,7 @@ void Map::saveToFile(std::string filename)
     mapData["units"][iii]["mp"] = units.at(iii).getMaxMovePoints();
     mapData["units"][iii]["mc"] = units.at(iii).getMoveCosts();
     mapData["units"][iii]["faction"] = units.at(iii).getFaction();
-    mapData["units"][iii]["unkeep"] = units.at(iii).getUnkeep();
+    mapData["units"][iii]["upkeep"] = units.at(iii).getUpkeep();
   }
 
   //Saving to file
@@ -703,7 +703,7 @@ void Map::loadFromFile(std::string filename)
                        savedMap["units"][iii]["name"],
                        savedMap["units"][iii]["mp"], savedMap["units"][iii]["mc"],
                        savedMap["units"][iii]["faction"],
-                       savedMap["units"][iii]["unkeep"]);
+                       savedMap["units"][iii]["upkeep"]);
   }
 }
       

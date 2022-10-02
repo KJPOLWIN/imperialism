@@ -12,7 +12,7 @@
       Unit(int x, int y, 
            std::string name, 
            int movePoints, std::vector<int> moveCosts,
-           int faction, int moneyUnkeep);
+           int faction, int moneyUpkeep);
       Unit() = default;
 
       void calculatePath(HexVector position, int sizeX, int sizeY);
@@ -34,7 +34,7 @@
       std::vector<int>& getMoveCostMap();
       int getMoveQueueLenght();
       int getFaction();
-      int getUnkeep();
+      int getUpkeep();
 
       bool isSelected{ false };
 
@@ -59,7 +59,7 @@
 
       int faction{  };
 
-      int unkeep{  };
+      int upkeep{  };
   };
 
 #endif
