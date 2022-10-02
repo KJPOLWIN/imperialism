@@ -700,6 +700,11 @@ void Map::loadFromFile(std::string filename)
                        savedMap["units"][iii]["faction"]);
   }
 }
+      
+std::vector<Unit>& Map::getUnits()
+{
+  return units;
+}
 
 MapNode& Map::getNode(int q, int r, int s)
 {

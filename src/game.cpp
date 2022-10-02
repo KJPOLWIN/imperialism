@@ -2,6 +2,7 @@
 #include "map.h"
 #include "textbutton.h"
 #include "imagebutton.h"
+#include "faction.h"
 #include "gamestate.h"
 #include "gui.h"
 #include "constant.h"
@@ -28,7 +29,12 @@ Game::Game(sf::Font& font)
     saveButton{ font, "save", sf::Vector2f(1140, 790), 24 },
     saveSelect{ sf::Vector2f(690, 340), sf::Vector2f(550, 350), 50.0 },
     filenameInput{ font, "Enter save name", 24, sf::Vector2f(690, 270), InputType::text },
-    turnCounter{"Turn 1", font, 24 }
+    turnCounter{"Turn 1", font, 24 },
+    moneyCounter{"", font, 24 },
+    foodCounter{"", font, 24 },
+    woodCounter{"", font, 24 },
+    stoneCounter{"", font, 24 },
+    weaponsCounter{"", font, 24 }
 {
   //Pause menu setup
   shadeTexture.loadFromFile("texture/shade.png");
@@ -131,7 +137,32 @@ Game::Game(sf::Font& font)
   yieldWidgetBackground.setFillColor(sf::Color::Black);
   yieldWidgetBackground.setOutlineColor(sf::Color::White);
   yieldWidgetBackground.setOutlineThickness(10); 
-  turnCounter.setPosition(sf::Vector2f(70, 12));
+  turnCounter.setPosition(sf::Vector2f(70, 14));
+  moneyIconTexture.loadFromFile("texture/iconmoney.png");
+  foodIconTexture.loadFromFile("texture/iconfood.png");
+  woodIconTexture.loadFromFile("texture/iconwood.png");
+  stoneIconTexture.loadFromFile("texture/iconstone.png");
+  weaponsIconTexture.loadFromFile("texture/iconweapons.png");
+  moneyIcon.setTexture(moneyIconTexture);
+  foodIcon.setTexture(foodIconTexture);
+  woodIcon.setTexture(woodIconTexture);
+  stoneIcon.setTexture(stoneIconTexture);
+  weaponsIcon.setTexture(weaponsIconTexture);
+  moneyCounter.setString(std::to_string(factions.at(0).getMoney()));
+  foodCounter.setString(std::to_string(factions.at(0).getFood()));
+  woodCounter.setString(std::to_string(factions.at(0).getWood()));
+  stoneCounter.setString(std::to_string(factions.at(0).getStone()));
+  weaponsCounter.setString(std::to_string(factions.at(0).getWeapons()));
+  moneyIcon.setPosition(sf::Vector2f(250, 10));
+  moneyCounter.setPosition(sf::Vector2f(290, 14));
+  foodIcon.setPosition(sf::Vector2f(390, 10));
+  foodCounter.setPosition(sf::Vector2f(430, 14));
+  woodIcon.setPosition(sf::Vector2f(530, 10));
+  woodCounter.setPosition(sf::Vector2f(570, 14));
+  stoneIcon.setPosition(sf::Vector2f(670, 10));
+  stoneCounter.setPosition(sf::Vector2f(710, 14));
+  weaponsIcon.setPosition(sf::Vector2f(810, 10));
+  weaponsCounter.setPosition(sf::Vector2f(850, 14));
 
 }
 
@@ -145,6 +176,15 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
         map.nextTurn();
         ++turn;
         turnCounter.setString("Turn " + std::to_string(turn + 1));
+        for(auto& faction : factions)
+        {
+          faction.updateResources(map.getUnits());
+        }
+        moneyCounter.setString(std::to_string(factions.at(0).getMoney()));
+        foodCounter.setString(std::to_string(factions.at(0).getFood()));
+        woodCounter.setString(std::to_string(factions.at(0).getWood()));
+        stoneCounter.setString(std::to_string(factions.at(0).getStone()));
+        weaponsCounter.setString(std::to_string(factions.at(0).getWeapons()));
       }
       else if(pauseButton.isClicked(clickPosition))
       {
@@ -380,15 +420,30 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   }
   
   //Draw
+  //Map
   window.setView(mapView);
   map.draw(window, 
            sf::Vector2f(mapView.getCenter().x - mapView.getSize().x / 2,
                         mapView.getCenter().y - mapView.getSize().y / 2), 
            zoomLevel);
 
+  //GUI
   window.setView(guiView);
+  //Yields widget
   window.draw(yieldWidgetBackground);
   window.draw(turnCounter);
+  window.draw(moneyIcon);
+  window.draw(moneyCounter);
+  window.draw(foodIcon);
+  window.draw(foodCounter);
+  window.draw(woodIcon);
+  window.draw(woodCounter);
+  window.draw(stoneIcon);
+  window.draw(stoneCounter);
+  window.draw(weaponsIcon);
+  window.draw(weaponsCounter);
+
+  //Node widget
   if(nodeNameLabel.getString() != "")
   {
     window.draw(nodeWidgetBackground);
@@ -456,6 +511,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     }
   }
   
+  //Unit widget
   if(unitNameLabel.getString() != "")
   {
     window.draw(unitWidgetBackground);

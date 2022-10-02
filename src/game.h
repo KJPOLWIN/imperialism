@@ -6,6 +6,7 @@
   #include "imagebutton.h"
   #include "scrollarea.h"
   #include "textinput.h"
+  #include "faction.h"
   #include "gamestate.h"
   #include "constant.h"
   #include <SFML/Graphics.hpp>
@@ -43,6 +44,11 @@
     private:
       Map map{ }; 
       int turn{ 0 };
+
+      std::vector<Faction> factions{
+        Faction(0, 100, 100, 100, 100, 100),
+        Faction(1, 100, 100, 100, 100, 100)
+      };
 
       sf::View mapView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       sf::View guiView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
@@ -127,8 +133,23 @@
       bool textInputUnclicked{ true };
 
       //Yields widget
-      sf::RectangleShape yieldWidgetBackground{ sf::Vector2f(1810, 50) };
+      sf::RectangleShape yieldWidgetBackground{ sf::Vector2f(1000, 50) };
       sf::Text turnCounter{  };
+      sf::Texture moneyIconTexture{  };
+      sf::Texture foodIconTexture{  };
+      sf::Texture woodIconTexture{  };
+      sf::Texture stoneIconTexture{  };
+      sf::Texture weaponsIconTexture{  };
+      sf::Sprite moneyIcon{  };
+      sf::Sprite foodIcon{  };
+      sf::Sprite woodIcon{  };
+      sf::Sprite stoneIcon{  };
+      sf::Sprite weaponsIcon{  };
+      sf::Text moneyCounter{  };
+      sf::Text foodCounter{  };
+      sf::Text woodCounter{  };
+      sf::Text stoneCounter{  };
+      sf::Text weaponsCounter{  };
   };
 
 #endif

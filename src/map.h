@@ -32,6 +32,8 @@
       std::string getSelectedNodeName();
       Unit& getSelectedUnit();
 
+      std::vector<Unit>& getUnits();
+
     private:
       MapNode& getNode(int q, int r, int s);
       MapNode& getNode(HexVector position);
