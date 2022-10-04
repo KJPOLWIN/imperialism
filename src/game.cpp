@@ -254,7 +254,7 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
           {
             std::string filename{ diread->d_name };
 
-            if(filename != "." && filename != "..")
+            if(filename.at(0) != '.')
             {
               filename.erase(filename.begin(),
                              filename.begin() + filename.find_first_of("/") + 1);
