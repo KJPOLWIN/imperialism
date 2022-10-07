@@ -34,7 +34,8 @@ Game::Game(sf::Font& font)
     foodCounter{"", font, 24 },
     woodCounter{"", font, 24 },
     stoneCounter{"", font, 24 },
-    weaponsCounter{"", font, 24 }
+    weaponsCounter{"", font, 24 },
+    buildingNameLabel{ "", font, 24 }
 {
   //Pause menu setup
   shadeTexture.loadFromFile("texture/shade.png");
@@ -106,9 +107,16 @@ Game::Game(sf::Font& font)
   tundraRiverTerrain.setPosition(1470, 200);
   desertRiverTerrain.setPosition(1470, 200);
   grasslandRiverTerrain.setPosition(1470, 200);
-  terrainTest.setPosition(1470, 200);
 
   nodeNameLabel.setPosition(0, 125);
+
+  //Building widget setup
+  buildingWidgetBackground.setPosition(1420, 340);
+  buildingWidgetBackground.setFillColor(sf::Color::Black);
+  buildingWidgetBackground.setOutlineColor(sf::Color::White);
+  buildingWidgetBackground.setOutlineThickness(10);
+  
+  buildingNameLabel.setPosition(0, 365);
 
   //Unit widget setup
   unitWidgetBackground.setPosition(100, 780);
@@ -215,7 +223,18 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
 
         nodeNameLabel.setString(map.getSelectedNodeName());
         GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
+        buildingNameLabel.setString(map.getSelectedBuilding().getName());
+        GUI::centerTextInField(buildingNameLabel, buildingWidgetBackground);
         unitNameLabel.setString(map.getSelectedUnit().getName());
+
+        if(map.getSelectedBuilding().getFaction() == 0)
+        {
+          buildingNameLabel.setFillColor(sf::Color::Blue);
+        }
+        else
+        {
+          buildingNameLabel.setFillColor(sf::Color::Red);
+        }
 
         if(map.getSelectedUnit().getFaction() == 0)
         {
@@ -509,6 +528,13 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     {
         window.draw(grasslandRiverTerrain);
     }
+  }
+
+  //Building widget
+  if(buildingNameLabel.getString() != "")
+  {
+    window.draw(buildingWidgetBackground);
+    window.draw(buildingNameLabel);
   }
   
   //Unit widget

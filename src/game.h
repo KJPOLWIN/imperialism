@@ -81,6 +81,7 @@
       //Node widget
       sf::RectangleShape nodeWidgetBackground{ sf::Vector2f(400, 200) };
       sf::Text nodeNameLabel{  };
+
       sf::Texture seaTerrainTexture{  };
       sf::Texture tundraTerrainTexture{  };
       sf::Texture desertTerrainTexture{  };
@@ -95,7 +96,8 @@
       sf::Texture rainforestHillsTerrainTexture{  };
       sf::Texture tundraRiverTerrainTexture{  };
       sf::Texture desertRiverTerrainTexture{  };
-      sf::Texture grasslandRiverTerrainTexture{  };
+      sf::Texture grasslandRiverTerrainTexture{  };\
+
       sf::Sprite seaTerrain{  };
       sf::Sprite tundraTerrain{  };
       sf::Sprite desertTerrain{  };
@@ -111,13 +113,17 @@
       sf::Sprite tundraRiverTerrain{  };
       sf::Sprite desertRiverTerrain{  };
       sf::Sprite grasslandRiverTerrain{  };
-      sf::RectangleShape terrainTest{ sf::Vector2f(300, 80) };
+
+      //Building widget
+      sf::RectangleShape buildingWidgetBackground{ sf::Vector2f(400, 150) };
+      sf::Text buildingNameLabel{  };
 
       //Unit widget
       sf::RectangleShape unitWidgetBackground{ sf::Vector2f(800, 200) };
       sf::Text unitNameLabel{  };
       sf::Text unitHealth{  };
       sf::Text unitMovePoints{  };
+
       sf::Texture riflemenLargeTexture{  };
       sf::Sprite riflemenLarge{  };
 

@@ -20,6 +20,7 @@ Map::Map()
   nodeBorderSelectedTexture.loadFromFile("texture/nodeborderselected.png");
   nodeBorderAllyTexture.loadFromFile("texture/nodeborderally.png");
   nodeBorderEnemyTexture.loadFromFile("texture/nodeborderenemy.png");
+
   grassNodeTexture.loadFromFile("texture/nodegrass.png");
   waterNodeTexture.loadFromFile("texture/nodewater.png");
   desertNodeTexture.loadFromFile("texture/nodedesert.png");
@@ -35,13 +36,17 @@ Map::Map()
   grasslandRiverNodeTexture.loadFromFile("texture/nodegrasslandriver.png");
   desertRiverNodeTexture.loadFromFile("texture/nodedesertriver.png");
   tundraRiverNodeTexture.loadFromFile("texture/nodetundrariver.png");
+
   riflemenTexture.loadFromFile("texture/riflemen.png");
+
+  farmTexture.loadFromFile("texture/buildingfarm.png");
 
   selectedNode.setTexture(selectedNodeTexture);
   nodeBorder.setTexture(nodeBorderTexture);
   nodeBorderSelected.setTexture(nodeBorderSelectedTexture);
   nodeBorderAlly.setTexture(nodeBorderAllyTexture);
   nodeBorderEnemy.setTexture(nodeBorderEnemyTexture);
+
   grassNode.setTexture(grassNodeTexture);
   waterNode.setTexture(waterNodeTexture);
   desertNode.setTexture(desertNodeTexture);
@@ -57,7 +62,10 @@ Map::Map()
   grasslandRiverNode.setTexture(grasslandRiverNodeTexture);
   desertRiverNode.setTexture(desertRiverNodeTexture);
   tundraRiverNode.setTexture(tundraRiverNodeTexture);
+
   riflemenSprite.setTexture(riflemenTexture);
+
+  farmSprite.setTexture(farmTexture);
 }
       
 void Map::nextTurn()
@@ -65,6 +73,11 @@ void Map::nextTurn()
   for( auto& unit : units )
   {
     unit.regenerateMovePoints();
+  }
+
+  for( auto& building : buildings )
+  {
+    building.update();
   }
 }
 
@@ -158,6 +171,11 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
   {
     unit.isSelected = false;
   }
+
+  for( auto& building : buildings )
+  {
+    building.isSelected = false;
+  }
   
   sf::Vector2i selectedNodeCartesian{ getClickedNode(clickPosition, viewOffset, zoom) };
 
@@ -173,6 +191,15 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
         unit.isSelected = true;
         unit.loadMoveCosts(sizeX, sizeY, nodes, units);
         unit.generateMCM(sizeX, sizeY, nodes);
+        break;
+      }
+    }
+
+    for( auto& building : buildings )
+    {
+      if(building.getHexPosition() == HexVector(selectedNodeCartesian))
+      {
+        building.isSelected = true;
         break;
       }
     }
@@ -321,6 +348,15 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       nodeBorder.setPosition(node.getPosition());
       targetWindow.draw(nodeBorder);
       //node.draw(targetWindow);
+    }
+  }
+
+  for( auto& building : buildings )
+  {
+    if(isVisible(building.getPosition(), viewOffset, zoom))
+    {
+      farmSprite.setPosition(building.getPosition());
+      targetWindow.draw(farmSprite); 
     }
   }
   
@@ -604,6 +640,7 @@ void Map::regenerate(int sizeX, int sizeY,
     }
   }
 
+  //Adding some debug units (delete later)
   units.clear();
   units.emplace_back(5, 5,  //Debug riflemen 
                      "Riflemen", 
@@ -626,6 +663,13 @@ void Map::regenerate(int sizeX, int sizeY,
     unit.loadMoveCosts(sizeX, sizeY, nodes, units);
     unit.generateMCM(sizeX, sizeY, nodes);
   }
+
+  //Adding some debug buildings (delete later)
+  buildings.clear();
+  buildings.emplace_back(10, 10, "Farm", 0,
+                         3,
+                         1, 1,
+                         0, 4, 0, 0, 0);
 }
       
 void Map::saveToFile(std::string filename)
@@ -658,6 +702,8 @@ void Map::saveToFile(std::string filename)
     mapData["units"][iii]["upkeep"] = units.at(iii).getUpkeep();
   }
 
+  //Buidling data (todo)
+
   //Saving to file
   std::fstream saveFile{  };
   saveFile.open(filename, std::ios::out | std::ios::trunc);
@@ -673,16 +719,20 @@ void Map::loadFromFile(std::string filename)
 {
   nodes.clear();
   units.clear();
+  buildings.clear();
 
+  //Loading file
   nlohmann::json savedMap{  };
   std::fstream saveFile{  };
   saveFile.open(filename, std::ios::in);
 
   saveFile >> savedMap;
 
+  //Map size
   sizeX = savedMap["sizeX"];
   sizeY = savedMap["sizeY"];
 
+  //Nodes
   for(int y{ 0 }; y < sizeY; ++y)
   {
     for(int x{ 0 }; x < sizeX; ++x)
@@ -697,6 +747,7 @@ void Map::loadFromFile(std::string filename)
     }
   }
 
+  //Units
   for(std::size_t iii{ 0 }; iii < savedMap["unitCount"]; ++iii)
   {
     units.emplace_back(savedMap["units"][iii]["x"], savedMap["units"][iii]["y"],
@@ -705,11 +756,18 @@ void Map::loadFromFile(std::string filename)
                        savedMap["units"][iii]["faction"],
                        savedMap["units"][iii]["upkeep"]);
   }
+
+  //Buildings (todo)
 }
       
 std::vector<Unit>& Map::getUnits()
 {
   return units;
+}
+
+std::vector<Building>& Map::getBuildings()
+{
+  return buildings;
 }
 
 MapNode& Map::getNode(int q, int r, int s)
@@ -914,4 +972,17 @@ Unit& Map::getSelectedUnit()
   }
 
   return nobody;
+}
+
+Building& Map::getSelectedBuilding()
+{
+  for( auto& building : buildings )
+  {
+    if(building.isSelected)
+    {
+      return building;
+    }
+  }
+
+  return nowhere;
 }

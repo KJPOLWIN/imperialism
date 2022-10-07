@@ -19,7 +19,11 @@
       void update();
 
       sf::Vector2f getPosition();
+      HexVector getHexPosition();
       void setPosition(HexVector newPosition);
+
+      std::string getName();
+      int getFaction();
 
       int getUpkeep();
       int getFoodCost();
@@ -29,6 +33,8 @@
       int getWoodProduction();
       int getStoneProduction();
       int getWeaponsProduction();
+
+      bool isSelected{ false };
 
     private:
       MapNode positioningNode{ 0, 0 };

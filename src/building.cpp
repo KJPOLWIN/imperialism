@@ -37,10 +37,24 @@ sf::Vector2f Building::getPosition()
 {
   return positioningNode.getPosition();
 }
+HexVector Building::getHexPosition()
+{
+  return positioningNode.getHexPosition();
+}
       
 void Building::setPosition(HexVector newPosition)
 {
   positioningNode.setPosition(newPosition);
+}
+      
+std::string Building::getName()
+{
+  return name;
+}
+
+int Building::getFaction()
+{
+  return faction;
 }
 
 int Building::getUpkeep()
