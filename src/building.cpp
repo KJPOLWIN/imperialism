@@ -74,7 +74,7 @@ int Building::getMoneyProduction()
 
 int Building::getFoodProduction()
 {
-  return woodProduction;
+  return foodProduction;
 }
 
 int Building::getWoodProduction()

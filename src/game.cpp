@@ -186,7 +186,7 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
         turnCounter.setString("Turn " + std::to_string(turn + 1));
         for(auto& faction : factions)
         {
-          faction.updateResources(map.getUnits());
+          faction.updateResources(map.getUnits(), map.getBuildings());
         }
         moneyCounter.setString(std::to_string(factions.at(0).getMoney()));
         foodCounter.setString(std::to_string(factions.at(0).getFood()));

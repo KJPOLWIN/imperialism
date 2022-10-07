@@ -2,6 +2,7 @@
 #define FACTION_H
 
   #include "unit.h"
+  #include "building.h"
   #include <vector>
 
   class Faction
@@ -11,7 +12,8 @@
               int startingFood, int startingWood, 
               int startingStone, int startingWeapons);
 
-      void updateResources(std::vector<Unit>& units);
+      void updateResources(std::vector<Unit>& units,
+                           std::vector<Building>& buildings);
 
       int getMoney();
       int getFood();

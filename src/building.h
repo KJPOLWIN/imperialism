@@ -35,11 +35,11 @@
       int getWeaponsProduction();
 
       bool isSelected{ false };
+      bool completed{ false };
 
     private:
       MapNode positioningNode{ 0, 0 };
 
-      bool completed{ false };
       int turnsToBuild{ 3 };
 
       std::string name{ "" };
