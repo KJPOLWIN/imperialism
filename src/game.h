@@ -117,6 +117,7 @@
       //Building widget
       sf::RectangleShape buildingWidgetBackground{ sf::Vector2f(400, 150) };
       sf::Text buildingNameLabel{  };
+      sf::Text underConstructionLabel{  };
 
       //Unit widget
       sf::RectangleShape unitWidgetBackground{ sf::Vector2f(800, 200) };

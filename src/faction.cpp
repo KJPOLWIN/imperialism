@@ -45,8 +45,18 @@ void Faction::updateResources(std::vector<Unit>& units,
   {
     if(building.getFaction() == id)
     {
-      food -= building.getFoodCost();
-      money -= building.getUpkeep();
+      if(building.completed)
+      {
+        food -= building.getFoodCost();
+        money -= building.getUpkeep();
+      }
+      else
+      {
+        if(building.getUpkeep() > 0)
+        {
+          --money;
+        }
+      }
     }
   }
 }

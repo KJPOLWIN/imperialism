@@ -86,6 +86,7 @@
 
       sf::Texture riflemenTexture{  };
 
+      sf::Texture constructionTexture{  };
       sf::Texture farmTexture{  };
       
       sf::Sprite selectedNode{  };
@@ -112,6 +113,7 @@
 
       sf::Sprite riflemenSprite{  };
 
+      sf::Sprite constructionSprite{  };
       sf::Sprite farmSprite{  };
   };
 

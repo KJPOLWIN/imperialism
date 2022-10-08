@@ -14,6 +14,8 @@ Map::Map()
 {
   clickmap.loadFromFile("clickmap.png");
 
+  nowhere.completed = true;
+
   //loading textures and sprites
   selectedNodeTexture.loadFromFile("texture/selectednode.png");
   nodeBorderTexture.loadFromFile("texture/nodeborder.png");
@@ -40,6 +42,7 @@ Map::Map()
   riflemenTexture.loadFromFile("texture/riflemen.png");
 
   farmTexture.loadFromFile("texture/buildingfarm.png");
+  constructionTexture.loadFromFile("texture/buildingconstruction.png");
 
   selectedNode.setTexture(selectedNodeTexture);
   nodeBorder.setTexture(nodeBorderTexture);
@@ -66,6 +69,7 @@ Map::Map()
   riflemenSprite.setTexture(riflemenTexture);
 
   farmSprite.setTexture(farmTexture);
+  constructionSprite.setTexture(constructionTexture);
 }
       
 void Map::nextTurn()
@@ -355,8 +359,16 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
   {
     if(isVisible(building.getPosition(), viewOffset, zoom))
     {
-      farmSprite.setPosition(building.getPosition());
-      targetWindow.draw(farmSprite); 
+      if(building.completed)
+      {
+        farmSprite.setPosition(building.getPosition());
+        targetWindow.draw(farmSprite); 
+      }
+      else
+      {
+        constructionSprite.setPosition(building.getPosition());
+        targetWindow.draw(constructionSprite); 
+      }
     }
   }
   

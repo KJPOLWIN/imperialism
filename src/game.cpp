@@ -35,7 +35,8 @@ Game::Game(sf::Font& font)
     woodCounter{"", font, 24 },
     stoneCounter{"", font, 24 },
     weaponsCounter{"", font, 24 },
-    buildingNameLabel{ "", font, 24 }
+    buildingNameLabel{ "", font, 24 },
+    underConstructionLabel{ "(under construction)", font, 16 }
 {
   //Pause menu setup
   shadeTexture.loadFromFile("texture/shade.png");
@@ -117,6 +118,8 @@ Game::Game(sf::Font& font)
   buildingWidgetBackground.setOutlineThickness(10);
   
   buildingNameLabel.setPosition(0, 365);
+  underConstructionLabel.setPosition(0, 405);
+  GUI::centerTextInField(underConstructionLabel, buildingWidgetBackground);
 
   //Unit widget setup
   unitWidgetBackground.setPosition(100, 780);
@@ -223,9 +226,12 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
 
         nodeNameLabel.setString(map.getSelectedNodeName());
         GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
+        
         buildingNameLabel.setString(map.getSelectedBuilding().getName());
         GUI::centerTextInField(buildingNameLabel, buildingWidgetBackground);
+        
         unitNameLabel.setString(map.getSelectedUnit().getName());
+
 
         if(map.getSelectedBuilding().getFaction() == 0)
         {
@@ -535,6 +541,11 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   {
     window.draw(buildingWidgetBackground);
     window.draw(buildingNameLabel);
+
+    if(!map.getSelectedBuilding().completed)
+    {
+      window.draw(underConstructionLabel);
+    }
   }
   
   //Unit widget
