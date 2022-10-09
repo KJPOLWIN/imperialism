@@ -21,7 +21,10 @@ Building::Building(int x, int y, std::string name, int faction,
     stoneProduction{ stoneProduction },
     weaponsProduction{ weaponsProduction }
 {
-
+  if(turnsToBuild < 1)
+  {
+    completed = true;
+  }
 }
 
 void Building::update()
@@ -90,4 +93,9 @@ int Building::getStoneProduction()
 int Building::getWeaponsProduction()
 {
   return weaponsProduction;
+}
+      
+int Building::getTurnsToBuild()
+{
+  return turnsToBuild;
 }

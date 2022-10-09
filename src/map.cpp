@@ -714,7 +714,38 @@ void Map::saveToFile(std::string filename)
     mapData["units"][iii]["upkeep"] = units.at(iii).getUpkeep();
   }
 
-  //Buidling data (todo)
+  //Buidling data
+  mapData["buildingCount"] = buildings.size();
+  for(std::size_t iii{ 0 }; iii < buildings.size(); ++iii)
+  {
+    mapData["buildings"][iii]["x"] = buildings.at(iii)
+                                              .getHexPosition()
+                                              .toCartesian().x;
+    mapData["buildings"][iii]["y"] = buildings.at(iii)
+                                              .getHexPosition()
+                                              .toCartesian().y;
+    mapData["buildings"][iii]["name"] = buildings.at(iii).getName();
+    mapData["buildings"][iii]["faction"] = buildings.at(iii).getFaction();
+    mapData["buildings"][iii]["turnsToBuild"] = buildings.at(iii)
+                                                        .getTurnsToBuild();
+    mapData["buildings"][iii]["upkeep"] = buildings.at(iii).getUpkeep();
+    mapData["buildings"][iii]["population"] = buildings.at(iii).getFoodCost();
+    mapData["buildings"]
+           [iii]
+           ["moneyProduction"] = buildings.at(iii).getMoneyProduction();
+    mapData["buildings"]
+           [iii]
+           ["foodProduction"] = buildings.at(iii).getFoodProduction();
+    mapData["buildings"]
+           [iii]
+           ["woodProduction"] = buildings.at(iii).getWoodProduction();
+    mapData["buildings"]
+           [iii][
+           "stoneProduction"] = buildings.at(iii).getStoneProduction();
+    mapData["buildings"]
+           [iii]
+           ["weaponsProduction"] = buildings.at(iii).getWeaponsProduction();
+  }
 
   //Saving to file
   std::fstream saveFile{  };
@@ -769,7 +800,22 @@ void Map::loadFromFile(std::string filename)
                        savedMap["units"][iii]["upkeep"]);
   }
 
-  //Buildings (todo)
+  //Buildings
+  for(std::size_t iii{ 0 }; iii < savedMap["buildingCount"]; ++iii)
+  {
+    buildings.emplace_back(savedMap["buildings"][iii]["x"], 
+                           savedMap["buildings"][iii]["y"],
+                           savedMap["buildings"][iii]["name"],
+                           savedMap["buildings"][iii]["faction"],
+                           savedMap["buildings"][iii]["turnsToBuild"], 
+                           savedMap["buildings"][iii]["upkeep"],
+                           savedMap["buildings"][iii]["population"],
+                           savedMap["buildings"][iii]["moneyProduction"],
+                           savedMap["buildings"][iii]["foodProduction"],
+                           savedMap["buildings"][iii]["woodProduction"],
+                           savedMap["buildings"][iii]["stoneProduction"],
+                           savedMap["buildings"][iii]["weaponsProduction"]);
+  }
 }
       
 std::vector<Unit>& Map::getUnits()

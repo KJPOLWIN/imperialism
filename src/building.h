@@ -36,6 +36,7 @@
 
       bool isSelected{ false };
       bool completed{ false };
+      int getTurnsToBuild();
 
     private:
       MapNode positioningNode{ 0, 0 };
