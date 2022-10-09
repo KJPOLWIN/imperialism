@@ -3,6 +3,7 @@
 
   #include "unit.h"
   #include "building.h"
+  #include "hexvector.h"
   #include <vector>
 
   class Faction
@@ -21,6 +22,9 @@
       int getStone();
       int getWeapons();
 
+      void addNodeToBorders(HexVector node);
+      std::vector<HexVector>& getBorders();
+
     private:
       std::size_t id{  };
 
@@ -29,6 +33,8 @@
       int wood{ 0 };
       int stone{ 0 };
       int weapons{ 0 };
+
+      std::vector<HexVector> borders{  };
   };
 
 #endif

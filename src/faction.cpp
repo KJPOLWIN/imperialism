@@ -85,3 +85,13 @@ int Faction::getWeapons()
 {
   return weapons;
 }
+      
+void Faction::addNodeToBorders(HexVector node)
+{
+  borders.push_back(node);
+}
+      
+std::vector<HexVector>& Faction::getBorders()
+{
+  return borders;
+}

@@ -45,11 +45,6 @@
       Map map{ }; 
       int turn{ 0 };
 
-      std::vector<Faction> factions{
-        Faction(0, 100, 100, 100, 100, 100),
-        Faction(1, 100, 100, 100, 100, 100)
-      };
-
       sf::View mapView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       sf::View guiView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       double maxZoom{ 0.5 };

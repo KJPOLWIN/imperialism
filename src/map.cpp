@@ -83,6 +83,11 @@ void Map::nextTurn()
   {
     building.update();
   }
+
+  for(auto& faction : factions)
+  {
+    faction.updateResources(units, buildings);
+  }
 }
 
 void Map::moveUnits(HexVector position)
@@ -818,6 +823,11 @@ void Map::loadFromFile(std::string filename)
   }
 }
       
+std::vector<Faction>& Map::getFactions()
+{
+  return factions;
+}
+
 std::vector<Unit>& Map::getUnits()
 {
   return units;

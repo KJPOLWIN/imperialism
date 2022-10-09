@@ -159,11 +159,11 @@ Game::Game(sf::Font& font)
   woodIcon.setTexture(woodIconTexture);
   stoneIcon.setTexture(stoneIconTexture);
   weaponsIcon.setTexture(weaponsIconTexture);
-  moneyCounter.setString(std::to_string(factions.at(0).getMoney()));
-  foodCounter.setString(std::to_string(factions.at(0).getFood()));
-  woodCounter.setString(std::to_string(factions.at(0).getWood()));
-  stoneCounter.setString(std::to_string(factions.at(0).getStone()));
-  weaponsCounter.setString(std::to_string(factions.at(0).getWeapons()));
+  moneyCounter.setString(std::to_string(map.getFactions().at(0).getMoney()));
+  foodCounter.setString(std::to_string(map.getFactions().at(0).getFood()));
+  woodCounter.setString(std::to_string(map.getFactions().at(0).getWood()));
+  stoneCounter.setString(std::to_string(map.getFactions().at(0).getStone()));
+  weaponsCounter.setString(std::to_string(map.getFactions().at(0).getWeapons()));
   moneyIcon.setPosition(sf::Vector2f(250, 10));
   moneyCounter.setPosition(sf::Vector2f(290, 14));
   foodIcon.setPosition(sf::Vector2f(390, 10));
@@ -187,15 +187,11 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
         map.nextTurn();
         ++turn;
         turnCounter.setString("Turn " + std::to_string(turn + 1));
-        for(auto& faction : factions)
-        {
-          faction.updateResources(map.getUnits(), map.getBuildings());
-        }
-        moneyCounter.setString(std::to_string(factions.at(0).getMoney()));
-        foodCounter.setString(std::to_string(factions.at(0).getFood()));
-        woodCounter.setString(std::to_string(factions.at(0).getWood()));
-        stoneCounter.setString(std::to_string(factions.at(0).getStone()));
-        weaponsCounter.setString(std::to_string(factions.at(0).getWeapons()));
+        moneyCounter.setString(std::to_string(map.getFactions().at(0).getMoney()));
+        foodCounter.setString(std::to_string(map.getFactions().at(0).getFood()));
+        woodCounter.setString(std::to_string(map.getFactions().at(0).getWood()));
+        stoneCounter.setString(std::to_string(map.getFactions().at(0).getStone()));
+        weaponsCounter.setString(std::to_string(map.getFactions().at(0).getWeapons()));
       }
       else if(pauseButton.isClicked(clickPosition))
       {

@@ -4,6 +4,7 @@
   #include "mapnode.h"
   #include "unit.h"
   #include "building.h"
+  #include "faction.h"
   #include <SFML/Graphics.hpp>
   #include "json.hpp"
   #include <vector>
@@ -34,6 +35,7 @@
       Unit& getSelectedUnit();
       Building& getSelectedBuilding();
 
+      std::vector<Faction>& getFactions();
       std::vector<Unit>& getUnits();
       std::vector<Building>& getBuildings();
 
@@ -51,6 +53,11 @@
       bool neighboursTerrain(int q, int r, int s, TerrainType terrain);
       bool neighboursTerrain(HexVector position, TerrainType terrain);
       bool neighboursTerrain(int x, int y, TerrainType terrain);
+      
+      std::vector<Faction> factions{
+        Faction(0, 100, 100, 100, 100, 100),
+        Faction(1, 100, 100, 100, 100, 100)
+      };
 
       std::vector<MapNode> nodes{  };
       MapNode nothingness{  };
