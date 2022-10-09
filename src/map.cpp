@@ -14,8 +14,15 @@ Map::Map()
 {
   clickmap.loadFromFile("clickmap.png");
 
+  nowhere.completed = true;
+
   //loading textures and sprites
   selectedNodeTexture.loadFromFile("texture/selectednode.png");
+  nodeBorderTexture.loadFromFile("texture/nodeborder.png");
+  nodeBorderSelectedTexture.loadFromFile("texture/nodeborderselected.png");
+  nodeBorderAllyTexture.loadFromFile("texture/nodeborderally.png");
+  nodeBorderEnemyTexture.loadFromFile("texture/nodeborderenemy.png");
+
   grassNodeTexture.loadFromFile("texture/nodegrass.png");
   waterNodeTexture.loadFromFile("texture/nodewater.png");
   desertNodeTexture.loadFromFile("texture/nodedesert.png");
@@ -31,9 +38,18 @@ Map::Map()
   grasslandRiverNodeTexture.loadFromFile("texture/nodegrasslandriver.png");
   desertRiverNodeTexture.loadFromFile("texture/nodedesertriver.png");
   tundraRiverNodeTexture.loadFromFile("texture/nodetundrariver.png");
+
   riflemenTexture.loadFromFile("texture/riflemen.png");
 
+  farmTexture.loadFromFile("texture/buildingfarm.png");
+  constructionTexture.loadFromFile("texture/buildingconstruction.png");
+
   selectedNode.setTexture(selectedNodeTexture);
+  nodeBorder.setTexture(nodeBorderTexture);
+  nodeBorderSelected.setTexture(nodeBorderSelectedTexture);
+  nodeBorderAlly.setTexture(nodeBorderAllyTexture);
+  nodeBorderEnemy.setTexture(nodeBorderEnemyTexture);
+
   grassNode.setTexture(grassNodeTexture);
   waterNode.setTexture(waterNodeTexture);
   desertNode.setTexture(desertNodeTexture);
@@ -49,7 +65,11 @@ Map::Map()
   grasslandRiverNode.setTexture(grasslandRiverNodeTexture);
   desertRiverNode.setTexture(desertRiverNodeTexture);
   tundraRiverNode.setTexture(tundraRiverNodeTexture);
+
   riflemenSprite.setTexture(riflemenTexture);
+
+  farmSprite.setTexture(farmTexture);
+  constructionSprite.setTexture(constructionTexture);
 }
       
 void Map::nextTurn()
@@ -57,6 +77,11 @@ void Map::nextTurn()
   for( auto& unit : units )
   {
     unit.regenerateMovePoints();
+  }
+
+  for( auto& building : buildings )
+  {
+    building.update();
   }
 }
 
@@ -150,6 +175,11 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
   {
     unit.isSelected = false;
   }
+
+  for( auto& building : buildings )
+  {
+    building.isSelected = false;
+  }
   
   sf::Vector2i selectedNodeCartesian{ getClickedNode(clickPosition, viewOffset, zoom) };
 
@@ -165,6 +195,15 @@ void Map::selectNodesAndUnits(sf::Vector2f clickPosition, sf::Vector2f viewOffse
         unit.isSelected = true;
         unit.loadMoveCosts(sizeX, sizeY, nodes, units);
         unit.generateMCM(sizeX, sizeY, nodes);
+        break;
+      }
+    }
+
+    for( auto& building : buildings )
+    {
+      if(building.getHexPosition() == HexVector(selectedNodeCartesian))
+      {
+        building.isSelected = true;
         break;
       }
     }
@@ -310,7 +349,43 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     if(!node.isSelected
     && isVisible(node.getPosition(), viewOffset, zoom))
     {
-      node.draw(targetWindow);
+      nodeBorder.setPosition(node.getPosition());
+      targetWindow.draw(nodeBorder);
+      //node.draw(targetWindow);
+    }
+  }
+
+  for( auto& building : buildings )
+  {
+    if(isVisible(building.getPosition(), viewOffset, zoom))
+    {
+      if(building.completed)
+      {
+        farmSprite.setPosition(building.getPosition());
+        targetWindow.draw(farmSprite); 
+      }
+      else
+      {
+        constructionSprite.setPosition(building.getPosition());
+        targetWindow.draw(constructionSprite); 
+      }
+    }
+  }
+  
+  for( auto& unit : units )
+  {
+    if(isVisible(unit.getPosition(), viewOffset, zoom))
+    {
+      if(unit.getFaction() == 0)
+      {
+        nodeBorderAlly.setPosition(unit.getPosition());
+        targetWindow.draw(nodeBorderAlly);
+      }
+      else
+      {
+        nodeBorderEnemy.setPosition(unit.getPosition());
+        targetWindow.draw(nodeBorderEnemy);
+      }
     }
   }
  
@@ -320,13 +395,15 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     if(node.isSelected
     && isVisible(node.getPosition(), viewOffset, zoom))
     {
-      node.draw(targetWindow);
+      nodeBorderSelected.setPosition(node.getPosition());
+      targetWindow.draw(nodeBorderSelected);
+      //node.draw(targetWindow);
     }
   }
 
+  //Drawing possible moves
   for( auto& unit : units )
   {
-    //Drawing possible moves
     for( auto& node : nodes )
     {
       if(unit.isSelected
@@ -344,8 +421,11 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
         }
       } 
     }
+  }
 
-    //Drawing units
+  //Drawing units
+  for( auto& unit : units )
+  {
     if(isVisible(unit.getPosition(), viewOffset, zoom))
     {
       riflemenSprite.setPosition(unit.getPosition());
@@ -572,18 +652,22 @@ void Map::regenerate(int sizeX, int sizeY,
     }
   }
 
+  //Adding some debug units (delete later)
   units.clear();
   units.emplace_back(5, 5,  //Debug riflemen 
                      "Riflemen", 
                      3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 },
-                     0);
+                     0,
+                     1);
   units.emplace_back(5, 6,  //Another debug riflemen
                      "Riflemen", 
                      3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 },
-                     0);
+                     0,
+                     1);
   units.emplace_back(7, 7,  //Debug enemy riflemen
                      "Riflemen", 
                      3, std::vector<int>{ 10, 1, 2, 3, 2, 2, 3 },
+                     1,
                      1);
 
   for(auto& unit : units)
@@ -591,6 +675,13 @@ void Map::regenerate(int sizeX, int sizeY,
     unit.loadMoveCosts(sizeX, sizeY, nodes, units);
     unit.generateMCM(sizeX, sizeY, nodes);
   }
+
+  //Adding some debug buildings (delete later)
+  buildings.clear();
+  buildings.emplace_back(10, 10, "Farm", 0,
+                         3,
+                         1, 1,
+                         0, 4, 0, 0, 0);
 }
       
 void Map::saveToFile(std::string filename)
@@ -605,7 +696,8 @@ void Map::saveToFile(std::string filename)
   std::vector<std::array<int, 2>> nodeData{  };
   for(auto& node : nodes)
   {
-    nodeData.push_back(std::array<int, 2>{ static_cast<int>(node.getTerrainType()), static_cast<int>(node.getClimateZone()) });
+    nodeData.push_back(std::array<int, 2>{ static_cast<int>(node.getTerrainType()), 
+                                           static_cast<int>(node.getClimateZone()) });
   }
   mapData["nodes"] = nodeData;
 
@@ -619,6 +711,40 @@ void Map::saveToFile(std::string filename)
     mapData["units"][iii]["mp"] = units.at(iii).getMaxMovePoints();
     mapData["units"][iii]["mc"] = units.at(iii).getMoveCosts();
     mapData["units"][iii]["faction"] = units.at(iii).getFaction();
+    mapData["units"][iii]["upkeep"] = units.at(iii).getUpkeep();
+  }
+
+  //Buidling data
+  mapData["buildingCount"] = buildings.size();
+  for(std::size_t iii{ 0 }; iii < buildings.size(); ++iii)
+  {
+    mapData["buildings"][iii]["x"] = buildings.at(iii)
+                                              .getHexPosition()
+                                              .toCartesian().x;
+    mapData["buildings"][iii]["y"] = buildings.at(iii)
+                                              .getHexPosition()
+                                              .toCartesian().y;
+    mapData["buildings"][iii]["name"] = buildings.at(iii).getName();
+    mapData["buildings"][iii]["faction"] = buildings.at(iii).getFaction();
+    mapData["buildings"][iii]["turnsToBuild"] = buildings.at(iii)
+                                                        .getTurnsToBuild();
+    mapData["buildings"][iii]["upkeep"] = buildings.at(iii).getUpkeep();
+    mapData["buildings"][iii]["population"] = buildings.at(iii).getFoodCost();
+    mapData["buildings"]
+           [iii]
+           ["moneyProduction"] = buildings.at(iii).getMoneyProduction();
+    mapData["buildings"]
+           [iii]
+           ["foodProduction"] = buildings.at(iii).getFoodProduction();
+    mapData["buildings"]
+           [iii]
+           ["woodProduction"] = buildings.at(iii).getWoodProduction();
+    mapData["buildings"]
+           [iii][
+           "stoneProduction"] = buildings.at(iii).getStoneProduction();
+    mapData["buildings"]
+           [iii]
+           ["weaponsProduction"] = buildings.at(iii).getWeaponsProduction();
   }
 
   //Saving to file
@@ -636,16 +762,20 @@ void Map::loadFromFile(std::string filename)
 {
   nodes.clear();
   units.clear();
+  buildings.clear();
 
+  //Loading file
   nlohmann::json savedMap{  };
   std::fstream saveFile{  };
   saveFile.open(filename, std::ios::in);
 
   saveFile >> savedMap;
 
+  //Map size
   sizeX = savedMap["sizeX"];
   sizeY = savedMap["sizeY"];
 
+  //Nodes
   for(int y{ 0 }; y < sizeY; ++y)
   {
     for(int x{ 0 }; x < sizeX; ++x)
@@ -660,13 +790,42 @@ void Map::loadFromFile(std::string filename)
     }
   }
 
+  //Units
   for(std::size_t iii{ 0 }; iii < savedMap["unitCount"]; ++iii)
   {
     units.emplace_back(savedMap["units"][iii]["x"], savedMap["units"][iii]["y"],
                        savedMap["units"][iii]["name"],
                        savedMap["units"][iii]["mp"], savedMap["units"][iii]["mc"],
-                       savedMap["units"][iii]["faction"]);
+                       savedMap["units"][iii]["faction"],
+                       savedMap["units"][iii]["upkeep"]);
   }
+
+  //Buildings
+  for(std::size_t iii{ 0 }; iii < savedMap["buildingCount"]; ++iii)
+  {
+    buildings.emplace_back(savedMap["buildings"][iii]["x"], 
+                           savedMap["buildings"][iii]["y"],
+                           savedMap["buildings"][iii]["name"],
+                           savedMap["buildings"][iii]["faction"],
+                           savedMap["buildings"][iii]["turnsToBuild"], 
+                           savedMap["buildings"][iii]["upkeep"],
+                           savedMap["buildings"][iii]["population"],
+                           savedMap["buildings"][iii]["moneyProduction"],
+                           savedMap["buildings"][iii]["foodProduction"],
+                           savedMap["buildings"][iii]["woodProduction"],
+                           savedMap["buildings"][iii]["stoneProduction"],
+                           savedMap["buildings"][iii]["weaponsProduction"]);
+  }
+}
+      
+std::vector<Unit>& Map::getUnits()
+{
+  return units;
+}
+
+std::vector<Building>& Map::getBuildings()
+{
+  return buildings;
 }
 
 MapNode& Map::getNode(int q, int r, int s)
@@ -871,4 +1030,17 @@ Unit& Map::getSelectedUnit()
   }
 
   return nobody;
+}
+
+Building& Map::getSelectedBuilding()
+{
+  for( auto& building : buildings )
+  {
+    if(building.isSelected)
+    {
+      return building;
+    }
+  }
+
+  return nowhere;
 }

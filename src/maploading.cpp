@@ -85,8 +85,8 @@ void MapLoading::run(sf::RenderWindow& window)
       
 void MapLoading::loadFilenames(sf::Font& font)
 {
-  saveSelect.getButtons().clear();
-  int buttonCounter{ 0 };
+  saveSelect.getToggles().clear();
+  int buttonCounter{ 1 };
 
   DIR *dir;
   struct dirent *diread;
@@ -95,7 +95,7 @@ void MapLoading::loadFilenames(sf::Font& font)
     while((diread = readdir(dir)) != nullptr)
     {
       std::string filename{ diread->d_name };
-      if(filename != "." && filename != "..")
+      if(filename.at(0) != '.')
       {
         filename.erase(filename.begin(),
                        filename.begin() + filename.find_first_of("/") + 1);
@@ -113,19 +113,6 @@ void MapLoading::loadFilenames(sf::Font& font)
     perror("opendir");
     std::cout << "directory not opened or something\n";
   }
-
-  /*int buttonCounter{ 1 };
-  for(auto& file : std::filesystem::directory_iterator("saves/"))
-  {
-    std::string filename{ file.path().u8string() };
-    filename.erase(filename.begin(),
-                   filename.begin() + filename.find_first_of("/") + 1);
-    filename.erase(filename.begin() + filename.find_last_of("."),
-                   filename.end());
-    saveSelect.addToggle(font, filename, 
-                         sf::Vector2f(100.0f, buttonCounter * 100.0f), 32);
-    ++buttonCounter;
-  }*/
 }
       
 std::string MapLoading::getMapFilename()

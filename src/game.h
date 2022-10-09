@@ -6,6 +6,7 @@
   #include "imagebutton.h"
   #include "scrollarea.h"
   #include "textinput.h"
+  #include "faction.h"
   #include "gamestate.h"
   #include "constant.h"
   #include <SFML/Graphics.hpp>
@@ -42,13 +43,21 @@
       
     private:
       Map map{ }; 
+      int turn{ 0 };
+
+      std::vector<Faction> factions{
+        Faction(0, 100, 100, 100, 100, 100),
+        Faction(1, 100, 100, 100, 100, 100)
+      };
+
       sf::View mapView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       sf::View guiView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       double maxZoom{ 0.5 };
       double minZoom{ 2 };
+      
       sf::Texture shadeTexture{  };
       sf::Sprite shade{  };
-      //bool paused{ false };
+      
       DisplayMode mode{ DisplayMode::game };
    
       //Pause menu
@@ -72,6 +81,7 @@
       //Node widget
       sf::RectangleShape nodeWidgetBackground{ sf::Vector2f(400, 200) };
       sf::Text nodeNameLabel{  };
+
       sf::Texture seaTerrainTexture{  };
       sf::Texture tundraTerrainTexture{  };
       sf::Texture desertTerrainTexture{  };
@@ -86,7 +96,8 @@
       sf::Texture rainforestHillsTerrainTexture{  };
       sf::Texture tundraRiverTerrainTexture{  };
       sf::Texture desertRiverTerrainTexture{  };
-      sf::Texture grasslandRiverTerrainTexture{  };
+      sf::Texture grasslandRiverTerrainTexture{  };\
+
       sf::Sprite seaTerrain{  };
       sf::Sprite tundraTerrain{  };
       sf::Sprite desertTerrain{  };
@@ -102,13 +113,18 @@
       sf::Sprite tundraRiverTerrain{  };
       sf::Sprite desertRiverTerrain{  };
       sf::Sprite grasslandRiverTerrain{  };
-      sf::RectangleShape terrainTest{ sf::Vector2f(300, 80) };
+
+      //Building widget
+      sf::RectangleShape buildingWidgetBackground{ sf::Vector2f(400, 150) };
+      sf::Text buildingNameLabel{  };
+      sf::Text underConstructionLabel{  };
 
       //Unit widget
       sf::RectangleShape unitWidgetBackground{ sf::Vector2f(800, 200) };
       sf::Text unitNameLabel{  };
       sf::Text unitHealth{  };
       sf::Text unitMovePoints{  };
+
       sf::Texture riflemenLargeTexture{  };
       sf::Sprite riflemenLarge{  };
 
@@ -122,6 +138,25 @@
       ScrollArea saveSelect{  };
       TextInput filenameInput{  };
       bool textInputUnclicked{ true };
+
+      //Yields widget
+      sf::RectangleShape yieldWidgetBackground{ sf::Vector2f(1000, 50) };
+      sf::Text turnCounter{  };
+      sf::Texture moneyIconTexture{  };
+      sf::Texture foodIconTexture{  };
+      sf::Texture woodIconTexture{  };
+      sf::Texture stoneIconTexture{  };
+      sf::Texture weaponsIconTexture{  };
+      sf::Sprite moneyIcon{  };
+      sf::Sprite foodIcon{  };
+      sf::Sprite woodIcon{  };
+      sf::Sprite stoneIcon{  };
+      sf::Sprite weaponsIcon{  };
+      sf::Text moneyCounter{  };
+      sf::Text foodCounter{  };
+      sf::Text woodCounter{  };
+      sf::Text stoneCounter{  };
+      sf::Text weaponsCounter{  };
   };
 
 #endif

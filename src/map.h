@@ -3,6 +3,7 @@
 
   #include "mapnode.h"
   #include "unit.h"
+  #include "building.h"
   #include <SFML/Graphics.hpp>
   #include "json.hpp"
   #include <vector>
@@ -31,6 +32,10 @@
       
       std::string getSelectedNodeName();
       Unit& getSelectedUnit();
+      Building& getSelectedBuilding();
+
+      std::vector<Unit>& getUnits();
+      std::vector<Building>& getBuildings();
 
     private:
       MapNode& getNode(int q, int r, int s);
@@ -50,12 +55,19 @@
       std::vector<MapNode> nodes{  };
       MapNode nothingness{  };
       Unit nobody{  };
+      Building nowhere{  };
       std::vector<Unit> units{  };
+      std::vector<Building> buildings{  };
       int sizeX{ 0 };
       int sizeY{ 0 };
       sf::Image clickmap{  };
 
       sf::Texture selectedNodeTexture{  };
+      sf::Texture nodeBorderTexture{  };
+      sf::Texture nodeBorderSelectedTexture{  };
+      sf::Texture nodeBorderAllyTexture{  };
+      sf::Texture nodeBorderEnemyTexture{  };
+
       sf::Texture grassNodeTexture{  };
       sf::Texture waterNodeTexture{  };
       sf::Texture desertNodeTexture{  };
@@ -71,9 +83,18 @@
       sf::Texture grasslandRiverNodeTexture{  };
       sf::Texture desertRiverNodeTexture{  };
       sf::Texture tundraRiverNodeTexture{  };
+
       sf::Texture riflemenTexture{  };
+
+      sf::Texture constructionTexture{  };
+      sf::Texture farmTexture{  };
       
       sf::Sprite selectedNode{  };
+      sf::Sprite nodeBorder{  };
+      sf::Sprite nodeBorderSelected{  };
+      sf::Sprite nodeBorderAlly{  };
+      sf::Sprite nodeBorderEnemy{  };
+
       sf::Sprite grassNode{  };
       sf::Sprite waterNode{  };
       sf::Sprite desertNode{  };
@@ -89,7 +110,11 @@
       sf::Sprite grasslandRiverNode{  };
       sf::Sprite desertRiverNode{  };
       sf::Sprite tundraRiverNode{  };
+
       sf::Sprite riflemenSprite{  };
+
+      sf::Sprite constructionSprite{  };
+      sf::Sprite farmSprite{  };
   };
 
 #endif
