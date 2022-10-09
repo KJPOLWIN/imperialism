@@ -23,6 +23,7 @@
 
       friend bool operator== (const HexVector& vector1, const HexVector& vector2);
       friend bool operator!= (const HexVector& vector1, const HexVector& vector2);
+      friend HexVector operator+ (const HexVector& vector1, const HexVector& vector2);
 
       sf::Vector2i toCartesian();
       std::size_t toID(int sizeX);

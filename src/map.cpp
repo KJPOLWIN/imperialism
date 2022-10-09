@@ -22,6 +22,7 @@ Map::Map()
   nodeBorderSelectedTexture.loadFromFile("texture/nodeborderselected.png");
   nodeBorderAllyTexture.loadFromFile("texture/nodeborderally.png");
   nodeBorderEnemyTexture.loadFromFile("texture/nodeborderenemy.png");
+  nodeBordersTexture.loadFromFile("texture/nodeborders.png");
 
   grassNodeTexture.loadFromFile("texture/nodegrass.png");
   waterNodeTexture.loadFromFile("texture/nodewater.png");
@@ -49,6 +50,8 @@ Map::Map()
   nodeBorderSelected.setTexture(nodeBorderSelectedTexture);
   nodeBorderAlly.setTexture(nodeBorderAllyTexture);
   nodeBorderEnemy.setTexture(nodeBorderEnemyTexture);
+  nodeBorderFragmentSprite.setTexture(nodeBordersTexture);
+  nodeBorderFragmentSprite.setTextureRect(sf::Rect(0, 0, 88, 102));
 
   grassNode.setTexture(grassNodeTexture);
   waterNode.setTexture(waterNodeTexture);
@@ -356,7 +359,98 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     {
       nodeBorder.setPosition(node.getPosition());
       targetWindow.draw(nodeBorder);
-      //node.draw(targetWindow);
+    }
+  }
+  
+  for( auto& unit : units )
+  {
+    if(isVisible(unit.getPosition(), viewOffset, zoom))
+    {
+      if(unit.getFaction() == 0)
+      {
+        nodeBorderAlly.setPosition(unit.getPosition());
+        targetWindow.draw(nodeBorderAlly);
+      }
+      else
+      {
+        nodeBorderEnemy.setPosition(unit.getPosition());
+        targetWindow.draw(nodeBorderEnemy);
+      }
+    }
+  }
+
+  for( auto& node : factions.at(0).getBorders() )
+  {
+    //west
+    bool drawW{ true };
+    bool drawNW{ true };
+    bool drawNE{ true };
+    bool drawE{ true };
+    bool drawSE{ true };
+    bool drawSW{ true };
+    for(auto& node2 : factions.at(0).getBorders())
+    {
+      if(node2 == node.getW())
+      {
+        drawW = false;
+      }
+      if(node2 == node.getNW())
+      {
+        drawNW = false;
+      }
+      if(node2 == node.getNE())
+      {
+        drawNE = false;
+      }
+      if(node2 == node.getE())
+      {
+        drawE = false;
+      }
+      if(node2 == node.getSE())
+      {
+        drawSE = false;
+      }
+      if(node2 == node.getSW())
+      {
+        drawSW = false;
+      }
+    }
+
+    if(drawW)
+    {
+      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
+      nodeBorderFragmentSprite.setTextureRect(sf::Rect(0, 0, 88, 102));
+      targetWindow.draw(nodeBorderFragmentSprite);
+    }
+    if(drawNW)
+    {
+      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
+      nodeBorderFragmentSprite.setTextureRect(sf::Rect(88, 0, 88, 102));
+      targetWindow.draw(nodeBorderFragmentSprite);
+    }
+    if(drawNE)
+    {
+      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
+      nodeBorderFragmentSprite.setTextureRect(sf::Rect(176, 0, 88, 102));
+      targetWindow.draw(nodeBorderFragmentSprite);
+    }
+    if(drawE)
+    {
+      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
+      nodeBorderFragmentSprite.setTextureRect(sf::Rect(264, 0, 88, 102));
+      targetWindow.draw(nodeBorderFragmentSprite);
+    }
+    if(drawSE)
+    {
+      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
+      nodeBorderFragmentSprite.setTextureRect(sf::Rect(352, 0, 88, 102));
+      targetWindow.draw(nodeBorderFragmentSprite);
+    }
+    if(drawSW)
+    {
+      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
+      nodeBorderFragmentSprite.setTextureRect(sf::Rect(440, 0, 88, 102));
+      targetWindow.draw(nodeBorderFragmentSprite);
     }
   }
 
@@ -377,22 +471,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     }
   }
   
-  for( auto& unit : units )
-  {
-    if(isVisible(unit.getPosition(), viewOffset, zoom))
-    {
-      if(unit.getFaction() == 0)
-      {
-        nodeBorderAlly.setPosition(unit.getPosition());
-        targetWindow.draw(nodeBorderAlly);
-      }
-      else
-      {
-        nodeBorderEnemy.setPosition(unit.getPosition());
-        targetWindow.draw(nodeBorderEnemy);
-      }
-    }
-  }
  
   //Drawing selected nodes
   for( auto& node : nodes )
@@ -687,6 +765,29 @@ void Map::regenerate(int sizeX, int sizeY,
                          3,
                          1, 1,
                          0, 4, 0, 0, 0);
+  
+  HexVector vec{ buildings.at(0).getHexPosition() };
+  factions.at(0).addNodeToBorders(vec);
+  factions.at(0).addNodeToBorders(vec.getW());
+  factions.at(0).addNodeToBorders(vec.getNW());
+  factions.at(0).addNodeToBorders(vec.getNE());
+  factions.at(0).addNodeToBorders(vec.getE());
+  factions.at(0).addNodeToBorders(vec.getSE());
+  factions.at(0).addNodeToBorders(vec.getSW());
+
+
+  //Adding nodes around buildings to faction borders (delete later) (find better way)
+  /*int radius{ 1 };
+  for(int q{ -radius }; q <= radius; ++q)
+  {
+    for(int r{ -radius }; r <= radius; ++r)
+    {
+      for(int s{ -radius }; s <= radius; ++s)
+      {
+          factions.at(0).addNodeToBorders(buildings.at(0).getHexPosition() + HexVector(q, r, s));
+      }
+    }
+  }*/
 }
       
 void Map::saveToFile(std::string filename)

@@ -10,6 +10,11 @@ bool operator!= (const HexVector& vector1, const HexVector& vector2)
 { 
   return (vector1.q != vector2.q || vector1.r != vector2.r || vector1.s != vector2.s);
 }
+      
+HexVector operator+ (const HexVector& vector1, const HexVector& vector2)
+{
+  return HexVector(vector1.q + vector2.q, vector1.r + vector2.r, vector1.s + vector2.s);
+}
 
 sf::Vector2i HexVector::toCartesian()
 {

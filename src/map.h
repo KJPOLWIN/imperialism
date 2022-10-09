@@ -74,6 +74,7 @@
       sf::Texture nodeBorderSelectedTexture{  };
       sf::Texture nodeBorderAllyTexture{  };
       sf::Texture nodeBorderEnemyTexture{  };
+      sf::Texture nodeBordersTexture{  };
 
       sf::Texture grassNodeTexture{  };
       sf::Texture waterNodeTexture{  };
@@ -101,6 +102,7 @@
       sf::Sprite nodeBorderSelected{  };
       sf::Sprite nodeBorderAlly{  };
       sf::Sprite nodeBorderEnemy{  };
+      sf::Sprite nodeBorderFragmentSprite{  };
 
       sf::Sprite grassNode{  };
       sf::Sprite waterNode{  };
