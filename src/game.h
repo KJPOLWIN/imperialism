@@ -43,7 +43,6 @@
       
     private:
       Map map{ }; 
-      int turn{ 0 };
 
       sf::View mapView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       sf::View guiView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };

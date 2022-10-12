@@ -35,6 +35,7 @@
       Unit& getSelectedUnit();
       Building& getSelectedBuilding();
 
+      int getTurn();
       std::vector<Faction>& getFactions();
       std::vector<Unit>& getUnits();
       std::vector<Building>& getBuildings();
@@ -54,6 +55,8 @@
       bool neighboursTerrain(HexVector position, TerrainType terrain);
       bool neighboursTerrain(int x, int y, TerrainType terrain);
       
+      int turn{ 0 };
+
       std::vector<Faction> factions{
         Faction(0, 100, 100, 100, 100, 100),
         Faction(1, 100, 100, 100, 100, 100)

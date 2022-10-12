@@ -185,8 +185,7 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
       if(nextTurnButton.isClicked(clickPosition))
       {
         map.nextTurn();
-        ++turn;
-        turnCounter.setString("Turn " + std::to_string(turn + 1));
+        turnCounter.setString("Turn " + std::to_string(map.getTurn() + 1));
         moneyCounter.setString(std::to_string(map.getFactions().at(0).getMoney()));
         foodCounter.setString(std::to_string(map.getFactions().at(0).getFood()));
         woodCounter.setString(std::to_string(map.getFactions().at(0).getWood()));

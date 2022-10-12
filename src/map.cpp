@@ -77,6 +77,8 @@ Map::Map()
       
 void Map::nextTurn()
 {
+  ++turn;
+
   for( auto& unit : units )
   {
     unit.regenerateMovePoints();
@@ -91,6 +93,7 @@ void Map::nextTurn()
   {
     faction.updateResources(units, buildings);
   }
+      
 }
 
 void Map::moveUnits(HexVector position)
@@ -378,10 +381,9 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       }
     }
   }
-
+    
   for( auto& node : factions.at(0).getBorders() )
   {
-    //west
     bool drawW{ true };
     bool drawNW{ true };
     bool drawNE{ true };
@@ -390,6 +392,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     bool drawSW{ true };
     for(auto& node2 : factions.at(0).getBorders())
     {
+      //std::cout << "started 
       if(node2 == node.getW())
       {
         drawW = false;
@@ -471,7 +474,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     }
   }
   
- 
   //Drawing selected nodes
   for( auto& node : nodes )
   {
@@ -766,6 +768,7 @@ void Map::regenerate(int sizeX, int sizeY,
                          1, 1,
                          0, 4, 0, 0, 0);
   
+  //Adding nodes around buildings to faction borders (delete later) (find better way)
   HexVector vec{ buildings.at(0).getHexPosition() };
   factions.at(0).addNodeToBorders(vec);
   factions.at(0).addNodeToBorders(vec.getW());
@@ -774,25 +777,14 @@ void Map::regenerate(int sizeX, int sizeY,
   factions.at(0).addNodeToBorders(vec.getE());
   factions.at(0).addNodeToBorders(vec.getSE());
   factions.at(0).addNodeToBorders(vec.getSW());
-
-
-  //Adding nodes around buildings to faction borders (delete later) (find better way)
-  /*int radius{ 1 };
-  for(int q{ -radius }; q <= radius; ++q)
-  {
-    for(int r{ -radius }; r <= radius; ++r)
-    {
-      for(int s{ -radius }; s <= radius; ++s)
-      {
-          factions.at(0).addNodeToBorders(buildings.at(0).getHexPosition() + HexVector(q, r, s));
-      }
-    }
-  }*/
 }
       
 void Map::saveToFile(std::string filename)
 {
   nlohmann::json mapData{  };
+  
+  //Turn counter
+  mapData["turn"] = turn;
 
   //Map size
   mapData["sizeX"] = sizeX;
@@ -806,6 +798,25 @@ void Map::saveToFile(std::string filename)
                                            static_cast<int>(node.getClimateZone()) });
   }
   mapData["nodes"] = nodeData;
+
+  //Faction data
+  mapData["factionCount"] = factions.size();
+  for(std::size_t iii{ 0 }; iii < factions.size(); ++iii)
+  {
+    mapData["factions"][iii]["id"] = iii;
+    mapData["factions"][iii]["money"] = factions.at(iii).getMoney();
+    mapData["factions"][iii]["food"] = factions.at(iii).getFood();
+    mapData["factions"][iii]["wood"] = factions.at(iii).getWood();
+    mapData["factions"][iii]["stone"] = factions.at(iii).getStone();
+    mapData["factions"][iii]["weapons"] = factions.at(iii).getWeapons();
+    mapData["factions"][iii]["bordersCount"] = factions.at(iii).getBorders().size();
+    for(std::size_t jjj{ 0 }; jjj < factions.at(iii).getBorders().size(); ++jjj)
+    {
+      mapData["factions"][iii]["borders"][jjj]["q"] = factions.at(iii).getBorders().at(jjj).q;
+      mapData["factions"][iii]["borders"][jjj]["r"] = factions.at(iii).getBorders().at(jjj).r;
+      mapData["factions"][iii]["borders"][jjj]["s"] = factions.at(iii).getBorders().at(jjj).s;
+    }
+  }
 
   //Unit data
   mapData["unitCount"] = units.size();
@@ -867,6 +878,7 @@ void Map::saveToFile(std::string filename)
 void Map::loadFromFile(std::string filename)
 {
   nodes.clear();
+  factions.clear();
   units.clear();
   buildings.clear();
 
@@ -877,9 +889,31 @@ void Map::loadFromFile(std::string filename)
 
   saveFile >> savedMap;
 
+  //Turn counter
+  turn = savedMap["turn"];
+
   //Map size
   sizeX = savedMap["sizeX"];
   sizeY = savedMap["sizeY"];
+
+  //Factions
+  for(std::size_t iii{ 0 }; iii < savedMap["factionCount"]; ++iii)
+  {
+    factions.emplace_back(iii, 
+                          savedMap["factions"][iii]["money"], 
+                          savedMap["factions"][iii]["food"], 
+                          savedMap["factions"][iii]["wood"], 
+                          savedMap["factions"][iii]["stone"], 
+                          savedMap["factions"][iii]["weapons"]);
+
+    for(std::size_t jjj{ 0 }; jjj < savedMap["factions"][iii]["bordersCount"]; ++jjj)
+    {
+      HexVector vec{ savedMap["factions"][iii]["borders"][jjj]["q"], 
+                     savedMap["factions"][iii]["borders"][jjj]["r"], 
+                     savedMap["factions"][iii]["borders"][jjj]["s"] };
+      factions.at(iii).addNodeToBorders(vec);
+    }
+  }
 
   //Nodes
   for(int y{ 0 }; y < sizeY; ++y)
@@ -922,6 +956,11 @@ void Map::loadFromFile(std::string filename)
                            savedMap["buildings"][iii]["stoneProduction"],
                            savedMap["buildings"][iii]["weaponsProduction"]);
   }
+}
+  
+int Map::getTurn()
+{
+  return turn;
 }
       
 std::vector<Faction>& Map::getFactions()
