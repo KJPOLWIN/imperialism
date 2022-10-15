@@ -14,6 +14,13 @@
                int moneyProduction, int foodProduction,
                int woodProduction, int stoneProduction,
                int weaponsProduction);
+      Building(std::string name,
+               int turnsToBuild, 
+               int upkeep, int population,
+               int moneyProduction, int foodProduction,
+               int woodProduction, int stoneProduction,
+               int weaponsProduction);
+      Building(int x, int y, int faction, Building& base); 
       Building() = default;
 
       void update();

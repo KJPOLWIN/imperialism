@@ -62,6 +62,13 @@
         Faction(1, 100, 100, 100, 100, 100)
       };
 
+      std::vector<Building> templateBuildings{
+        Building("Farm",
+                 3,
+                 1, 1,
+                 0, 4, 0, 0, 0)
+      };
+
       std::vector<MapNode> nodes{  };
       MapNode nothingness{  };
       Unit nobody{  };

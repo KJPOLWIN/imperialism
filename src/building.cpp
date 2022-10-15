@@ -26,6 +26,49 @@ Building::Building(int x, int y, std::string name, int faction,
     completed = true;
   }
 }
+      
+Building::Building(std::string name,
+                   int turnsToBuild, 
+                   int upkeep, int population,
+                   int moneyProduction, int foodProduction,
+                   int woodProduction, int stoneProduction,
+                   int weaponsProduction)
+  : positioningNode{ 0, 0 },
+    turnsToBuild{ turnsToBuild },
+    name{ name },
+    faction{ faction },
+    upkeep{ upkeep },
+    population{ population },
+    moneyProduction{ moneyProduction },
+    foodProduction{ foodProduction },
+    woodProduction{ woodProduction },
+    stoneProduction{ stoneProduction },
+    weaponsProduction{ weaponsProduction }
+{
+  if(turnsToBuild < 1)
+  {
+    completed = true;
+  }
+}
+      
+Building::Building(int x, int y, int faction, Building& base)
+  : positioningNode{ x, y },
+    turnsToBuild{ base.turnsToBuild },
+    name{ base.name },
+    faction{ faction },
+    upkeep{ base.upkeep },
+    population{ base.population },
+    moneyProduction{ base.moneyProduction },
+    foodProduction{ base.foodProduction },
+    woodProduction{ base.woodProduction },
+    stoneProduction{ base.stoneProduction },
+    weaponsProduction{ base.weaponsProduction }
+{
+  if(turnsToBuild < 1)
+  {
+    completed = true;
+  }
+}
 
 void Building::update()
 {

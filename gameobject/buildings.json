@@ -1,0 +1,37 @@
+{
+  "buildings": [
+    {
+      "name": "Farm",
+      "turnsToBuild": 3,
+      "population": 1,
+      "upkeep": 1,
+      "moneyProduction": 0,
+      "foodProduction": 4,
+      "woodProduction": 0,
+      "stoneProduction": 0,
+      "weaponsProduction": 0
+    },
+    {
+      "name": "Town",
+      "turnsToBuild": 5,
+      "population": 2,
+      "upkeep": 1,
+      "moneyProduction": 5,
+      "foodProduction": 0,
+      "woodProduction": 0,
+      "stoneProduction": 0,
+      "weaponsProduction": 0
+    },
+    {
+      "name": "Lumbermill",
+      "turnsToBuild": 3,
+      "population": 0,
+      "upkeep": 2,
+      "moneyProduction": 0,
+      "foodProduction": 0,
+      "woodProduction": 3,
+      "stoneProduction": 0,
+      "weaponsProduction": 0
+    }
+  ]
+}

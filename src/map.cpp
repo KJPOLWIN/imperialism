@@ -763,10 +763,7 @@ void Map::regenerate(int sizeX, int sizeY,
 
   //Adding some debug buildings (delete later)
   buildings.clear();
-  buildings.emplace_back(10, 10, "Farm", 0,
-                         3,
-                         1, 1,
-                         0, 4, 0, 0, 0);
+  buildings.emplace_back(10, 10, 0, templateBuildings.at(0));
   
   //Adding nodes around buildings to faction borders (delete later) (find better way)
   HexVector vec{ buildings.at(0).getHexPosition() };
