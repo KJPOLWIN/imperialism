@@ -401,30 +401,30 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
 {
   sf::Vector2i mousePosition{ sf::Mouse::getPosition(window) };
 
+  const int scrollSensitivity{ 30 };
   double zoomLevel{ mapView.getSize().x / Constant::windowWidth };
 
   //Update
   switch(mode)
   {
     case DisplayMode::game:
-      if(mousePosition.x < 10)
+      if(mousePosition.x < scrollSensitivity)
       {
         mapView.move(-Constant::scrollSpeed * timeElapsed * zoomLevel, 0);
       }
-      else if(mousePosition.x > Constant::windowWidth - 10)
+      else if(mousePosition.x > Constant::windowWidth - scrollSensitivity)
       {
         mapView.move(Constant::scrollSpeed * timeElapsed * zoomLevel, 0);
       }
   
-      if(mousePosition.y < 10)
+      if(mousePosition.y < scrollSensitivity)
       {
         mapView.move(0.0, -Constant::scrollSpeed * timeElapsed * zoomLevel);
       }
-      else if(mousePosition.y > Constant::windowHeight - 10)
+      else if(mousePosition.y > Constant::windowHeight - scrollSensitivity)
       {
         mapView.move(0.0, Constant::scrollSpeed * timeElapsed * zoomLevel);
       }
-
     case DisplayMode::pauseMenu:
     case DisplayMode::saveMenu:
       

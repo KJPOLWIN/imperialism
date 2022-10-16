@@ -73,6 +73,25 @@ Map::Map()
 
   farmSprite.setTexture(farmTexture);
   constructionSprite.setTexture(constructionTexture);
+
+  //Loading building templates
+  templateBuildings.clear();
+  nlohmann::json buildingData{  };
+  std::fstream buildingsFile{  };
+  buildingsFile.open("gameobject/buildings.json", std::ios::in);
+  buildingsFile >> buildingData;
+  for(std::size_t iii{ 0 }; iii < buildingData["buildingCount"]; ++iii)
+  {
+    templateBuildings.emplace_back(buildingData["buildings"][iii]["name"],
+                buildingData["buildings"][iii]["turnsToBuild"],
+                buildingData["buildings"][iii]["upkeep"],
+                buildingData["buildings"][iii]["population"],
+                buildingData["buildings"][iii]["moneyProduction"],
+                buildingData["buildings"][iii]["foodProduction"],
+                buildingData["buildings"][iii]["woodProduction"],
+                buildingData["buildings"][iii]["stoneProduction"],
+                buildingData["buildings"][iii]["weaponsProduction"]);
+  }
 }
       
 void Map::nextTurn()
