@@ -5,9 +5,11 @@
   #include "unit.h"
   #include "building.h"
   #include "faction.h"
+  #include "graphicalresource.h"
   #include <SFML/Graphics.hpp>
   #include "json.hpp"
   #include <vector>
+  #include <map>
 
   class Map
   { 
@@ -79,61 +81,33 @@
       int sizeY{ 0 };
       sf::Image clickmap{  };
 
-      sf::Texture selectedNodeTexture{  };
-      sf::Texture nodeBorderTexture{  };
-      sf::Texture nodeBorderSelectedTexture{  };
-      sf::Texture nodeBorderAllyTexture{  };
-      sf::Texture nodeBorderEnemyTexture{  };
-      sf::Texture nodeBordersTexture{  };
+      GraphicalResource selectedNode{  };
+      GraphicalResource nodeBorder{  };
+      GraphicalResource nodeBorderSelected{  };
+      GraphicalResource nodeBorderAlly{  };
+      GraphicalResource nodeBorderEnemy{  };
+      GraphicalResource nodeBorderFragment{  };
 
-      sf::Texture grassNodeTexture{  };
-      sf::Texture waterNodeTexture{  };
-      sf::Texture desertNodeTexture{  };
-      sf::Texture tundraNodeTexture{  };
-      sf::Texture grassHillsNodeTexture{  };
-      sf::Texture desertHillsNodeTexture{  };
-      sf::Texture tundraHillsNodeTexture{  };
-      sf::Texture forestNodeTexture{  };
-      sf::Texture forestHillsNodeTexture{  };
-      sf::Texture jungleNodeTexture{  };
-      sf::Texture jungleHillsNodeTexture{  };
-      sf::Texture mountainsNodeTexture{  };
-      sf::Texture grasslandRiverNodeTexture{  };
-      sf::Texture desertRiverNodeTexture{  };
-      sf::Texture tundraRiverNodeTexture{  };
+      GraphicalResource grassNode{  };
+      GraphicalResource waterNode{  };
+      GraphicalResource desertNode{  };
+      GraphicalResource tundraNode{  };
+      GraphicalResource grassHillsNode{  };
+      GraphicalResource desertHillsNode{  };
+      GraphicalResource tundraHillsNode{  };
+      GraphicalResource forestNode{  };
+      GraphicalResource forestHillsNode{  };
+      GraphicalResource jungleNode{  };
+      GraphicalResource jungleHillsNode{  };
+      GraphicalResource mountainsNode{  };
+      GraphicalResource grasslandRiverNode{  };
+      GraphicalResource desertRiverNode{  };
+      GraphicalResource tundraRiverNode{  };
 
-      sf::Texture riflemenTexture{  };
+      GraphicalResource riflemen{  };
 
-      sf::Texture constructionTexture{  };
-      sf::Texture farmTexture{  };
-      
-      sf::Sprite selectedNode{  };
-      sf::Sprite nodeBorder{  };
-      sf::Sprite nodeBorderSelected{  };
-      sf::Sprite nodeBorderAlly{  };
-      sf::Sprite nodeBorderEnemy{  };
-      sf::Sprite nodeBorderFragmentSprite{  };
-
-      sf::Sprite grassNode{  };
-      sf::Sprite waterNode{  };
-      sf::Sprite desertNode{  };
-      sf::Sprite tundraNode{  };
-      sf::Sprite grassHillsNode{  };
-      sf::Sprite desertHillsNode{  };
-      sf::Sprite tundraHillsNode{  };
-      sf::Sprite forestNode{  };
-      sf::Sprite forestHillsNode{  };
-      sf::Sprite jungleNode{  };
-      sf::Sprite jungleHillsNode{  };
-      sf::Sprite mountainsNode{  };
-      sf::Sprite grasslandRiverNode{  };
-      sf::Sprite desertRiverNode{  };
-      sf::Sprite tundraRiverNode{  };
-
-      sf::Sprite riflemenSprite{  };
-
-      sf::Sprite constructionSprite{  };
-      sf::Sprite farmSprite{  };
+      GraphicalResource construction{  };
+      GraphicalResource farm{  };
   };
 
 #endif

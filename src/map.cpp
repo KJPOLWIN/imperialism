@@ -17,62 +17,33 @@ Map::Map()
   nowhere.completed = true;
 
   //loading textures and sprites
-  selectedNodeTexture.loadFromFile("texture/selectednode.png");
-  nodeBorderTexture.loadFromFile("texture/nodeborder.png");
-  nodeBorderSelectedTexture.loadFromFile("texture/nodeborderselected.png");
-  nodeBorderAllyTexture.loadFromFile("texture/nodeborderally.png");
-  nodeBorderEnemyTexture.loadFromFile("texture/nodeborderenemy.png");
-  nodeBordersTexture.loadFromFile("texture/nodeborders.png");
+  selectedNode.load("texture/selectednode.png");
+  nodeBorder.load("texture/nodeborder.png");
+  nodeBorderSelected.load("texture/nodeborderselected.png");
+  nodeBorderAlly.load("texture/nodeborderally.png");
+  nodeBorderEnemy.load("texture/nodeborderenemy.png");
+  nodeBorderFragment.load("texture/nodeborders.png");
 
-  grassNodeTexture.loadFromFile("texture/nodegrass.png");
-  waterNodeTexture.loadFromFile("texture/nodewater.png");
-  desertNodeTexture.loadFromFile("texture/nodedesert.png");
-  tundraNodeTexture.loadFromFile("texture/nodetundra.png");
-  grassHillsNodeTexture.loadFromFile("texture/nodegrasshills.png");
-  desertHillsNodeTexture.loadFromFile("texture/nodedeserthills.png");
-  tundraHillsNodeTexture.loadFromFile("texture/nodetundrahills.png");
-  forestNodeTexture.loadFromFile("texture/nodeforest.png");
-  forestHillsNodeTexture.loadFromFile("texture/nodeforesthills.png");
-  jungleNodeTexture.loadFromFile("texture/nodejungle.png");
-  jungleHillsNodeTexture.loadFromFile("texture/nodejunglehills.png");
-  mountainsNodeTexture.loadFromFile("texture/nodemountain.png");
-  grasslandRiverNodeTexture.loadFromFile("texture/nodegrasslandriver.png");
-  desertRiverNodeTexture.loadFromFile("texture/nodedesertriver.png");
-  tundraRiverNodeTexture.loadFromFile("texture/nodetundrariver.png");
+  grassNode.load("texture/nodegrass.png");
+  waterNode.load("texture/nodewater.png");
+  desertNode.load("texture/nodedesert.png");
+  tundraNode.load("texture/nodetundra.png");
+  grassHillsNode.load("texture/nodegrasshills.png");
+  desertHillsNode.load("texture/nodedeserthills.png");
+  tundraHillsNode.load("texture/nodetundrahills.png");
+  forestNode.load("texture/nodeforest.png");
+  forestHillsNode.load("texture/nodeforesthills.png");
+  jungleNode.load("texture/nodejungle.png");
+  jungleHillsNode.load("texture/nodejunglehills.png");
+  mountainsNode.load("texture/nodemountain.png");
+  grasslandRiverNode.load("texture/nodegrasslandriver.png");
+  desertRiverNode.load("texture/nodedesertriver.png");
+  tundraRiverNode.load("texture/nodetundrariver.png");
 
-  riflemenTexture.loadFromFile("texture/riflemen.png");
+  riflemen.load("texture/riflemen.png");
 
-  farmTexture.loadFromFile("texture/buildingfarm.png");
-  constructionTexture.loadFromFile("texture/buildingconstruction.png");
-
-  selectedNode.setTexture(selectedNodeTexture);
-  nodeBorder.setTexture(nodeBorderTexture);
-  nodeBorderSelected.setTexture(nodeBorderSelectedTexture);
-  nodeBorderAlly.setTexture(nodeBorderAllyTexture);
-  nodeBorderEnemy.setTexture(nodeBorderEnemyTexture);
-  nodeBorderFragmentSprite.setTexture(nodeBordersTexture);
-  nodeBorderFragmentSprite.setTextureRect(sf::Rect(0, 0, 88, 102));
-
-  grassNode.setTexture(grassNodeTexture);
-  waterNode.setTexture(waterNodeTexture);
-  desertNode.setTexture(desertNodeTexture);
-  tundraNode.setTexture(tundraNodeTexture);
-  grassHillsNode.setTexture(grassHillsNodeTexture);
-  desertHillsNode.setTexture(desertHillsNodeTexture);
-  tundraHillsNode.setTexture(tundraHillsNodeTexture);
-  forestNode.setTexture(forestNodeTexture);
-  forestHillsNode.setTexture(forestHillsNodeTexture);
-  jungleNode.setTexture(jungleNodeTexture);
-  jungleHillsNode.setTexture(jungleHillsNodeTexture);
-  mountainsNode.setTexture(mountainsNodeTexture);
-  grasslandRiverNode.setTexture(grasslandRiverNodeTexture);
-  desertRiverNode.setTexture(desertRiverNodeTexture);
-  tundraRiverNode.setTexture(tundraRiverNodeTexture);
-
-  riflemenSprite.setTexture(riflemenTexture);
-
-  farmSprite.setTexture(farmTexture);
-  constructionSprite.setTexture(constructionTexture);
+  farm.load("texture/buildingfarm.png");
+  construction.load("texture/buildingconstruction.png");
 
   //Loading building templates
   templateBuildings.clear();
@@ -258,7 +229,8 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       {
         case TerrainType::water:
           waterNode.setPosition(node.getPosition());
-          targetWindow.draw(waterNode);
+          //targetWindow.draw(waterNode);
+          waterNode.draw(targetWindow);
         break;
 
         case TerrainType::plains:
@@ -266,18 +238,19 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
           {
             case ClimateZone::polar:
               tundraNode.setPosition(node.getPosition());
-              targetWindow.draw(tundraNode);
+              //targetWindow.draw(tundraNode);
+              tundraNode.draw(targetWindow);
             break;
 
             case ClimateZone::dry:
               desertNode.setPosition(node.getPosition());
-              targetWindow.draw(desertNode);
+              desertNode.draw(targetWindow);
             break;
 
             case ClimateZone::temperate:
             case ClimateZone::tropical:
               grassNode.setPosition(node.getPosition());
-              targetWindow.draw(grassNode);
+              grassNode.draw(targetWindow);
             break;
           }
         break;
@@ -287,25 +260,25 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
           {
             case ClimateZone::polar:
               tundraHillsNode.setPosition(node.getPosition());
-              targetWindow.draw(tundraHillsNode);
+              tundraHillsNode.draw(targetWindow);
             break;
 
             case ClimateZone::dry:
               desertHillsNode.setPosition(node.getPosition());
-              targetWindow.draw(desertHillsNode);
+              desertHillsNode.draw(targetWindow);
             break;
             
             case ClimateZone::temperate:
             case ClimateZone::tropical:
               grassHillsNode.setPosition(node.getPosition());
-              targetWindow.draw(grassHillsNode);
+              grassHillsNode.draw(targetWindow);
             break;
           }
         break;
 
         case TerrainType::mountains:
           mountainsNode.setPosition(node.getPosition());
-          targetWindow.draw(mountainsNode);
+          mountainsNode.draw(targetWindow);
         break;
 
         case TerrainType::forest:
@@ -313,12 +286,12 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
           {
             case ClimateZone::temperate:
               forestNode.setPosition(node.getPosition());
-              targetWindow.draw(forestNode);
+              forestNode.draw(targetWindow);
             break;
 
             case ClimateZone::tropical:
               jungleNode.setPosition(node.getPosition());
-              targetWindow.draw(jungleNode);
+              jungleNode.draw(targetWindow);
             break;
 
             case ClimateZone::polar:
@@ -332,12 +305,12 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
           {
             case ClimateZone::temperate:
               forestHillsNode.setPosition(node.getPosition());
-              targetWindow.draw(forestHillsNode);
+              forestHillsNode.draw(targetWindow);
             break;
 
             case ClimateZone::tropical:
               jungleHillsNode.setPosition(node.getPosition());
-              targetWindow.draw(jungleHillsNode);
+              jungleHillsNode.draw(targetWindow);
             break;
             
             case ClimateZone::polar:
@@ -351,18 +324,18 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
           {
             case ClimateZone::polar:
               tundraRiverNode.setPosition(node.getPosition());
-              targetWindow.draw(tundraRiverNode);
+              tundraRiverNode.draw(targetWindow);
             break;
 
             case ClimateZone::dry:
               desertRiverNode.setPosition(node.getPosition());
-              targetWindow.draw(desertRiverNode);
+              desertRiverNode.draw(targetWindow);
             break;
             
             case ClimateZone::temperate:
             case ClimateZone::tropical:
               grasslandRiverNode.setPosition(node.getPosition());
-              targetWindow.draw(grasslandRiverNode);
+              grasslandRiverNode.draw(targetWindow);
             break;
           }
         break;
@@ -380,7 +353,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     && isVisible(node.getPosition(), viewOffset, zoom))
     {
       nodeBorder.setPosition(node.getPosition());
-      targetWindow.draw(nodeBorder);
+      nodeBorder.draw(targetWindow);
     }
   }
   
@@ -391,12 +364,12 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       if(unit.getFaction() == 0)
       {
         nodeBorderAlly.setPosition(unit.getPosition());
-        targetWindow.draw(nodeBorderAlly);
+        nodeBorderAlly.draw(targetWindow);
       }
       else
       {
         nodeBorderEnemy.setPosition(unit.getPosition());
-        targetWindow.draw(nodeBorderEnemy);
+        nodeBorderEnemy.draw(targetWindow);
       }
     }
   }
@@ -411,7 +384,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     bool drawSW{ true };
     for(auto& node2 : factions.at(0).getBorders())
     {
-      //std::cout << "started 
       if(node2 == node.getW())
       {
         drawW = false;
@@ -440,39 +412,39 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
 
     if(drawW)
     {
-      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
-      nodeBorderFragmentSprite.setTextureRect(sf::Rect(0, 0, 88, 102));
-      targetWindow.draw(nodeBorderFragmentSprite);
+      nodeBorderFragment.setPosition(getNode(node).getPosition());
+      nodeBorderFragment.setTextureRect(0, 0, 88, 102);
+      nodeBorderFragment.draw(targetWindow);
     }
     if(drawNW)
     {
-      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
-      nodeBorderFragmentSprite.setTextureRect(sf::Rect(88, 0, 88, 102));
-      targetWindow.draw(nodeBorderFragmentSprite);
+      nodeBorderFragment.setPosition(getNode(node).getPosition());
+      nodeBorderFragment.setTextureRect(88, 0, 88, 102);
+      nodeBorderFragment.draw(targetWindow);
     }
     if(drawNE)
     {
-      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
-      nodeBorderFragmentSprite.setTextureRect(sf::Rect(176, 0, 88, 102));
-      targetWindow.draw(nodeBorderFragmentSprite);
+      nodeBorderFragment.setPosition(getNode(node).getPosition());
+      nodeBorderFragment.setTextureRect(176, 0, 88, 102);
+      nodeBorderFragment.draw(targetWindow);
     }
     if(drawE)
     {
-      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
-      nodeBorderFragmentSprite.setTextureRect(sf::Rect(264, 0, 88, 102));
-      targetWindow.draw(nodeBorderFragmentSprite);
+      nodeBorderFragment.setPosition(getNode(node).getPosition());
+      nodeBorderFragment.setTextureRect(264, 0, 88, 102);
+      nodeBorderFragment.draw(targetWindow);
     }
     if(drawSE)
     {
-      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
-      nodeBorderFragmentSprite.setTextureRect(sf::Rect(352, 0, 88, 102));
-      targetWindow.draw(nodeBorderFragmentSprite);
+      nodeBorderFragment.setPosition(getNode(node).getPosition());
+      nodeBorderFragment.setTextureRect(352, 0, 88, 102);
+      nodeBorderFragment.draw(targetWindow);
     }
     if(drawSW)
     {
-      nodeBorderFragmentSprite.setPosition(getNode(node).getPosition());
-      nodeBorderFragmentSprite.setTextureRect(sf::Rect(440, 0, 88, 102));
-      targetWindow.draw(nodeBorderFragmentSprite);
+      nodeBorderFragment.setPosition(getNode(node).getPosition());
+      nodeBorderFragment.setTextureRect(440, 0, 88, 102);
+      nodeBorderFragment.draw(targetWindow);
     }
   }
 
@@ -482,13 +454,13 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     {
       if(building.completed)
       {
-        farmSprite.setPosition(building.getPosition());
-        targetWindow.draw(farmSprite); 
+        farm.setPosition(building.getPosition());
+        farm.draw(targetWindow);
       }
       else
       {
-        constructionSprite.setPosition(building.getPosition());
-        targetWindow.draw(constructionSprite); 
+        construction.setPosition(building.getPosition());
+        construction.draw(targetWindow);
       }
     }
   }
@@ -500,8 +472,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     && isVisible(node.getPosition(), viewOffset, zoom))
     {
       nodeBorderSelected.setPosition(node.getPosition());
-      targetWindow.draw(nodeBorderSelected);
-      //node.draw(targetWindow);
+      nodeBorderSelected.draw(targetWindow);
     }
   }
 
@@ -521,7 +492,7 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
         && nodeCost <= unitMP)
         {
           selectedNode.setPosition(node.getPosition());
-          targetWindow.draw(selectedNode);
+          selectedNode.draw(targetWindow);
         }
       } 
     }
@@ -532,8 +503,8 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
   {
     if(isVisible(unit.getPosition(), viewOffset, zoom))
     {
-      riflemenSprite.setPosition(unit.getPosition());
-      targetWindow.draw(riflemenSprite);
+      riflemen.setPosition(unit.getPosition());
+      riflemen.draw(targetWindow);
     }
   }
 }
