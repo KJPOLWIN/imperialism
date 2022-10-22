@@ -234,7 +234,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       {
         case TerrainType::water:
           waterNode.setPosition(node.getPosition());
-          //targetWindow.draw(waterNode);
           waterNode.draw(targetWindow);
         break;
 
@@ -243,7 +242,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
           {
             case ClimateZone::polar:
               tundraNode.setPosition(node.getPosition());
-              //targetWindow.draw(tundraNode);
               tundraNode.draw(targetWindow);
             break;
 
@@ -381,37 +379,17 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     
   for( auto& node : factions.at(0).getBorders() )
   {
-    bool drawW{ true };
-    bool drawNW{ true };
-    bool drawNE{ true };
-    bool drawE{ true };
-    bool drawSE{ true };
-    bool drawSW{ true };
+    std::array<bool, 6> draw{ true, true, true, true, true, true };
     for(auto& node2 : factions.at(0).getBorders())
     {
+      //std::cout << "started 
       if(node2 == node.getW())
+      for(std::size_t iii{ 0 }; iii < 6; ++iii)
       {
-        drawW = false;
-      }
-      if(node2 == node.getNW())
-      {
-        drawNW = false;
-      }
-      if(node2 == node.getNE())
-      {
-        drawNE = false;
-      }
-      if(node2 == node.getE())
-      {
-        drawE = false;
-      }
-      if(node2 == node.getSE())
-      {
-        drawSE = false;
-      }
-      if(node2 == node.getSW())
-      {
-        drawSW = false;
+        if(node2 == node.getNeighbour(iii))
+        {
+          draw.at(iii) = false;
+        }
       }
     }
 
@@ -450,6 +428,14 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       nodeBorderFragment.setPosition(getNode(node).getPosition());
       nodeBorderFragment.setTextureRect(440, 0, 88, 102);
       nodeBorderFragment.draw(targetWindow);
+    for(std::size_t iii{ 0 }; iii < 6; ++iii)
+    {
+      if(draw.at(iii))
+      {
+        nodeBorderFragment.setPosition(getNode(node).getPosition());
+        nodeBorderFragment.setTextureRect(88 * iii, 0, 88, 102);
+        nodeBorderFragment.draw(targetWindow);
+      }
     }
   }
 
