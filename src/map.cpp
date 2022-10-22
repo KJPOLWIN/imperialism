@@ -43,8 +43,6 @@ Map::Map()
   riflemen.load("texture/riflemen.png");
 
   construction.load("texture/buildingconstruction.png");
-  
-  //buildingTexture["Farm"].load("texture/buildingfarm.png");
 
   //Loading building templates
   templateBuildings.clear();
@@ -382,8 +380,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     std::array<bool, 6> draw{ true, true, true, true, true, true };
     for(auto& node2 : factions.at(0).getBorders())
     {
-      //std::cout << "started 
-      if(node2 == node.getW())
       for(std::size_t iii{ 0 }; iii < 6; ++iii)
       {
         if(node2 == node.getNeighbour(iii))
@@ -393,41 +389,6 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
       }
     }
 
-    if(drawW)
-    {
-      nodeBorderFragment.setPosition(getNode(node).getPosition());
-      nodeBorderFragment.setTextureRect(0, 0, 88, 102);
-      nodeBorderFragment.draw(targetWindow);
-    }
-    if(drawNW)
-    {
-      nodeBorderFragment.setPosition(getNode(node).getPosition());
-      nodeBorderFragment.setTextureRect(88, 0, 88, 102);
-      nodeBorderFragment.draw(targetWindow);
-    }
-    if(drawNE)
-    {
-      nodeBorderFragment.setPosition(getNode(node).getPosition());
-      nodeBorderFragment.setTextureRect(176, 0, 88, 102);
-      nodeBorderFragment.draw(targetWindow);
-    }
-    if(drawE)
-    {
-      nodeBorderFragment.setPosition(getNode(node).getPosition());
-      nodeBorderFragment.setTextureRect(264, 0, 88, 102);
-      nodeBorderFragment.draw(targetWindow);
-    }
-    if(drawSE)
-    {
-      nodeBorderFragment.setPosition(getNode(node).getPosition());
-      nodeBorderFragment.setTextureRect(352, 0, 88, 102);
-      nodeBorderFragment.draw(targetWindow);
-    }
-    if(drawSW)
-    {
-      nodeBorderFragment.setPosition(getNode(node).getPosition());
-      nodeBorderFragment.setTextureRect(440, 0, 88, 102);
-      nodeBorderFragment.draw(targetWindow);
     for(std::size_t iii{ 0 }; iii < 6; ++iii)
     {
       if(draw.at(iii))
