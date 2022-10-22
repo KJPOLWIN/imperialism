@@ -108,6 +108,7 @@
 
       GraphicalResource construction{  };
       GraphicalResource farm{  };
+      std::map<std::string, GraphicalResource> buildingTexture{  };
   };
 
 #endif

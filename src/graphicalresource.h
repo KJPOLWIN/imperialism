@@ -8,6 +8,7 @@
   {
     public:
       GraphicalResource(std::string filename);
+      GraphicalResource(const GraphicalResource& copy);
       GraphicalResource() = default;
 
       void load(std::string filename);

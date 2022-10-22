@@ -3,6 +3,7 @@
   "buildings": [
     {
       "name": "Farm",
+      "filename": "buildingfarm.png",
       "turnsToBuild": 3,
       "population": 1,
       "upkeep": 1,
@@ -14,6 +15,7 @@
     },
     {
       "name": "Town",
+      "filename": "buildingtown.png",
       "turnsToBuild": 5,
       "population": 2,
       "upkeep": 1,
@@ -25,6 +27,7 @@
     },
     {
       "name": "Lumbermill",
+      "filename": "buildinglumbermill.png",
       "turnsToBuild": 3,
       "population": 0,
       "upkeep": 2,

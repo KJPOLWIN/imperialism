@@ -42,8 +42,9 @@ Map::Map()
 
   riflemen.load("texture/riflemen.png");
 
-  farm.load("texture/buildingfarm.png");
   construction.load("texture/buildingconstruction.png");
+  
+  //buildingTexture["Farm"].load("texture/buildingfarm.png");
 
   //Loading building templates
   templateBuildings.clear();
@@ -62,6 +63,10 @@ Map::Map()
                 buildingData["buildings"][iii]["woodProduction"],
                 buildingData["buildings"][iii]["stoneProduction"],
                 buildingData["buildings"][iii]["weaponsProduction"]);
+
+    std::string filename{ buildingData["buildings"][iii]["filename"] };
+    buildingTexture[buildingData["buildings"][iii]["name"]]
+      .load("texture/" + filename);
   }
 }
       
@@ -454,8 +459,8 @@ void Map::draw(sf::RenderWindow& targetWindow, sf::Vector2f viewOffset, double z
     {
       if(building.completed)
       {
-        farm.setPosition(building.getPosition());
-        farm.draw(targetWindow);
+        buildingTexture[building.getName()].setPosition(building.getPosition());
+        buildingTexture[building.getName()].draw(targetWindow);
       }
       else
       {
@@ -754,6 +759,8 @@ void Map::regenerate(int sizeX, int sizeY,
   //Adding some debug buildings (delete later)
   buildings.clear();
   buildings.emplace_back(10, 10, 0, templateBuildings.at(0));
+  buildings.emplace_back(11, 11, 0, templateBuildings.at(1));
+  buildings.emplace_back(10, 11, 0, templateBuildings.at(2));
   
   //Adding nodes around buildings to faction borders (delete later) (find better way)
   HexVector vec{ buildings.at(0).getHexPosition() };

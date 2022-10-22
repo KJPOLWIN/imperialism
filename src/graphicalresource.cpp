@@ -7,6 +7,13 @@ GraphicalResource::GraphicalResource(std::string filename)
   texture.loadFromFile(filename);
   sprite.setTexture(texture);
 }
+      
+GraphicalResource::GraphicalResource(const GraphicalResource& copy)
+  : texture{ copy.texture },
+    sprite{ copy.sprite }
+{
+  
+}
 
 void GraphicalResource::load(std::string filename)
 {
