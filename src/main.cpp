@@ -49,7 +49,7 @@ int main()
   GameState previousState{ GameState::mainMenu };
 
   //Setting up game states
-  MainMenu menu{ pressStart2P };
+  MainMenu menu{ pressStart2P, state };
   GameSettings gameSettings{ pressStart2P };
   Game game{ pressStart2P };
   Options options{ pressStart2P };

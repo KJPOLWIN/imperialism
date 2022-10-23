@@ -3,12 +3,16 @@
 
   #include <SFML/Graphics.hpp>
   #include <string>
+  #include <functional>
 
   class TextButton
   {
     public:
       TextButton(sf::Font& font, std::string text, 
                  sf::Vector2f position, unsigned int size);
+      TextButton(sf::Font& font, std::string text, 
+                 sf::Vector2f position, unsigned int size, 
+                 std::function<void()> function);
       TextButton();
       
       bool isClicked(sf::Vector2i clickPosition);
@@ -25,8 +29,13 @@
 
       void setFont(sf::Font& font);
 
+      void setFunction(std::function<void()>& func);
+
     private:
       sf::Text text{  };
+      std::function<void()> function{ 
+        [](){}
+      };
 
   };
 
