@@ -7,6 +7,7 @@
   #include "scrollarea.h"
   #include "textinput.h"
   #include "faction.h"
+  #include "guielement.h"
   #include "gamestate.h"
   #include "constant.h"
   #include <SFML/Graphics.hpp>
@@ -42,6 +43,8 @@
       void loadMapFromFile(std::string filename);
       
     private:
+      GUIElement screen{ sf::Vector2f(0, 0), sf::Vector2f(1920, 1080), nullptr };
+
       Map map{ }; 
 
       sf::View mapView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
@@ -73,7 +76,8 @@
       ImageButton unpauseButton{  };
   
       //Node widget
-      sf::RectangleShape nodeWidgetBackground{ sf::Vector2f(400, 200) };
+      GUIElement nodeWidget{ sf::Vector2f(400, 200), &screen };
+
       sf::Text nodeNameLabel{  };
 
       sf::Texture seaTerrainTexture{  };
@@ -90,7 +94,7 @@
       sf::Texture rainforestHillsTerrainTexture{  };
       sf::Texture tundraRiverTerrainTexture{  };
       sf::Texture desertRiverTerrainTexture{  };
-      sf::Texture grasslandRiverTerrainTexture{  };\
+      sf::Texture grasslandRiverTerrainTexture{  };
 
       sf::Sprite seaTerrain{  };
       sf::Sprite tundraTerrain{  };

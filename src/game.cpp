@@ -59,10 +59,9 @@ Game::Game(sf::Font& font)
   GUI::centerTextInField(exitToDesktopButton, pauseMenuBackground);
 
   //Node widget setup
-  nodeWidgetBackground.setPosition(1420, 100); 
-  nodeWidgetBackground.setFillColor(sf::Color::Black);
-  nodeWidgetBackground.setOutlineColor(sf::Color::White);
-  nodeWidgetBackground.setOutlineThickness(10);
+  nodeWidget.positionAtTop(100);
+  nodeWidget.positionAtRight(100);
+  
   seaTerrainTexture.loadFromFile("texture/terrainsea.png");
   tundraTerrainTexture.loadFromFile("texture/terraintundra.png");
   desertTerrainTexture.loadFromFile("texture/terraindesert.png");
@@ -466,7 +465,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   //Node widget
   if(nodeNameLabel.getString() != "")
   {
-    window.draw(nodeWidgetBackground);
+    nodeWidget.draw(window);
     window.draw(nodeNameLabel);
 
     if(nodeNameLabel.getString() == "Sea")
