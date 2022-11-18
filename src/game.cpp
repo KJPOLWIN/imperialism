@@ -20,7 +20,6 @@ Game::Game(sf::Font& font)
     exitToDesktopButton{ font, "Exit to desktop", sf::Vector2f(300, 800), 24 },
     pauseButton{ &pauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
     unpauseButton{ &unpauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
-    nodeNameLabel{ "", font, 24 },
     unitNameLabel{ "", font, 24 },
     unitHealth{ "", font, 16 },
     unitMovePoints{ "", font, 16 },
@@ -61,6 +60,10 @@ Game::Game(sf::Font& font)
   //Node widget setup
   nodeWidget.positionAtTop(100);
   nodeWidget.positionAtRight(100);
+
+  nodeName.setFont(font);
+  nodeName.positionAtTop(25);
+  nodeName.centerHorizontally();
   
   seaTerrainTexture.loadFromFile("texture/terrainsea.png");
   tundraTerrainTexture.loadFromFile("texture/terraintundra.png");
@@ -108,7 +111,7 @@ Game::Game(sf::Font& font)
   desertRiverTerrain.setPosition(1470, 200);
   grasslandRiverTerrain.setPosition(1470, 200);
 
-  nodeNameLabel.setPosition(0, 125);
+  //nodeNameLabel.setPosition(0, 125);
 
   //Building widget setup
   buildingWidgetBackground.setPosition(1420, 340);
@@ -218,8 +221,9 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
                                   - mapView.getSize().y / 2)),
                                   mapView.getSize().x / Constant::windowWidth);
 
-        nodeNameLabel.setString(map.getSelectedNodeName());
-        GUI::centerTextInField(nodeNameLabel, nodeWidgetBackground);
+        //nodeNameLabel.setString(map.getSelectedNodeName());
+        nodeName.setText(map.getSelectedNodeName());
+        nodeName.centerHorizontally();
         
         buildingNameLabel.setString(map.getSelectedBuilding().getName());
         GUI::centerTextInField(buildingNameLabel, buildingWidgetBackground);
@@ -463,70 +467,70 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   window.draw(weaponsCounter);
 
   //Node widget
-  if(nodeNameLabel.getString() != "")
+  if(nodeName.getText() != "")
   {
     nodeWidget.draw(window);
-    window.draw(nodeNameLabel);
+    //nodeName.draw(window);
 
-    if(nodeNameLabel.getString() == "Sea")
+    if(nodeName.getText() == "Sea")
     {
-        window.draw(seaTerrain);
+      window.draw(seaTerrain);
     }
-    else if(nodeNameLabel.getString() == "Tundra")
+    else if(nodeName.getText() == "Tundra")
     {
-        window.draw(tundraTerrain);
+      window.draw(tundraTerrain);
     }
-    else if(nodeNameLabel.getString() == "Desert")
+    else if(nodeName.getText() == "Desert")
     {
-        window.draw(desertTerrain);
+      window.draw(desertTerrain);
     }
-    else if(nodeNameLabel.getString() == "Grassland")
+    else if(nodeName.getText() == "Grassland")
     {
-        window.draw(grasslandTerrain);
+      window.draw(grasslandTerrain);
     }
-    else if(nodeNameLabel.getString() == "Tundra hills")
+    else if(nodeName.getText() == "Tundra hills")
     {
-        window.draw(tundraHillsTerrain);
+      window.draw(tundraHillsTerrain);
     }
-    else if(nodeNameLabel.getString() == "Desert hills")
+    else if(nodeName.getText() == "Desert hills")
     {
-        window.draw(desertHillsTerrain);
+      window.draw(desertHillsTerrain);
     }
-    else if(nodeNameLabel.getString() == "Grassland hills")
+    else if(nodeName.getText() == "Grassland hills")
     {
-        window.draw(grasslandHillsTerrain);
+      window.draw(grasslandHillsTerrain);
     }
-    else if(nodeNameLabel.getString() == "Mountains")
+    else if(nodeName.getText() == "Mountains")
     {
-        window.draw(mountainsTerrain);
+      window.draw(mountainsTerrain);
     }
-    else if(nodeNameLabel.getString() == "Forest")
+    else if(nodeName.getText() == "Forest")
     {
-        window.draw(forestTerrain);
+      window.draw(forestTerrain);
     }
-    else if(nodeNameLabel.getString() == "Rainforest")
+    else if(nodeName.getText() == "Rainforest")
     {
-        window.draw(rainforestTerrain);
+      window.draw(rainforestTerrain);
     }
-    else if(nodeNameLabel.getString() == "Forest hills")
+    else if(nodeName.getText() == "Forest hills")
     {
-        window.draw(forestHillsTerrain);
+      window.draw(forestHillsTerrain);
     }
-    else if(nodeNameLabel.getString() == "Rainforest hills")
+    else if(nodeName.getText() == "Rainforest hills")
     {
-        window.draw(rainforestHillsTerrain);
+      window.draw(rainforestHillsTerrain);
     }
-    else if(nodeNameLabel.getString() == "Tundra river")
+    else if(nodeName.getText() == "Tundra river")
     {
-        window.draw(tundraRiverTerrain);
+      window.draw(tundraRiverTerrain);
     }
-    else if(nodeNameLabel.getString() == "Desert river")
+    else if(nodeName.getText() == "Desert river")
     {
-        window.draw(desertRiverTerrain);
+      window.draw(desertRiverTerrain);
     }
-    else if(nodeNameLabel.getString() == "Grassland river")
+    else if(nodeName.getText() == "Grassland river")
     {
-        window.draw(grasslandRiverTerrain);
+      window.draw(grasslandRiverTerrain);
     }
   }
 

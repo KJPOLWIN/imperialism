@@ -8,6 +8,7 @@
   #include "textinput.h"
   #include "faction.h"
   #include "guielement.h"
+  #include "guitextlabel.h"
   #include "gamestate.h"
   #include "constant.h"
   #include <SFML/Graphics.hpp>
@@ -77,8 +78,9 @@
   
       //Node widget
       GUIElement nodeWidget{ sf::Vector2f(400, 200), &screen };
+      GUITextLabel nodeName{ 24, &nodeWidget };
 
-      sf::Text nodeNameLabel{  };
+      //sf::Text nodeNameLabel{  };
 
       sf::Texture seaTerrainTexture{  };
       sf::Texture tundraTerrainTexture{  };

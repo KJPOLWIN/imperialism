@@ -8,6 +8,11 @@ GUIElement::GUIElement(sf::Vector2f position, sf::Vector2f size, GUIElement* mas
 {
   field.setPosition(position);
 
+  if(masterElement != nullptr)
+  {
+    masterElement->bindElement(this);
+  }
+
   //style
   field.setFillColor(sf::Color::Black);
   field.setOutlineColor(sf::Color::White);
@@ -19,11 +24,21 @@ GUIElement::GUIElement(sf::Vector2f size, GUIElement* masterElement)
     masterElement{ masterElement }
 {
   field.setPosition(0, 0);
+  
+  if(masterElement != nullptr)
+  {
+    masterElement->bindElement(this);
+  }
 
   //style
   field.setFillColor(sf::Color::Black);
   field.setOutlineColor(sf::Color::White);
   field.setOutlineThickness(10);
+}
+      
+void GUIElement::bindElement(GUIElement* slave)
+{
+  slaveElements.push_back(slave);
 }
 
 sf::Vector2f GUIElement::getPosition()
@@ -45,18 +60,20 @@ void GUIElement::setPosition(sf::Vector2f position)
 
 void GUIElement::centerHorizontally()
 {
-  field.setPosition(masterElement->field.getPosition().x
-                    + masterElement->field.getSize().x
-                    - field.getSize().x / 2, 
-                    field.getPosition().y);
+  setPosition(sf::Vector2f(
+                masterElement->field.getPosition().x
+                + masterElement->field.getSize().x / 2
+                - GUIElement::field.getSize().x / 2, 
+                GUIElement::field.getPosition().y));
 }
 
 void GUIElement::centerVertically()
 {
-  field.setPosition(field.getPosition().x,
-                    masterElement->field.getPosition().y
-                    + masterElement->field.getSize().y
-                    - field.getSize().y / 2);
+  setPosition(sf::Vector2f(
+                GUIElement::field.getPosition().x,
+                masterElement->field.getPosition().y
+                + masterElement->field.getSize().y / 2
+                - GUIElement::field.getSize().y / 2));
 }
 
 void GUIElement::centerInMaster()
@@ -67,30 +84,30 @@ void GUIElement::centerInMaster()
 
 void GUIElement::positionAtTop(int pixels)
 {
-  field.setPosition(field.getPosition().x,
-                    masterElement->field.getPosition().y + pixels);
+  setPosition(sf::Vector2f(field.getPosition().x,
+                    masterElement->field.getPosition().y + pixels));
 }
 
 void GUIElement::positionAtRight(int pixels)
 {
-  field.setPosition(masterElement->field.getPosition().x
+  setPosition(sf::Vector2f(masterElement->field.getPosition().x
                     + masterElement->field.getSize().x 
                     - pixels - this->field.getSize().x, 
-                    field.getPosition().y);
+                    field.getPosition().y));
 }
 
 void GUIElement::positionAtBottom(int pixels)
 {
-  field.setPosition(field.getPosition().x,
+  setPosition(sf::Vector2f(field.getPosition().x,
                     masterElement->field.getPosition().y
                     + masterElement->field.getSize().y 
-                    - pixels - this->field.getSize().y);
+                    - pixels - this->field.getSize().y));
 }
 
 void GUIElement::positionAtLeft(int pixels)
 {
-  field.setPosition(masterElement->field.getPosition().x + pixels, 
-                    field.getPosition().y);
+  setPosition(sf::Vector2f(masterElement->field.getPosition().x + pixels, 
+                    field.getPosition().y));
 }
       
 bool GUIElement::isClicked(sf::Vector2i clickPosition)

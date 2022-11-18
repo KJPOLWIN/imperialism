@@ -11,6 +11,8 @@
       GUIElement(sf::Vector2f size, GUIElement* masterElement);
       GUIElement() = default;
 
+      void bindElement(GUIElement* slave);
+
       sf::Vector2f getPosition();
       void setPosition(sf::Vector2f position);
 
@@ -25,7 +27,7 @@
       bool isClicked(sf::Vector2i clickPosition);
 
       void update();
-      void draw(sf::RenderWindow& window);
+      virtual void draw(sf::RenderWindow& window);
       
       enum class Flag
       {
@@ -34,7 +36,7 @@
         scrollable  = 4
       };
 
-    private:
+    protected:
       sf::RectangleShape field{  };
       GUIElement* masterElement{ nullptr };
       std::vector<GUIElement*> slaveElements{  };
