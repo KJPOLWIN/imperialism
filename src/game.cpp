@@ -63,55 +63,24 @@ Game::Game(sf::Font& font)
 
   nodeName.setFont(font);
   nodeName.positionAtTop(25);
-  nodeName.centerHorizontally();
-  
-  seaTerrainTexture.loadFromFile("texture/terrainsea.png");
-  tundraTerrainTexture.loadFromFile("texture/terraintundra.png");
-  desertTerrainTexture.loadFromFile("texture/terraindesert.png");
-  grasslandTerrainTexture.loadFromFile("texture/terraingrass.png");
-  tundraHillsTerrainTexture.loadFromFile("texture/terraintundrahills.png");
-  desertHillsTerrainTexture.loadFromFile("texture/terraindeserthills.png");
-  grasslandHillsTerrainTexture.loadFromFile("texture/terraingrasshills.png");
-  mountainsTerrainTexture.loadFromFile("texture/terrainmountains.png");
-  forestTerrainTexture.loadFromFile("texture/terrainforest.png");
-  rainforestTerrainTexture.loadFromFile("texture/terrainrainforest.png");
-  forestHillsTerrainTexture.loadFromFile("texture/terrainforesthills.png");
-  rainforestHillsTerrainTexture.loadFromFile("texture/terrainrainforesthills.png");
-  tundraRiverTerrainTexture.loadFromFile("texture/terraintundrariver.png");
-  desertRiverTerrainTexture.loadFromFile("texture/terraindesertriver.png");
-  grasslandRiverTerrainTexture.loadFromFile("texture/terraingrassriver.png");
-  seaTerrain.setTexture(seaTerrainTexture);
-  tundraTerrain.setTexture(tundraTerrainTexture);
-  desertTerrain.setTexture(desertTerrainTexture);
-  grasslandTerrain.setTexture(grasslandTerrainTexture);
-  tundraHillsTerrain.setTexture(tundraHillsTerrainTexture);
-  desertHillsTerrain.setTexture(desertHillsTerrainTexture);
-  grasslandHillsTerrain.setTexture(grasslandHillsTerrainTexture);
-  mountainsTerrain.setTexture(mountainsTerrainTexture);
-  forestTerrain.setTexture(forestTerrainTexture);
-  rainforestTerrain.setTexture(rainforestTerrainTexture);
-  forestHillsTerrain.setTexture(forestHillsTerrainTexture);
-  rainforestHillsTerrain.setTexture(rainforestHillsTerrainTexture);
-  tundraRiverTerrain.setTexture(tundraRiverTerrainTexture);
-  desertRiverTerrain.setTexture(desertRiverTerrainTexture);
-  grasslandRiverTerrain.setTexture(grasslandRiverTerrainTexture);
-  seaTerrain.setPosition(1470, 200);
-  tundraTerrain.setPosition(1470, 200);
-  desertTerrain.setPosition(1470, 200);
-  grasslandTerrain.setPosition(1470, 200);
-  tundraHillsTerrain.setPosition(1470, 200);
-  desertHillsTerrain.setPosition(1470, 200);
-  grasslandHillsTerrain.setPosition(1470, 200);
-  mountainsTerrain.setPosition(1470, 200);
-  forestTerrain.setPosition(1470, 200);
-  rainforestTerrain.setPosition(1470, 200);
-  forestHillsTerrain.setPosition(1470, 200);
-  rainforestHillsTerrain.setPosition(1470, 200);
-  tundraRiverTerrain.setPosition(1470, 200);
-  desertRiverTerrain.setPosition(1470, 200);
-  grasslandRiverTerrain.setPosition(1470, 200);
 
-  //nodeNameLabel.setPosition(0, 125);
+  nodeImage.positionAtTop(100);
+  
+  seaTerrain.load("texture/terrainsea.png");
+  tundraTerrain.load("texture/terraintundra.png");
+  desertTerrain.load("texture/terraindesert.png");
+  grasslandTerrain.load("texture/terraingrass.png");
+  tundraHillsTerrain.load("texture/terraintundrahills.png");
+  desertHillsTerrain.load("texture/terraindeserthills.png");
+  grasslandHillsTerrain.load("texture/terraingrasshills.png");
+  mountainsTerrain.load("texture/terrainmountains.png");
+  forestTerrain.load("texture/terrainforest.png");
+  rainforestTerrain.load("texture/terrainrainforest.png");
+  forestHillsTerrain.load("texture/terrainforesthills.png");
+  rainforestHillsTerrain.load("texture/terrainrainforesthills.png");
+  tundraRiverTerrain.load("texture/terraintundrariver.png");
+  desertRiverTerrain.load("texture/terraindesertriver.png");
+  grasslandRiverTerrain.load("texture/terraingrassriver.png");
 
   //Building widget setup
   buildingWidgetBackground.setPosition(1420, 340);
@@ -469,69 +438,70 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   //Node widget
   if(nodeName.getText() != "")
   {
-    nodeWidget.draw(window);
-    //nodeName.draw(window);
-
     if(nodeName.getText() == "Sea")
     {
-      window.draw(seaTerrain);
+      nodeImage.setImage(&seaTerrain);
     }
     else if(nodeName.getText() == "Tundra")
     {
-      window.draw(tundraTerrain);
+      nodeImage.setImage(&tundraTerrain);
     }
     else if(nodeName.getText() == "Desert")
     {
-      window.draw(desertTerrain);
+      nodeImage.setImage(&desertTerrain);
     }
     else if(nodeName.getText() == "Grassland")
     {
-      window.draw(grasslandTerrain);
+      nodeImage.setImage(&grasslandTerrain);
     }
     else if(nodeName.getText() == "Tundra hills")
     {
-      window.draw(tundraHillsTerrain);
+      nodeImage.setImage(&tundraHillsTerrain);
     }
     else if(nodeName.getText() == "Desert hills")
     {
-      window.draw(desertHillsTerrain);
+      nodeImage.setImage(&desertHillsTerrain);
     }
     else if(nodeName.getText() == "Grassland hills")
     {
-      window.draw(grasslandHillsTerrain);
+      nodeImage.setImage(&grasslandHillsTerrain);
     }
     else if(nodeName.getText() == "Mountains")
     {
-      window.draw(mountainsTerrain);
+      nodeImage.setImage(&mountainsTerrain);
     }
     else if(nodeName.getText() == "Forest")
     {
-      window.draw(forestTerrain);
+      nodeImage.setImage(&forestTerrain);
     }
     else if(nodeName.getText() == "Rainforest")
     {
-      window.draw(rainforestTerrain);
+      nodeImage.setImage(&rainforestTerrain);
     }
     else if(nodeName.getText() == "Forest hills")
     {
-      window.draw(forestHillsTerrain);
+      nodeImage.setImage(&forestHillsTerrain);
     }
     else if(nodeName.getText() == "Rainforest hills")
     {
-      window.draw(rainforestHillsTerrain);
+      nodeImage.setImage(&rainforestHillsTerrain);
     }
     else if(nodeName.getText() == "Tundra river")
     {
-      window.draw(tundraRiverTerrain);
+      nodeImage.setImage(&tundraRiverTerrain);
     }
     else if(nodeName.getText() == "Desert river")
     {
-      window.draw(desertRiverTerrain);
+      nodeImage.setImage(&desertRiverTerrain);
     }
     else if(nodeName.getText() == "Grassland river")
     {
-      window.draw(grasslandRiverTerrain);
+      nodeImage.setImage(&grasslandRiverTerrain);
     }
+
+    nodeImage.centerHorizontally();
+    
+    nodeWidget.draw(window);
   }
 
   //Building widget

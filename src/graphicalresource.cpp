@@ -30,6 +30,11 @@ void GraphicalResource::setTextureRect(int top, int left, int width, int height)
 {
   sprite.setTextureRect(sf::Rect(top, left, width, height));
 }
+      
+sf::Vector2f GraphicalResource::getSpriteSize()
+{
+  return sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height);
+}
 
 void GraphicalResource::draw(sf::RenderWindow& window)
 {

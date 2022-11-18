@@ -9,6 +9,8 @@
   #include "faction.h"
   #include "guielement.h"
   #include "guitextlabel.h"
+  #include "guiimage.h"
+  #include "graphicalresource.h"
   #include "gamestate.h"
   #include "constant.h"
   #include <SFML/Graphics.hpp>
@@ -79,40 +81,23 @@
       //Node widget
       GUIElement nodeWidget{ sf::Vector2f(400, 200), &screen };
       GUITextLabel nodeName{ 24, &nodeWidget };
+      GUIImage nodeImage{ &nodeWidget };
 
-      //sf::Text nodeNameLabel{  };
-
-      sf::Texture seaTerrainTexture{  };
-      sf::Texture tundraTerrainTexture{  };
-      sf::Texture desertTerrainTexture{  };
-      sf::Texture grasslandTerrainTexture{  };
-      sf::Texture tundraHillsTerrainTexture{  };
-      sf::Texture desertHillsTerrainTexture{  };
-      sf::Texture grasslandHillsTerrainTexture{  };
-      sf::Texture mountainsTerrainTexture{  };
-      sf::Texture forestTerrainTexture{  };
-      sf::Texture rainforestTerrainTexture{  };
-      sf::Texture forestHillsTerrainTexture{  };
-      sf::Texture rainforestHillsTerrainTexture{  };
-      sf::Texture tundraRiverTerrainTexture{  };
-      sf::Texture desertRiverTerrainTexture{  };
-      sf::Texture grasslandRiverTerrainTexture{  };
-
-      sf::Sprite seaTerrain{  };
-      sf::Sprite tundraTerrain{  };
-      sf::Sprite desertTerrain{  };
-      sf::Sprite grasslandTerrain{  };
-      sf::Sprite tundraHillsTerrain{  };
-      sf::Sprite desertHillsTerrain{  };
-      sf::Sprite grasslandHillsTerrain{  };
-      sf::Sprite mountainsTerrain{  };
-      sf::Sprite forestTerrain{  };
-      sf::Sprite rainforestTerrain{  };
-      sf::Sprite forestHillsTerrain{  };
-      sf::Sprite rainforestHillsTerrain{  };
-      sf::Sprite tundraRiverTerrain{  };
-      sf::Sprite desertRiverTerrain{  };
-      sf::Sprite grasslandRiverTerrain{  };
+      GraphicalResource seaTerrain{  };
+      GraphicalResource tundraTerrain{  };
+      GraphicalResource desertTerrain{  };
+      GraphicalResource grasslandTerrain{  };
+      GraphicalResource tundraHillsTerrain{  };
+      GraphicalResource desertHillsTerrain{  };
+      GraphicalResource grasslandHillsTerrain{  };
+      GraphicalResource mountainsTerrain{  };
+      GraphicalResource forestTerrain{  };
+      GraphicalResource rainforestTerrain{  };
+      GraphicalResource forestHillsTerrain{  };
+      GraphicalResource rainforestHillsTerrain{  };
+      GraphicalResource tundraRiverTerrain{  };
+      GraphicalResource desertRiverTerrain{  };
+      GraphicalResource grasslandRiverTerrain{  };
 
       //Building widget
       sf::RectangleShape buildingWidgetBackground{ sf::Vector2f(400, 150) };

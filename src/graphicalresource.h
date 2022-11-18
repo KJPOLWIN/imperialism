@@ -14,6 +14,7 @@
       void load(std::string filename);
       void setPosition(sf::Vector2f position);
       void setTextureRect(int top, int left, int width, int height);
+      sf::Vector2f getSpriteSize();
       void draw(sf::RenderWindow& window);
 
     private:
