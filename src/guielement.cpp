@@ -110,6 +110,36 @@ void GUIElement::positionAtLeft(int pixels)
                     field.getPosition().y));
 }
       
+void GUIElement::positionUpTo(GUIElement* element, int pixels)
+{
+  setPosition(sf::Vector2f(field.getPosition().x,
+                    element->field.getPosition().y
+                    - pixels - this->field.getSize().y));
+}
+
+void GUIElement::positionRightTo(GUIElement* element, int pixels)
+{
+  setPosition(sf::Vector2f(element->field.getPosition().x
+                    + element->field.getSize().x 
+                    + pixels, 
+                    field.getPosition().y));
+}
+
+void GUIElement::positionDownTo(GUIElement* element, int pixels)
+{
+  setPosition(sf::Vector2f(field.getPosition().x,
+                    element->field.getPosition().y
+                    + element->field.getSize().y 
+                    + pixels));
+}
+
+void GUIElement::positionLeftTo(GUIElement* element, int pixels)
+{
+  setPosition(sf::Vector2f(element->field.getPosition().x
+                    - pixels - this->field.getSize().x, 
+                    field.getPosition().y));
+}
+      
 bool GUIElement::isClicked(sf::Vector2i clickPosition)
 {
 
@@ -126,7 +156,31 @@ void GUIElement::draw(sf::RenderWindow& window)
   
   for(auto& slave : slaveElements)
   {
-    slave->draw(window);
+    if(slave != nullptr)
+    {
+      slave->draw(window);
+    }
   }
 }
 
+bool GUIElement::testFlag(int flag)
+{
+  if(flags >> flag == 0)
+  {
+    std::cout << "flag set\n";
+  }
+  else
+  {
+    std::cout << "flag not set\n";
+  }
+    
+  return (flags >> flag == 0);
+}
+
+void GUIElement::setFlag(int flag)
+{
+  if(!testFlag(flag))
+  {
+    flags += flag;
+  }
+}

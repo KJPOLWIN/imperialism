@@ -18,32 +18,29 @@ Game::Game(sf::Font& font)
     optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
     saveGameButton{ font, "Save game", sf::Vector2f(300, 475), 24 },
     exitToDesktopButton{ font, "Exit to desktop", sf::Vector2f(300, 800), 24 },
-    pauseButton{ &pauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
-    unpauseButton{ &unpauseButtonSprite, sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
-    unitNameLabel{ "", font, 24 },
-    unitHealth{ "", font, 16 },
-    unitMovePoints{ "", font, 16 },
+    pauseButton{ pauseButtonSprite.getSpritePointer(), sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
+    unpauseButton{ unpauseButtonSprite.getSpritePointer(), sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
     nextTurnButton{ font, "Next turn", sf::Vector2f(1550, 950), 32 },
     backButton{ font, "back", sf::Vector2f(690, 790), 24 },
     saveButton{ font, "save", sf::Vector2f(1140, 790), 24 },
     saveSelect{ sf::Vector2f(690, 340), sf::Vector2f(550, 350), 50.0 },
-    filenameInput{ font, "Enter save name", 24, sf::Vector2f(690, 270), InputType::text },
-    turnCounter{"Turn 1", font, 24 },
+    filenameInput{ font, "Enter save name", 24, sf::Vector2f(690, 270), InputType::text }
+    /*turnCounter{"Turn 1", font, 24 },
     moneyCounter{"", font, 24 },
     foodCounter{"", font, 24 },
     woodCounter{"", font, 24 },
     stoneCounter{"", font, 24 },
-    weaponsCounter{"", font, 24 },
-    buildingNameLabel{ "", font, 24 },
-    underConstructionLabel{ "(under construction)", font, 16 }
+    weaponsCounter{"", font, 24 }*/
 {
   //Pause menu setup
   shadeTexture.loadFromFile("texture/shade.png");
   shade.setTexture(shadeTexture);
-  pauseButtonTexture.loadFromFile("texture/pause.png");
+  /*pauseButtonTexture.loadFromFile("texture/pause.png");
   pauseButtonSprite.setTexture(pauseButtonTexture);
   unpauseButtonTexture.loadFromFile("texture/unpause.png");
-  unpauseButtonSprite.setTexture(unpauseButtonTexture);
+  unpauseButtonSprite.setTexture(unpauseButtonTexture);*/
+  pauseButtonSprite.load("texture/pause.png");
+  unpauseButtonSprite.load("texture/unpause.png");
 
   pauseMenuBackground.setPosition(710, 250); 
   pauseMenuBackground.setFillColor(sf::Color::Black);
@@ -64,7 +61,7 @@ Game::Game(sf::Font& font)
   nodeName.setFont(font);
   nodeName.positionAtTop(25);
 
-  nodeImage.positionAtTop(100);
+  nodeImage.positionDownTo(&nodeName, 50);
   
   seaTerrain.load("texture/terrainsea.png");
   tundraTerrain.load("texture/terraintundra.png");
@@ -83,31 +80,37 @@ Game::Game(sf::Font& font)
   grasslandRiverTerrain.load("texture/terraingrassriver.png");
 
   //Building widget setup
-  buildingWidgetBackground.setPosition(1420, 340);
-  buildingWidgetBackground.setFillColor(sf::Color::Black);
-  buildingWidgetBackground.setOutlineColor(sf::Color::White);
-  buildingWidgetBackground.setOutlineThickness(10);
-  
-  buildingNameLabel.setPosition(0, 365);
-  underConstructionLabel.setPosition(0, 405);
-  GUI::centerTextInField(underConstructionLabel, buildingWidgetBackground);
+  buildingWidget.positionAtRight(100);
+  buildingWidget.positionDownTo(&nodeWidget, 100);
+
+  buildingName.setFont(font);
+  buildingName.positionAtTop(25);
+
+  underConstructionLabel.setFont(font);
+  underConstructionLabel.positionDownTo(&buildingName, 25);
 
   //Unit widget setup
-  unitWidgetBackground.setPosition(100, 780);
-  unitWidgetBackground.setFillColor(sf::Color::Black);
-  unitWidgetBackground.setOutlineColor(sf::Color::White);
-  unitWidgetBackground.setOutlineThickness(10);
+  unitWidget.positionAtBottom(100);
+  unitWidget.positionAtLeft(100);
 
-  unitNameLabel.setPosition(325, 805);
-  unitHealth.setPosition(350, 855);
-  unitHealth.setFillColor(sf::Color::Green);
-  unitMovePoints.setPosition(350, 885);
-  unitMovePoints.setFillColor(sf::Color(44, 234, 221));
+  riflemenLarge.load("texture/riflemen_large.png");
+  unitImage.setImage(&riflemenLarge);
+  
+  unitImage.positionAtTop(25);
+  unitImage.positionAtLeft(25);
 
-  riflemenLargeTexture.loadFromFile("texture/riflemen_large.png");
-  riflemenLarge.setTexture(riflemenLargeTexture);
-  riflemenLarge.setPosition(125, 805);
+  unitName.setFont(font);
+  unitName.positionAtTop(25);
+  unitName.positionRightTo(&unitImage, 25);
 
+  unitHealth.setFont(font);
+  unitHealth.positionDownTo(&unitName, 50);
+  unitHealth.positionRightTo(&unitImage, 25);
+
+  unitMovePoints.setFont(font);
+  unitMovePoints.positionDownTo(&unitHealth, 50);
+  unitMovePoints.positionRightTo(&unitImage, 25);
+  
   //Save menu setup
   saveMenuBackground.setPosition(660, 240);
   saveMenuBackground.setFillColor(sf::Color::Black);
@@ -115,7 +118,65 @@ Game::Game(sf::Font& font)
   saveMenuBackground.setOutlineThickness(10);
 
   //Yields widget setup
-  yieldWidgetBackground.setPosition(0, 0);
+  yieldWidget.setPosition(sf::Vector2f(0, 0));
+
+  moneyIconSprite.load("texture/iconmoney.png");
+  foodIconSprite.load("texture/iconfood.png");
+  woodIconSprite.load("texture/iconwood.png");
+  stoneIconSprite.load("texture/iconstone.png");
+  weaponsIconSprite.load("texture/iconweapons.png");
+
+  turnCounter.setFont(font);
+  turnCounter.setText("Turn 1");
+  turnCounter.positionAtTop(14);
+  turnCounter.positionAtLeft(70);
+ 
+  moneyCounter.setFont(font);
+  moneyCounter.setText(std::to_string(map.getFactions().at(0).getMoney()));
+  moneyCounter.positionRightTo(&turnCounter, 70);
+  moneyCounter.positionAtTop(14);
+
+  moneyIcon.setImage(&moneyIconSprite);
+  moneyIcon.positionRightTo(&moneyCounter, 10);
+  moneyIcon.positionAtTop(10);
+
+  foodCounter.setFont(font);
+  foodCounter.setText(std::to_string(map.getFactions().at(0).getFood()));
+  foodCounter.positionRightTo(&moneyIcon, 50);
+  foodCounter.positionAtTop(14);
+
+  foodIcon.setImage(&foodIconSprite);
+  foodIcon.positionRightTo(&foodCounter, 10);
+  foodIcon.positionAtTop(10);
+
+  woodCounter.setFont(font);
+  woodCounter.setText(std::to_string(map.getFactions().at(0).getWood()));
+  woodCounter.positionRightTo(&foodIcon, 50);
+  woodCounter.positionAtTop(14);
+
+  woodIcon.setImage(&woodIconSprite);
+  woodIcon.positionRightTo(&woodCounter, 10);
+  woodIcon.positionAtTop(10);
+
+  stoneCounter.setFont(font);
+  stoneCounter.setText(std::to_string(map.getFactions().at(0).getStone()));
+  stoneCounter.positionRightTo(&woodIcon, 50);
+  stoneCounter.positionAtTop(14);
+
+  stoneIcon.setImage(&stoneIconSprite);
+  stoneIcon.positionRightTo(&stoneCounter, 10);
+  stoneIcon.positionAtTop(10);
+
+  weaponsCounter.setFont(font);
+  weaponsCounter.setText(std::to_string(map.getFactions().at(0).getWeapons()));
+  weaponsCounter.positionRightTo(&stoneIcon, 50);
+  weaponsCounter.positionAtTop(14);
+
+  weaponsIcon.setImage(&weaponsIconSprite);
+  weaponsIcon.positionRightTo(&weaponsCounter, 10);
+  weaponsIcon.positionAtTop(10);
+
+  /*yieldWidgetBackground.setPosition(0, 0);
   yieldWidgetBackground.setFillColor(sf::Color::Black);
   yieldWidgetBackground.setOutlineColor(sf::Color::White);
   yieldWidgetBackground.setOutlineThickness(10); 
@@ -144,8 +205,7 @@ Game::Game(sf::Font& font)
   stoneIcon.setPosition(sf::Vector2f(670, 10));
   stoneCounter.setPosition(sf::Vector2f(710, 14));
   weaponsIcon.setPosition(sf::Vector2f(810, 10));
-  weaponsCounter.setPosition(sf::Vector2f(850, 14));
-
+  weaponsCounter.setPosition(sf::Vector2f(850, 14));*/
 }
 
 void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition, sf::Font& font)
@@ -156,12 +216,18 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
       if(nextTurnButton.isClicked(clickPosition))
       {
         map.nextTurn();
-        turnCounter.setString("Turn " + std::to_string(map.getTurn() + 1));
+        /*turnCounter.setString("Turn " + std::to_string(map.getTurn() + 1));
         moneyCounter.setString(std::to_string(map.getFactions().at(0).getMoney()));
         foodCounter.setString(std::to_string(map.getFactions().at(0).getFood()));
         woodCounter.setString(std::to_string(map.getFactions().at(0).getWood()));
         stoneCounter.setString(std::to_string(map.getFactions().at(0).getStone()));
-        weaponsCounter.setString(std::to_string(map.getFactions().at(0).getWeapons()));
+        weaponsCounter.setString(std::to_string(map.getFactions().at(0).getWeapons()));*/
+        turnCounter.setText("Turn " + std::to_string(map.getTurn() + 1));
+        moneyCounter.setText(std::to_string(map.getFactions().at(0).getMoney()));
+        foodCounter.setText(std::to_string(map.getFactions().at(0).getFood()));
+        woodCounter.setText(std::to_string(map.getFactions().at(0).getWood()));
+        stoneCounter.setText(std::to_string(map.getFactions().at(0).getStone()));
+        weaponsCounter.setText(std::to_string(map.getFactions().at(0).getWeapons()));
       }
       else if(pauseButton.isClicked(clickPosition))
       {
@@ -190,32 +256,40 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
                                   - mapView.getSize().y / 2)),
                                   mapView.getSize().x / Constant::windowWidth);
 
-        //nodeNameLabel.setString(map.getSelectedNodeName());
         nodeName.setText(map.getSelectedNodeName());
         nodeName.centerHorizontally();
         
-        buildingNameLabel.setString(map.getSelectedBuilding().getName());
-        GUI::centerTextInField(buildingNameLabel, buildingWidgetBackground);
-        
-        unitNameLabel.setString(map.getSelectedUnit().getName());
-
+        buildingName.setText(map.getSelectedBuilding().getName());
+        buildingName.centerHorizontally();
 
         if(map.getSelectedBuilding().getFaction() == 0)
         {
-          buildingNameLabel.setFillColor(sf::Color::Blue);
+          buildingName.setTextColor(sf::Color::Blue);
         }
         else
         {
-          buildingNameLabel.setFillColor(sf::Color::Red);
+          buildingName.setTextColor(sf::Color::Red);
         }
+        
+        if(!map.getSelectedBuilding().completed)
+        {
+          underConstructionLabel.setText("(under construction)");
+          underConstructionLabel.centerHorizontally();
+        }
+        else
+        {
+          underConstructionLabel.setText("");
+        }
+        
+        unitName.setText(map.getSelectedUnit().getName());
 
         if(map.getSelectedUnit().getFaction() == 0)
         {
-          unitNameLabel.setFillColor(sf::Color::Blue);
+          unitName.setTextColor(sf::Color::Blue);
         }
         else
         {
-          unitNameLabel.setFillColor(sf::Color::Red);
+          unitName.setTextColor(sf::Color::Red);
         }
       }
     break;
@@ -400,11 +474,15 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
     case DisplayMode::pauseMenu:
     case DisplayMode::saveMenu:
       
-      unitHealth.setString("Health: "
+      unitHealth.setText("Health: "
                        + std::to_string(map.getSelectedUnit().getHealth()) 
                        + "/" 
                        + std::to_string(map.getSelectedUnit().getMaxHealth()));
-      unitMovePoints.setString("Move points: "
+      /*unitMovePoints.setString("Move points: "
+                       + std::to_string(map.getSelectedUnit().getMovePoints()) 
+                       + "/" 
+                       + std::to_string(map.getSelectedUnit().getMaxMovePoints()));*/
+      unitMovePoints.setText("Move points: "
                        + std::to_string(map.getSelectedUnit().getMovePoints()) 
                        + "/" 
                        + std::to_string(map.getSelectedUnit().getMaxMovePoints()));
@@ -422,7 +500,8 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   //GUI
   window.setView(guiView);
   //Yields widget
-  window.draw(yieldWidgetBackground);
+  yieldWidget.draw(window);
+  /*window.draw(yieldWidgetBackground);
   window.draw(turnCounter);
   window.draw(moneyIcon);
   window.draw(moneyCounter);
@@ -433,7 +512,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   window.draw(stoneIcon);
   window.draw(stoneCounter);
   window.draw(weaponsIcon);
-  window.draw(weaponsCounter);
+  window.draw(weaponsCounter);*/
 
   //Node widget
   if(nodeName.getText() != "")
@@ -505,29 +584,15 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   }
 
   //Building widget
-  if(buildingNameLabel.getString() != "")
+  if(buildingName.getText() != "")
   {
-    window.draw(buildingWidgetBackground);
-    window.draw(buildingNameLabel);
-
-    if(!map.getSelectedBuilding().completed)
-    {
-      window.draw(underConstructionLabel);
-    }
+    buildingWidget.draw(window);
   }
   
   //Unit widget
-  if(unitNameLabel.getString() != "")
+  if(unitName.getText() != "")
   {
-    window.draw(unitWidgetBackground);
-    window.draw(unitNameLabel);
-    window.draw(unitHealth);
-    window.draw(unitMovePoints);
-
-    if(unitNameLabel.getString() == "Riflemen")
-    {
-      window.draw(riflemenLarge);
-    }
+    unitWidget.draw(window);
   }
 
   nextTurnButton.draw(window);

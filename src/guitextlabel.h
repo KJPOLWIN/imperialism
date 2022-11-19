@@ -9,8 +9,15 @@
   class GUITextLabel : public GUIElement
   {
     public:
-      GUITextLabel(sf::Vector2f position, sf::Font& font, std::string text, unsigned int size, GUIElement* masterElement);
-      GUITextLabel(sf::Font& font, std::string text, unsigned int size, GUIElement* masterElement);
+      GUITextLabel(sf::Vector2f position, sf::Font& font, std::string text, 
+                   unsigned int size, GUIElement* masterElement, int flags);
+      GUITextLabel(sf::Vector2f position, sf::Font& font, std::string text, 
+                   unsigned int size, GUIElement* masterElement);
+      GUITextLabel(sf::Font& font, std::string text, unsigned int size, 
+                   GUIElement* masterElement, int flags);
+      GUITextLabel(sf::Font& font, std::string text, unsigned int size, 
+                   GUIElement* masterElement);
+      GUITextLabel(unsigned int size, GUIElement* masterElement, int flags);
       GUITextLabel(unsigned int size, GUIElement* masterElement);
       GUITextLabel() = default;
 
@@ -23,10 +30,15 @@
       void positionAtRight(int pixels);
       void positionAtBottom(int pixels);
       void positionAtLeft(int pixels);
+      void positionUpTo(GUIElement* element, int pixels);
+      void positionRightTo(GUIElement* element, int pixels);
+      void positionDownTo(GUIElement* element, int pixels);
+      void positionLeftTo(GUIElement* element, int pixels);
 
       void setFont(sf::Font& font);
       std::string getText();
       void setText(std::string text);
+      void setTextColor(sf::Color color);
 
       virtual void draw(sf::RenderWindow& window);
 

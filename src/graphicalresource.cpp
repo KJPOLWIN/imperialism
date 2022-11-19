@@ -20,6 +20,11 @@ void GraphicalResource::load(std::string filename)
   texture.loadFromFile(filename);
   sprite.setTexture(texture);
 }
+      
+sf::Sprite* GraphicalResource::getSpritePointer()
+{
+  return &sprite;
+}
 
 void GraphicalResource::setPosition(sf::Vector2f position)
 {

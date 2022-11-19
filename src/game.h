@@ -67,16 +67,6 @@
       TextButton optionsButton{  };
       TextButton saveGameButton{  };
       TextButton exitToDesktopButton{  };
-
-      //Pause button
-      sf::Texture pauseButtonTexture{  };
-      sf::Sprite pauseButtonSprite{  };
-      ImageButton pauseButton{  };
-
-      //Unpause button
-      sf::Texture unpauseButtonTexture{  };
-      sf::Sprite unpauseButtonSprite{  };
-      ImageButton unpauseButton{  };
   
       //Node widget
       GUIElement nodeWidget{ sf::Vector2f(400, 200), &screen };
@@ -100,18 +90,17 @@
       GraphicalResource grasslandRiverTerrain{  };
 
       //Building widget
-      sf::RectangleShape buildingWidgetBackground{ sf::Vector2f(400, 150) };
-      sf::Text buildingNameLabel{  };
-      sf::Text underConstructionLabel{  };
+      GUIElement buildingWidget{ sf::Vector2f(400, 150), &screen };
+      GUITextLabel buildingName{ 24, &buildingWidget };
+      GUITextLabel underConstructionLabel{ 16, &buildingWidget };
 
       //Unit widget
-      sf::RectangleShape unitWidgetBackground{ sf::Vector2f(800, 200) };
-      sf::Text unitNameLabel{  };
-      sf::Text unitHealth{  };
-      sf::Text unitMovePoints{  };
-
-      sf::Texture riflemenLargeTexture{  };
-      sf::Sprite riflemenLarge{  };
+      GUIElement unitWidget{ sf::Vector2f(800, 200), &screen };
+      GUITextLabel unitName{ 24, &unitWidget };
+      GUITextLabel unitHealth{ 16, &unitWidget };
+      GUITextLabel unitMovePoints{ 16, &unitWidget };
+      GUIImage unitImage{ &unitWidget };
+      GraphicalResource riflemenLarge{  };
 
       //Next turn button
       TextButton nextTurnButton{  };
@@ -125,7 +114,26 @@
       bool textInputUnclicked{ true };
 
       //Yields widget
-      sf::RectangleShape yieldWidgetBackground{ sf::Vector2f(1000, 50) };
+      GUIElement yieldWidget{ sf::Vector2f(1100, 50), &screen };
+      GUITextLabel turnCounter{ 24, &yieldWidget };
+      GUIImage moneyIcon{ &yieldWidget };
+      GUIImage foodIcon{ &yieldWidget };
+      GUIImage woodIcon{ &yieldWidget };
+      GUIImage stoneIcon{ &yieldWidget };
+      GUIImage weaponsIcon{ &yieldWidget };
+      GUITextLabel moneyCounter{ 24, &yieldWidget };
+      GUITextLabel foodCounter{ 24, &yieldWidget };
+      GUITextLabel woodCounter{ 24, &yieldWidget };
+      GUITextLabel stoneCounter{ 24, &yieldWidget };
+      GUITextLabel weaponsCounter{ 24, &yieldWidget };
+     
+      GraphicalResource moneyIconSprite{  };
+      GraphicalResource foodIconSprite{  };
+      GraphicalResource woodIconSprite{  };
+      GraphicalResource stoneIconSprite{  };
+      GraphicalResource weaponsIconSprite{  };
+
+      /*sf::RectangleShape yieldWidgetBackground{ sf::Vector2f(1000, 50) };
       sf::Text turnCounter{  };
       sf::Texture moneyIconTexture{  };
       sf::Texture foodIconTexture{  };
@@ -141,7 +149,19 @@
       sf::Text foodCounter{  };
       sf::Text woodCounter{  };
       sf::Text stoneCounter{  };
-      sf::Text weaponsCounter{  };
+      sf::Text weaponsCounter{  };*/
+      
+      //Pause button
+      //sf::Texture pauseButtonTexture{  };
+      //sf::Sprite pauseButtonSprite{  };
+      GraphicalResource pauseButtonSprite{  };
+      ImageButton pauseButton{  };
+
+      //Unpause button
+      //sf::Texture unpauseButtonTexture{  };
+      //sf::Sprite unpauseButtonSprite{  };
+      GraphicalResource unpauseButtonSprite{  };
+      ImageButton unpauseButton{  };
   };
 
 #endif

@@ -7,7 +7,9 @@
   class GUIElement
   {
     public:
+      GUIElement(sf::Vector2f position, sf::Vector2f size, GUIElement* masterElement, int flags);
       GUIElement(sf::Vector2f position, sf::Vector2f size, GUIElement* masterElement);
+      GUIElement(sf::Vector2f size, GUIElement* masterElement, int flags);
       GUIElement(sf::Vector2f size, GUIElement* masterElement);
       GUIElement() = default;
 
@@ -23,6 +25,10 @@
       void positionAtRight(int pixels);
       void positionAtBottom(int pixels);
       void positionAtLeft(int pixels);
+      void positionUpTo(GUIElement* element, int pixels);
+      void positionRightTo(GUIElement* element, int pixels);
+      void positionDownTo(GUIElement* element, int pixels);
+      void positionLeftTo(GUIElement* element, int pixels);
 
       bool isClicked(sf::Vector2i clickPosition);
 
@@ -31,15 +37,24 @@
       
       enum class Flag
       {
-        clickable   = 1,
-        togglable   = 2,
-        scrollable  = 4
+        clickable   = 1 << 0,
+        togglable   = 1 << 1,
+        scrollable  = 1 << 2
       };
+
+      bool testFlag(int flag);
+      void setFlag(int flag);
+
+      /*inline Flag operator|(Flag a, Flag b)
+      {
+        return static_cast<Flag>(static_cast<int>(a) | static_cast<int>(b));
+      }*/
 
     protected:
       sf::RectangleShape field{  };
       GUIElement* masterElement{ nullptr };
       std::vector<GUIElement*> slaveElements{  };
+      int flags{ 0 };
   };
 
 #endif
