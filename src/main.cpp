@@ -140,7 +140,7 @@ int main()
         switch(state)
         {
           case GameState::mainMenu:
-            menu.mouseInput(state, window, clickPosition);
+            menu.mouseInput(clickPosition);
           break;
 
           case GameState::gameSettings:
@@ -328,6 +328,10 @@ int main()
         }
         
         mapLoading.run(window);
+      break;
+
+      case GameState::exit:
+        window.close();
       break;
     }
 

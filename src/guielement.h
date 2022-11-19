@@ -3,6 +3,19 @@
 
   #include <SFML/Graphics.hpp>
   #include <vector>
+  #include <functional>
+
+  #include <iostream>
+    
+  namespace GUIFlag
+  {
+    enum Flag
+    {
+      clickable   = 1 << 0,
+      togglable   = 1 << 1,
+      scrollable  = 1 << 2
+    };
+  }
 
   class GUIElement
   {
@@ -14,6 +27,7 @@
       GUIElement() = default;
 
       void bindElement(GUIElement* slave);
+      void setFunction(std::function<void()> func);
 
       sf::Vector2f getPosition();
       void setPosition(sf::Vector2f position);
@@ -31,16 +45,10 @@
       void positionLeftTo(GUIElement* element, int pixels);
 
       bool isClicked(sf::Vector2i clickPosition);
+      void clickInput(sf::Vector2i clickPosition);
 
       void update();
       virtual void draw(sf::RenderWindow& window);
-      
-      enum class Flag
-      {
-        clickable   = 1 << 0,
-        togglable   = 1 << 1,
-        scrollable  = 1 << 2
-      };
 
       bool testFlag(int flag);
       void setFlag(int flag);
@@ -55,6 +63,9 @@
       GUIElement* masterElement{ nullptr };
       std::vector<GUIElement*> slaveElements{  };
       int flags{ 0 };
+      std::function<void()> function{
+        [](){}
+      };
   };
 
 #endif

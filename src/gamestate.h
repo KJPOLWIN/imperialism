@@ -8,7 +8,8 @@
     game,
     options,
     credits,
-    mapLoading
+    mapLoading,
+    exit
   };
 
 #endif
