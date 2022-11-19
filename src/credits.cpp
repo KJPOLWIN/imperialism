@@ -4,69 +4,84 @@
 #include "gui.h"
 #include <SFML/Graphics.hpp>
 
-Credits::Credits(sf::Font& font)
-  : backButton{ font, "back", sf::Vector2f(100, 970), 32 },
-    title{ "imperialism", font, 80 },
-    version{ "early development edition", font, 40 },
-    code{ "Code and graphics", font, 24 },
-    codeAuthors{ "POLWIN", font, 32 },
-    fontLabel{ "Font", font, 24 },
-    fontName{ "Press Start 2P", font, 32 },
-    fontAuthors{ "made by CodeMan38", font, 32 },
-    fontLicense{ "licensed under Open Font License", font, 32 },
-    sfml{ "Made with SFML", font, 24 },
-    date{ "2022", font, 24 }
+Credits::Credits(sf::Font& font, GameState& state)
 {
-  title.setPosition(0, 75);
-  GUI::centerTextInField(title, positioningField);
+  backButton.setFont(font);
+  backButton.setText("back");
+  backButton.positionAtBottom(100);
+  backButton.positionAtLeft(100);
+  backButton.setFlag(GUIFlag::clickable);
+  backButton.setFunction([&state](){
+               state = GameState::mainMenu;
+                                   });
 
-  version.setPosition(0, 175);
-  GUI::centerTextInField(version, positioningField);
+  title.setFont(font);
+  title.setText("imperialism");
+  title.positionAtTop(75);
+  title.centerHorizontally();
 
-  code.setPosition(0, 400);
-  GUI::centerTextInField(code, positioningField);
+  version.setFont(font);
+  version.setText("early development edition");
+  version.positionDownTo(&title, 20);
+  version.centerHorizontally();
 
-  codeAuthors.setPosition(0, 450);
-  GUI::centerTextInField(codeAuthors, positioningField);
+  code.setFont(font);
+  code.setText("Code and graphics");
+  code.positionDownTo(&version, 100);
+  code.centerHorizontally();
+
+  codeAuthors.setFont(font);
+  codeAuthors.setText("POLWIN");
+  codeAuthors.positionDownTo(&code, 15);
+  codeAuthors.centerHorizontally();
+
+  fontLabel.setFont(font);
+  fontLabel.setText("Font");
+  fontLabel.positionDownTo(&codeAuthors, 150);
+  fontLabel.centerHorizontally();
+
+  fontName.setFont(font);
+  fontName.setText("Press Start 2P");
+  fontName.positionDownTo(&fontLabel, 15);
+  fontName.centerHorizontally();
+
+  fontAuthors.setFont(font);
+  fontAuthors.setText("made by CodeMan38");
+  fontAuthors.positionDownTo(&fontName, 15);
+  fontAuthors.centerHorizontally();
+
+  fontLicense.setFont(font);
+  fontLicense.setText("licensed under Open Font License");
+  fontLicense.positionDownTo(&fontAuthors, 15);
+  fontLicense.centerHorizontally();
+
+  date.setFont(font);
+  date.setText("2022");
+  date.positionAtBottom(100);
+  date.centerHorizontally();
   
-  fontLabel.setPosition(0, 600);
-  GUI::centerTextInField(fontLabel, positioningField);
-  
-  fontName.setPosition(0, 650);
-  GUI::centerTextInField(fontName, positioningField);
-
-  fontAuthors.setPosition(0, 700);
-  GUI::centerTextInField(fontAuthors, positioningField);
-
-  fontLicense.setPosition(0, 750);
-  GUI::centerTextInField(fontLicense, positioningField);
-  
-  sfml.setPosition(0, 950);
-  GUI::centerTextInField(sfml, positioningField);
-
-  date.setPosition(0, 1000);
-  GUI::centerTextInField(date, positioningField);
+  sfml.setFont(font);
+  sfml.setText("Made with SFML");
+  sfml.positionUpTo(&date, 15);
+  sfml.centerHorizontally();
 }
       
-void Credits::mouseInput(GameState& state, sf::Vector2i clickPosition)
+void Credits::mouseInput(sf::Vector2i clickPosition)
 {
-  if(backButton.isClicked(clickPosition))
-  {
-    state = GameState::mainMenu;
-  }
+  screen.clickInput(clickPosition);
 }
  
 void Credits::run(sf::RenderWindow& window)
 {
   backButton.draw(window);
-  window.draw(title);
-  window.draw(version);
-  window.draw(code);
-  window.draw(codeAuthors);
-  window.draw(fontLabel);
-  window.draw(fontName);
-  window.draw(fontAuthors);
-  window.draw(fontLicense);
-  window.draw(sfml);
-  window.draw(date);
+  title.draw(window);
+  version.draw(window);
+  code.draw(window);
+  codeAuthors.draw(window);
+  fontLabel.draw(window);
+  fontName.draw(window);
+  fontAuthors.draw(window);
+  fontLicense.draw(window);
+  sfml.draw(window);
+  date.draw(window);
 }

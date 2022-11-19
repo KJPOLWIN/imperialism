@@ -1,35 +1,38 @@
 #ifndef CREDITS_H
 #define CREDITS_H
 
-  #include "textbutton.h"
   #include "gamestate.h"
+  #include "guielement.h"
+  #include "guitextlabel.h"
   #include "constant.h"
   #include <SFML/Graphics.hpp>
 
   class Credits
   {
     public:
-      Credits(sf::Font& font);
+      Credits(sf::Font& font, GameState& state);
       
-      void mouseInput(GameState& state, sf::Vector2i clickPosition);
+      void mouseInput(sf::Vector2i clickPosition);
       void run(sf::RenderWindow& window);
 
     private:
-      TextButton backButton{  };
-      sf::RectangleShape positioningField{ sf::Vector2f(Constant::windowWidth, Constant::windowHeight) };
-      sf::Text title{  };
-      sf::Text version{  };
+      GUIElement screen{ sf::Vector2f(1920, 1080), nullptr };
+
+      GUITextLabel backButton{ 32, &screen };
+
+      GUITextLabel title{ 80, &screen };
+      GUITextLabel version{ 40, &screen };
       
-      sf::Text code{  };
-      sf::Text codeAuthors{  };
-
-      sf::Text fontLabel{  };
-      sf::Text fontName{  };
-      sf::Text fontAuthors{  };
-      sf::Text fontLicense{  };
-
-      sf::Text sfml{  };
-      sf::Text date{  };
+      GUITextLabel code{ 24, &screen };
+      GUITextLabel codeAuthors{ 32, &screen };
+      
+      GUITextLabel fontLabel{ 24, &screen };
+      GUITextLabel fontName{ 32, &screen };
+      GUITextLabel fontAuthors{ 32, &screen };
+      GUITextLabel fontLicense{ 32, &screen };
+      
+      GUITextLabel sfml{ 24, &screen };
+      GUITextLabel date{ 24, &screen };
       
   };
 

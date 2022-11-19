@@ -53,7 +53,7 @@ int main()
   GameSettings gameSettings{ pressStart2P };
   Game game{ pressStart2P };
   Options options{ pressStart2P };
-  Credits credits{ pressStart2P };
+  Credits credits{ pressStart2P, state };
   MapLoading mapLoading{ pressStart2P };
 
   //Uploading saved options
@@ -156,7 +156,7 @@ int main()
           break;
 
           case GameState::credits:
-            credits.mouseInput(state, clickPosition);
+            credits.mouseInput(clickPosition);
           break;
 
           case GameState::mapLoading:
