@@ -23,6 +23,7 @@
       void positionAtBottom(int pixels);
       void positionAtLeft(int pixels);
 
+      GraphicalResource* getImagePointer();
       void setImage(GraphicalResource* image);
 
       virtual void draw(sf::RenderWindow& window);

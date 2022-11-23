@@ -190,9 +190,17 @@ bool GUIElement::isClicked(sf::Vector2i clickPosition)
       
 void GUIElement::clickInput(sf::Vector2i clickPosition)
 {
-  if(testFlag(GUIFlag::clickable) && isClicked(clickPosition))
+  if(isClicked(clickPosition))
   {
-    function();
+    if(testFlag(GUIFlag::clickable))
+    {
+      function();
+    }
+
+    if(testFlag(GUIFlag::togglable))
+    {
+      active = !active;
+    }
   }
 
   for(auto& slave : slaveElements)
@@ -221,16 +229,18 @@ void GUIElement::draw(sf::RenderWindow& window)
 
 bool GUIElement::testFlag(int flag)
 {
-  /*if(flags >> flag == 0)
+  /*std::cout << "flags = " << flags << ";\ttest = " << (flags & flag) << "\tflag " << flag;
+
+  if(flags & flag)
   {
-    std::cout << "flag set\n";
+    std::cout << " is set\n";
   }
   else
   {
-    std::cout << "flag not set\n";
+    std::cout << " is not set\n";
   }*/
-    
-  return (flags >> flag == 0);
+
+  return static_cast<bool>(flags & flag);
 }
 
 void GUIElement::setFlag(int flag)

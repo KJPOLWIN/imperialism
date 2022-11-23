@@ -18,29 +18,30 @@ Game::Game(sf::Font& font)
     optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
     saveGameButton{ font, "Save game", sf::Vector2f(300, 475), 24 },
     exitToDesktopButton{ font, "Exit to desktop", sf::Vector2f(300, 800), 24 },
-    pauseButton{ pauseButtonSprite.getSpritePointer(), sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
-    unpauseButton{ unpauseButtonSprite.getSpritePointer(), sf::Vector2f(10, 10), sf::Vector2f(30, 32) },
-    nextTurnButton{ font, "Next turn", sf::Vector2f(1550, 950), 32 },
+    //nextTurnButton{ font, "Next turn", sf::Vector2f(1550, 950), 32 },
     backButton{ font, "back", sf::Vector2f(690, 790), 24 },
     saveButton{ font, "save", sf::Vector2f(1140, 790), 24 },
     saveSelect{ sf::Vector2f(690, 340), sf::Vector2f(550, 350), 50.0 },
     filenameInput{ font, "Enter save name", 24, sf::Vector2f(690, 270), InputType::text }
-    /*turnCounter{"Turn 1", font, 24 },
-    moneyCounter{"", font, 24 },
-    foodCounter{"", font, 24 },
-    woodCounter{"", font, 24 },
-    stoneCounter{"", font, 24 },
-    weaponsCounter{"", font, 24 }*/
 {
+  //Next turn button setup
+  nextTurnButton.setFont(font);
+  nextTurnButton.setText("Next turn");
+  nextTurnButton.setFlag(GUIFlag::clickable);
+  nextTurnButton.setFunction([this](){
+        this->map.nextTurn();
+        this->turnCounter.setText("Turn " + std::to_string(this->map.getTurn() + 1));
+        this->moneyCounter.setText(std::to_string(this->map.getFactions().at(0).getMoney()));
+        this->foodCounter.setText(std::to_string(this->map.getFactions().at(0).getFood()));
+        this->woodCounter.setText(std::to_string(this->map.getFactions().at(0).getWood()));
+        this->stoneCounter.setText(std::to_string(this->map.getFactions().at(0).getStone()));
+        this->weaponsCounter.setText(std::to_string(this->map.getFactions().at(0).getWeapons()));
+      });
+  nextTurnButton.positionAtBottom(100);
+  nextTurnButton.positionAtRight(100);
+
   //Pause menu setup
-  shadeTexture.loadFromFile("texture/shade.png");
-  shade.setTexture(shadeTexture);
-  /*pauseButtonTexture.loadFromFile("texture/pause.png");
-  pauseButtonSprite.setTexture(pauseButtonTexture);
-  unpauseButtonTexture.loadFromFile("texture/unpause.png");
-  unpauseButtonSprite.setTexture(unpauseButtonTexture);*/
-  pauseButtonSprite.load("texture/pause.png");
-  unpauseButtonSprite.load("texture/unpause.png");
+  shade.load("texture/shade.png");
 
   pauseMenuBackground.setPosition(710, 250); 
   pauseMenuBackground.setFillColor(sf::Color::Black);
@@ -120,16 +121,26 @@ Game::Game(sf::Font& font)
   //Yields widget setup
   yieldWidget.setPosition(sf::Vector2f(0, 0));
 
+  pauseButtonSprite.load("texture/pause.png");
+  pauseButtonSprite.setTextureRect(0, 0, 30, 30);
   moneyIconSprite.load("texture/iconmoney.png");
   foodIconSprite.load("texture/iconfood.png");
   woodIconSprite.load("texture/iconwood.png");
   stoneIconSprite.load("texture/iconstone.png");
   weaponsIconSprite.load("texture/iconweapons.png");
 
+  pauseButton.setImage(&pauseButtonSprite);
+  pauseButton.setFlag(GUIFlag::clickable);
+  pauseButton.setFunction([this](){
+        this->switchPause();
+      });
+  pauseButton.positionAtTop(10);
+  pauseButton.positionAtLeft(10);
+
   turnCounter.setFont(font);
   turnCounter.setText("Turn 1");
   turnCounter.positionAtTop(14);
-  turnCounter.positionAtLeft(70);
+  turnCounter.positionRightTo(&pauseButton, 50);
  
   moneyCounter.setFont(font);
   moneyCounter.setText(std::to_string(map.getFactions().at(0).getMoney()));
@@ -175,122 +186,71 @@ Game::Game(sf::Font& font)
   weaponsIcon.setImage(&weaponsIconSprite);
   weaponsIcon.positionRightTo(&weaponsCounter, 10);
   weaponsIcon.positionAtTop(10);
-
-  /*yieldWidgetBackground.setPosition(0, 0);
-  yieldWidgetBackground.setFillColor(sf::Color::Black);
-  yieldWidgetBackground.setOutlineColor(sf::Color::White);
-  yieldWidgetBackground.setOutlineThickness(10); 
-  turnCounter.setPosition(sf::Vector2f(70, 14));
-  moneyIconTexture.loadFromFile("texture/iconmoney.png");
-  foodIconTexture.loadFromFile("texture/iconfood.png");
-  woodIconTexture.loadFromFile("texture/iconwood.png");
-  stoneIconTexture.loadFromFile("texture/iconstone.png");
-  weaponsIconTexture.loadFromFile("texture/iconweapons.png");
-  moneyIcon.setTexture(moneyIconTexture);
-  foodIcon.setTexture(foodIconTexture);
-  woodIcon.setTexture(woodIconTexture);
-  stoneIcon.setTexture(stoneIconTexture);
-  weaponsIcon.setTexture(weaponsIconTexture);
-  moneyCounter.setString(std::to_string(map.getFactions().at(0).getMoney()));
-  foodCounter.setString(std::to_string(map.getFactions().at(0).getFood()));
-  woodCounter.setString(std::to_string(map.getFactions().at(0).getWood()));
-  stoneCounter.setString(std::to_string(map.getFactions().at(0).getStone()));
-  weaponsCounter.setString(std::to_string(map.getFactions().at(0).getWeapons()));
-  moneyIcon.setPosition(sf::Vector2f(250, 10));
-  moneyCounter.setPosition(sf::Vector2f(290, 14));
-  foodIcon.setPosition(sf::Vector2f(390, 10));
-  foodCounter.setPosition(sf::Vector2f(430, 14));
-  woodIcon.setPosition(sf::Vector2f(530, 10));
-  woodCounter.setPosition(sf::Vector2f(570, 14));
-  stoneIcon.setPosition(sf::Vector2f(670, 10));
-  stoneCounter.setPosition(sf::Vector2f(710, 14));
-  weaponsIcon.setPosition(sf::Vector2f(810, 10));
-  weaponsCounter.setPosition(sf::Vector2f(850, 14));*/
 }
 
 void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition, sf::Font& font)
 {
+  pauseButton.clickInput(clickPosition);
+  
   switch(mode)
   {
     case DisplayMode::game:
-      if(nextTurnButton.isClicked(clickPosition))
+      nextTurnButton.clickInput(clickPosition);
+        
+      map.moveUnits(
+        HexVector(map.getClickedNode(
+          window.mapPixelToCoords(
+            sf::Mouse::getPosition(window)),    
+            sf::Vector2f((mapView.getCenter().x 
+                          - mapView.getSize().x / 2), 
+                         (mapView.getCenter().y 
+                          - mapView.getSize().y / 2)),
+                         mapView.getSize().x 
+                         / Constant::windowWidth)));
+
+      map.selectNodesAndUnits(
+        window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
+                                sf::Vector2f((mapView.getCenter().x 
+                                - mapView.getSize().x / 2), 
+                                (mapView.getCenter().y 
+                                - mapView.getSize().y / 2)),
+                                mapView.getSize().x / Constant::windowWidth);
+
+      nodeName.setText(map.getSelectedNodeName());
+      nodeName.centerHorizontally();
+        
+      buildingName.setText(map.getSelectedBuilding()
+                              .getName());
+      buildingName.centerHorizontally();
+
+      if(map.getSelectedBuilding().getFaction() == 0)
       {
-        map.nextTurn();
-        /*turnCounter.setString("Turn " + std::to_string(map.getTurn() + 1));
-        moneyCounter.setString(std::to_string(map.getFactions().at(0).getMoney()));
-        foodCounter.setString(std::to_string(map.getFactions().at(0).getFood()));
-        woodCounter.setString(std::to_string(map.getFactions().at(0).getWood()));
-        stoneCounter.setString(std::to_string(map.getFactions().at(0).getStone()));
-        weaponsCounter.setString(std::to_string(map.getFactions().at(0).getWeapons()));*/
-        turnCounter.setText("Turn " + std::to_string(map.getTurn() + 1));
-        moneyCounter.setText(std::to_string(map.getFactions().at(0).getMoney()));
-        foodCounter.setText(std::to_string(map.getFactions().at(0).getFood()));
-        woodCounter.setText(std::to_string(map.getFactions().at(0).getWood()));
-        stoneCounter.setText(std::to_string(map.getFactions().at(0).getStone()));
-        weaponsCounter.setText(std::to_string(map.getFactions().at(0).getWeapons()));
-      }
-      else if(pauseButton.isClicked(clickPosition))
-      {
-        mode = DisplayMode::pauseMenu;
+        buildingName.setTextColor(sf::Color::Blue);
       }
       else
       {
-        sf::Vector2i posCartesian{ 
-          map.getClickedNode(
-            window.mapPixelToCoords(sf::Mouse::getPosition(window)),    
-                                    sf::Vector2f((mapView.getCenter().x 
-                                    - mapView.getSize().x / 2), 
-                                    (mapView.getCenter().y 
-                                    - mapView.getSize().y / 2)),
-                                    mapView.getSize().x 
-                                    / Constant::windowWidth) };
-
-        HexVector newPos{ posCartesian };
-        map.moveUnits(newPos);
-
-        map.selectNodesAndUnits(
-          window.mapPixelToCoords(sf::Mouse::getPosition(window)), 
-                                  sf::Vector2f((mapView.getCenter().x 
-                                  - mapView.getSize().x / 2), 
-                                  (mapView.getCenter().y 
-                                  - mapView.getSize().y / 2)),
-                                  mapView.getSize().x / Constant::windowWidth);
-
-        nodeName.setText(map.getSelectedNodeName());
-        nodeName.centerHorizontally();
+        buildingName.setTextColor(sf::Color::Red);
+      }
         
-        buildingName.setText(map.getSelectedBuilding().getName());
-        buildingName.centerHorizontally();
-
-        if(map.getSelectedBuilding().getFaction() == 0)
-        {
-          buildingName.setTextColor(sf::Color::Blue);
-        }
-        else
-        {
-          buildingName.setTextColor(sf::Color::Red);
-        }
+      if(!map.getSelectedBuilding().completed)
+      {
+        underConstructionLabel.setText("(under construction)");
+        underConstructionLabel.centerHorizontally();
+      }
+      else
+      {
+        underConstructionLabel.setText("");
+      }
         
-        if(!map.getSelectedBuilding().completed)
-        {
-          underConstructionLabel.setText("(under construction)");
-          underConstructionLabel.centerHorizontally();
-        }
-        else
-        {
-          underConstructionLabel.setText("");
-        }
-        
-        unitName.setText(map.getSelectedUnit().getName());
+      unitName.setText(map.getSelectedUnit().getName());
 
-        if(map.getSelectedUnit().getFaction() == 0)
-        {
-          unitName.setTextColor(sf::Color::Blue);
-        }
-        else
-        {
-          unitName.setTextColor(sf::Color::Red);
-        }
+      if(map.getSelectedUnit().getFaction() == 0)
+      {
+        unitName.setTextColor(sf::Color::Blue);
+      }
+      else
+      {
+        unitName.setTextColor(sf::Color::Red);
       }
     break;
 
@@ -338,10 +298,6 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
           perror("opendir");
           std::cout << "directory not opened or something\n";
         }
-      }
-      else if(unpauseButton.isClicked(clickPosition))
-      {
-        mode = DisplayMode::game;
       }
       else if(exitToDesktopButton.isClicked(clickPosition))
       {
@@ -436,10 +392,14 @@ void Game::switchPause()
   if(mode == DisplayMode::game) 
   {
     mode = DisplayMode::pauseMenu;
+    this->pauseButton.getImagePointer()
+                      ->setTextureRect(0, 30, 30, 30);
   }
   else 
   {
     mode = DisplayMode::game;
+    this->pauseButton.getImagePointer()
+                      ->setTextureRect(0, 0, 30, 30);
   }
 }
 
@@ -478,10 +438,6 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
                        + std::to_string(map.getSelectedUnit().getHealth()) 
                        + "/" 
                        + std::to_string(map.getSelectedUnit().getMaxHealth()));
-      /*unitMovePoints.setString("Move points: "
-                       + std::to_string(map.getSelectedUnit().getMovePoints()) 
-                       + "/" 
-                       + std::to_string(map.getSelectedUnit().getMaxMovePoints()));*/
       unitMovePoints.setText("Move points: "
                        + std::to_string(map.getSelectedUnit().getMovePoints()) 
                        + "/" 
@@ -501,18 +457,6 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   window.setView(guiView);
   //Yields widget
   yieldWidget.draw(window);
-  /*window.draw(yieldWidgetBackground);
-  window.draw(turnCounter);
-  window.draw(moneyIcon);
-  window.draw(moneyCounter);
-  window.draw(foodIcon);
-  window.draw(foodCounter);
-  window.draw(woodIcon);
-  window.draw(woodCounter);
-  window.draw(stoneIcon);
-  window.draw(stoneCounter);
-  window.draw(weaponsIcon);
-  window.draw(weaponsCounter);*/
 
   //Node widget
   if(nodeName.getText() != "")
@@ -599,22 +543,17 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
 
   if(mode == DisplayMode::pauseMenu)
   {
-    window.draw(shade);
+    shade.draw(window);
     window.draw(pauseMenuBackground); 
     window.draw(pauseMenuLabel); 
     menuButton.draw(window);
     optionsButton.draw(window);
     saveGameButton.draw(window);
-    unpauseButton.draw(window);
     exitToDesktopButton.draw(window);
-  }
-  else if(mode == DisplayMode::game)
-  {
-    pauseButton.draw(window);
   }
   else if(mode == DisplayMode::saveMenu)
   {
-    window.draw(shade);
+    shade.draw(window);
     window.draw(saveMenuBackground);
     saveSelect.draw(window);
     backButton.draw(window);

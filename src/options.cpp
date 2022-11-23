@@ -3,17 +3,40 @@
 #include "gamestate.h"
 #include <SFML/Graphics.hpp>
 
-Options::Options(sf::Font& font)
-  : backButton{ font, "back", sf::Vector2f(100, 968), 32 },
+Options::Options(sf::Font& font, GameState& state, GameState& previousState)
+  /*: backButton{ font, "back", sf::Vector2f(100, 968), 32 },
     fpsDisplay{ font, "FPS display", sf::Vector2f(100, 100), 32 },
-    vSync{ font, "vertical sync", sf::Vector2f(100, 150), 32 }
+    vSync{ font, "vertical sync", sf::Vector2f(100, 150), 32 }*/
 {
+  backButton.setFont(font);
+  backButton.setText("back");
+  backButton.setFlag(GUIFlag::clickable);
+  backButton.setFunction([&state, &previousState](){
+        state = previousState;
+      });
+  backButton.positionAtBottom(100);
+  backButton.positionAtLeft(100);
 
+  fpsDisplay.setFont(font);
+  fpsDisplay.setText("FPS display");
+  fpsDisplay.setFlag(GUIFlag::togglable);
+  fpsDisplay.positionAtTop(100);
+  fpsDisplay.positionAtLeft(100);
+  
+  vSync.setFont(font);
+  vSync.setText("vertical sync");
+  vSync.setFlag(GUIFlag::togglable);
+  vSync.positionDownTo(&fpsDisplay, 50);
+  vSync.positionAtLeft(100);
 }
       
-void Options::mouseInput(GameState& state, GameState previousState, sf::Vector2i clickPosition)
+void Options::mouseInput(sf::Vector2i clickPosition)
 {
-  if(backButton.isClicked(clickPosition))
+  backButton.clickInput(clickPosition);
+  fpsDisplay.clickInput(clickPosition);
+  vSync.clickInput(clickPosition);
+
+  /*if(backButton.isClicked(clickPosition))
   {
     state = previousState;
   }
@@ -21,18 +44,12 @@ void Options::mouseInput(GameState& state, GameState previousState, sf::Vector2i
   {
     fpsDisplay.clickInput(clickPosition);
     vSync.clickInput(clickPosition);
-  }
-  /*else if(fpsDisplay.isClicked(clickPosition))
-  {
-    fpsDisplaySelected = !fpsDisplaySelected;
-  }
-  else if(vSync.isClicked(clickPosition))
-  {
-    vSyncSelected = !vSyncSelected;
   }*/
 
-  fpsDisplaySelected = fpsDisplay.getState();
-  vSyncSelected = vSync.getState();
+  /*fpsDisplaySelected = fpsDisplay.getState();
+  vSyncSelected = vSync.getState();*/
+  fpsDisplaySelected = fpsDisplay.active;
+  vSyncSelected = vSync.active;
 }
  
 void Options::run(sf::RenderWindow& window)
@@ -42,22 +59,12 @@ void Options::run(sf::RenderWindow& window)
   vSync.draw(window);
 }
       
-/*void Options::toggleFPSDisplay()
-{
-  fpsDisplay.toggle();
-}
-
-void Options::toggleVSync()
-{
-  vSync.toggle();
-}*/
-
 void Options::setFPSDisplay(bool state)
 {
-  fpsDisplay.setState(state);
+  fpsDisplay.active = state;
 }
 
 void Options::setVSync(bool state)
 {
-  vSync.setState(state);
+  vSync.active = state;
 }

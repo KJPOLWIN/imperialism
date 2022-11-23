@@ -88,6 +88,11 @@ void GUIImage::positionAtLeft(int pixels)
   }
 }
       
+GraphicalResource* GUIImage::getImagePointer()
+{
+  return image;
+}
+      
 void GUIImage::setImage(GraphicalResource* image)
 {
   this->image = image;

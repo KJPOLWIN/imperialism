@@ -52,7 +52,7 @@ int main()
   MainMenu menu{ pressStart2P, state };
   GameSettings gameSettings{ pressStart2P };
   Game game{ pressStart2P };
-  Options options{ pressStart2P };
+  Options options{ pressStart2P, state, previousState };
   Credits credits{ pressStart2P, state };
   MapLoading mapLoading{ pressStart2P };
 
@@ -61,14 +61,6 @@ int main()
   options.vSyncSelected = savedOptions["vSync"];
   options.setFPSDisplay(savedOptions["fpsDisplay"]);
   options.setVSync(savedOptions["vSync"]);
-  /*if(options.fpsDisplaySelected)
-  {
-    options.toggleFPSDisplay();
-  }
-  if(options.vSyncSelected)
-  {
-    options.toggleVSync();
-  }*/
  
   //Setting up fps display
   sf::Text fpsDisplay{ "e", pressStart2P, 16 };
@@ -152,7 +144,7 @@ int main()
           break;
 
           case GameState::options:
-            options.mouseInput(state, previousState, clickPosition);
+            options.mouseInput(clickPosition);
           break;
 
           case GameState::credits:

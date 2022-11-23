@@ -3,19 +3,19 @@
 
   #include "textbutton.h"
   #include "texttoggle.h"
+  #include "guielement.h"
+  #include "guitextlabel.h"
   #include "gamestate.h"
   #include <SFML/Graphics.hpp>
 
   class Options
   {
     public:
-      Options(sf::Font& font);
+      Options(sf::Font& font, GameState& state, GameState& previousState);
       
-      void mouseInput(GameState& state, GameState previousState, sf::Vector2i clickPosition);
+      void mouseInput(sf::Vector2i clickPosition);
       void run(sf::RenderWindow& window);
 
-      //void toggleFPSDisplay();
-      //void toggleVSync();
       void setFPSDisplay(bool state);
       void setVSync(bool state);
 
@@ -23,9 +23,12 @@
       bool vSyncSelected{ false };
 
     private:
-      TextButton backButton{  };
-      TextToggle fpsDisplay{  };
-      TextToggle vSync{  };
+      GUIElement screen{ sf::Vector2f(1920, 1080), nullptr };
+
+      GUITextLabel backButton{ 32, &screen };
+      GUITextLabel fpsDisplay{ 32, &screen };
+      GUITextLabel vSync{ 32, &screen };
+
   };
 
 #endif

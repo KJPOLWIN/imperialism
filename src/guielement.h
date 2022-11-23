@@ -11,9 +11,9 @@
   {
     enum Flag
     {
-      clickable   = 1 << 0,
-      togglable   = 1 << 1,
-      scrollable  = 1 << 2
+      clickable   = 1,
+      togglable   = 2,
+      scrollable  = 4
     };
   }
 
@@ -57,12 +57,15 @@
       {
         return static_cast<Flag>(static_cast<int>(a) | static_cast<int>(b));
       }*/
+      
+      bool active{ false };
 
     protected:
       sf::RectangleShape field{  };
       GUIElement* masterElement{ nullptr };
       std::vector<GUIElement*> slaveElements{  };
       int flags{ 0 };
+
       std::function<void()> function{
         [](){}
       };

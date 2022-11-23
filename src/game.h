@@ -54,9 +54,8 @@
       sf::View guiView{ sf::FloatRect(0, 0, Constant::windowWidth, Constant::windowHeight) };
       double maxZoom{ 0.5 };
       double minZoom{ 2 };
-      
-      sf::Texture shadeTexture{  };
-      sf::Sprite shade{  };
+     
+      GraphicalResource shade{  };
       
       DisplayMode mode{ DisplayMode::game };
    
@@ -103,7 +102,7 @@
       GraphicalResource riflemenLarge{  };
 
       //Next turn button
-      TextButton nextTurnButton{  };
+      GUITextLabel nextTurnButton{32, &screen };
 
       //Map saving menu
       sf::RectangleShape saveMenuBackground{ sf::Vector2f(600, 600) };
@@ -132,36 +131,11 @@
       GraphicalResource woodIconSprite{  };
       GraphicalResource stoneIconSprite{  };
       GraphicalResource weaponsIconSprite{  };
-
-      /*sf::RectangleShape yieldWidgetBackground{ sf::Vector2f(1000, 50) };
-      sf::Text turnCounter{  };
-      sf::Texture moneyIconTexture{  };
-      sf::Texture foodIconTexture{  };
-      sf::Texture woodIconTexture{  };
-      sf::Texture stoneIconTexture{  };
-      sf::Texture weaponsIconTexture{  };
-      sf::Sprite moneyIcon{  };
-      sf::Sprite foodIcon{  };
-      sf::Sprite woodIcon{  };
-      sf::Sprite stoneIcon{  };
-      sf::Sprite weaponsIcon{  };
-      sf::Text moneyCounter{  };
-      sf::Text foodCounter{  };
-      sf::Text woodCounter{  };
-      sf::Text stoneCounter{  };
-      sf::Text weaponsCounter{  };*/
       
       //Pause button
-      //sf::Texture pauseButtonTexture{  };
-      //sf::Sprite pauseButtonSprite{  };
       GraphicalResource pauseButtonSprite{  };
-      ImageButton pauseButton{  };
+      GUIImage pauseButton{ &yieldWidget };
 
-      //Unpause button
-      //sf::Texture unpauseButtonTexture{  };
-      //sf::Sprite unpauseButtonSprite{  };
-      GraphicalResource unpauseButtonSprite{  };
-      ImageButton unpauseButton{  };
   };
 
 #endif

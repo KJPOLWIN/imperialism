@@ -137,7 +137,7 @@ std::string GUITextLabel::getText()
 void GUITextLabel::setText(std::string text)
 {
   this->text.setString(text);
-  field.setSize(sf::Vector2f(this->text.getGlobalBounds().width, this->text.getGlobalBounds().height));
+  field.setSize(sf::Vector2f(this->text.getGlobalBounds().width,  this->text.getGlobalBounds().height));
 }
       
 void GUITextLabel::setTextColor(sf::Color color)
@@ -147,5 +147,10 @@ void GUITextLabel::setTextColor(sf::Color color)
 
 void GUITextLabel::draw(sf::RenderWindow& window)
 {
+  if(active)
+  {
+    GUIElement::draw(window);
+  }
+
   window.draw(text);
 }
