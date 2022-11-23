@@ -26,9 +26,9 @@
   class Game
   {
     public:
-      Game(sf::Font& font);
+      Game(sf::Font& font, GameState& state);
 
-      void mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition, sf::Font& font);
+      void mouseInput(sf::RenderWindow& window, sf::Vector2i clickPosition, sf::Font& font);
       void holdInput(sf::Vector2i clickPosition);
       void scrollInput(double scroll);
       void textInput(char input);
@@ -60,13 +60,13 @@
       DisplayMode mode{ DisplayMode::game };
    
       //Pause menu
-      sf::RectangleShape pauseMenuBackground{ sf::Vector2f(400, 600) };
-      sf::Text pauseMenuLabel{  };
-      TextButton menuButton{  };
-      TextButton optionsButton{  };
-      TextButton saveGameButton{  };
-      TextButton exitToDesktopButton{  };
-  
+      GUIElement pauseMenu{ sf::Vector2f(400, 400), &screen };
+      GUITextLabel pauseMenuLabel{ 32, &pauseMenu };
+      GUITextLabel menuButton{ 24, &pauseMenu };
+      GUITextLabel optionsButton{ 24, &pauseMenu };
+      GUITextLabel saveGameButton{ 24, &pauseMenu };
+      GUITextLabel exitToDesktopButton{ 24, &pauseMenu };
+
       //Node widget
       GUIElement nodeWidget{ sf::Vector2f(400, 200), &screen };
       GUITextLabel nodeName{ 24, &nodeWidget };

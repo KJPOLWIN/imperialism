@@ -13,7 +13,8 @@
     {
       clickable   = 1,
       togglable   = 2,
-      scrollable  = 4
+      textInput  = 4,
+      scrollable  = 8
     };
   }
 

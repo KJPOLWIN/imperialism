@@ -12,14 +12,8 @@
 
   #include <iostream>
 
-Game::Game(sf::Font& font)
-  : pauseMenuLabel{ "Game paused", font, 32 },
-    menuButton{ font, "Main menu", sf::Vector2f(300, 375), 24 },
-    optionsButton{ font, "Options", sf::Vector2f(300, 425), 24 },
-    saveGameButton{ font, "Save game", sf::Vector2f(300, 475), 24 },
-    exitToDesktopButton{ font, "Exit to desktop", sf::Vector2f(300, 800), 24 },
-    //nextTurnButton{ font, "Next turn", sf::Vector2f(1550, 950), 32 },
-    backButton{ font, "back", sf::Vector2f(690, 790), 24 },
+Game::Game(sf::Font& font, GameState& state)
+  : backButton{ font, "back", sf::Vector2f(690, 790), 24 },
     saveButton{ font, "save", sf::Vector2f(1140, 790), 24 },
     saveSelect{ sf::Vector2f(690, 340), sf::Vector2f(550, 350), 50.0 },
     filenameInput{ font, "Enter save name", 24, sf::Vector2f(690, 270), InputType::text }
@@ -43,17 +37,80 @@ Game::Game(sf::Font& font)
   //Pause menu setup
   shade.load("texture/shade.png");
 
-  pauseMenuBackground.setPosition(710, 250); 
-  pauseMenuBackground.setFillColor(sf::Color::Black);
-  pauseMenuBackground.setOutlineColor(sf::Color::White);
-  pauseMenuBackground.setOutlineThickness(10);
+  pauseMenu.centerInMaster();
 
-  pauseMenuLabel.setPosition(0, 275);
-  GUI::centerTextInField(pauseMenuLabel, pauseMenuBackground);
-  GUI::centerTextInField(menuButton, pauseMenuBackground);
-  GUI::centerTextInField(optionsButton, pauseMenuBackground);
-  GUI::centerTextInField(saveGameButton, pauseMenuBackground);
-  GUI::centerTextInField(exitToDesktopButton, pauseMenuBackground);
+  pauseMenuLabel.setFont(font);
+  pauseMenuLabel.setText("game paused");
+  pauseMenuLabel.positionAtTop(25);
+  pauseMenuLabel.centerHorizontally();
+
+  menuButton.setFont(font);
+  menuButton.setText("main menu");
+  menuButton.setFlag(GUIFlag::clickable);
+  menuButton.setFunction([&state, this](){
+        state = GameState::mainMenu;
+        this->mode = DisplayMode::game;
+      });
+  menuButton.positionDownTo(&pauseMenuLabel, 75);
+  menuButton.centerHorizontally();
+
+  optionsButton.setFont(font);
+  optionsButton.setText("options");
+  optionsButton.setFlag(GUIFlag::clickable);
+  optionsButton.setFunction([&state](){
+        state = GameState::options;
+      });
+  optionsButton.positionDownTo(&menuButton, 50);
+  optionsButton.centerHorizontally();
+
+  saveGameButton.setFont(font);
+  saveGameButton.setText("save game");
+  saveGameButton.setFlag(GUIFlag::clickable);
+  saveGameButton.setFunction([this, &font](){
+        this->mode = DisplayMode::saveMenu;
+        
+        //filename list is updated
+        this->saveSelect.getButtons().clear();
+        int buttonCounter{ 0 };
+
+        DIR *dir;
+        struct dirent *diread;
+        if((dir = opendir("./saves")) != nullptr)
+        {
+          while((diread = readdir(dir)) != nullptr)
+          {
+            std::string filename{ diread->d_name };
+
+            if(filename.at(0) != '.')
+            {
+              filename.erase(filename.begin(),
+                             filename.begin() + filename.find_first_of("/") + 1);
+              filename.erase(filename.begin() + filename.find_last_of("."),
+                             filename.end());
+              saveSelect.addButton(font, filename,
+                                   sf::Vector2f(690, 340 + buttonCounter * 50.0f), 24);
+              ++buttonCounter;
+            }
+          }
+          closedir(dir);
+        }
+        else
+        {
+          perror("opendir");
+          std::cout << "directory not opened or something\n";
+        }
+      });
+  saveGameButton.positionDownTo(&optionsButton, 50);
+  saveGameButton.centerHorizontally();
+
+  exitToDesktopButton.setFont(font);
+  exitToDesktopButton.setText("exit to desktop");
+  exitToDesktopButton.setFlag(GUIFlag::clickable);
+  exitToDesktopButton.setFunction([&state](){
+        state = GameState::exit;
+      });
+  exitToDesktopButton.positionDownTo(&saveGameButton, 50);
+  exitToDesktopButton.centerHorizontally();
 
   //Node widget setup
   nodeWidget.positionAtTop(100);
@@ -188,7 +245,7 @@ Game::Game(sf::Font& font)
   weaponsIcon.positionAtTop(10);
 }
 
-void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i clickPosition, sf::Font& font)
+void Game::mouseInput(sf::RenderWindow& window, sf::Vector2i clickPosition, sf::Font& font)
 {
   pauseButton.clickInput(clickPosition);
   
@@ -255,54 +312,7 @@ void Game::mouseInput(GameState& state, sf::RenderWindow& window, sf::Vector2i c
     break;
 
     case DisplayMode::pauseMenu:
-      if(menuButton.isClicked(clickPosition))
-      {
-        state = GameState::mainMenu;
-        mode = DisplayMode::game;
-      }
-      else if(optionsButton.isClicked(clickPosition))
-      {
-        state = GameState::options;
-      }
-      else if(saveGameButton.isClicked(clickPosition))
-      {
-        mode = DisplayMode::saveMenu;
-
-        //filename list is updated
-        saveSelect.getButtons().clear();
-        int buttonCounter{ 0 };
-
-        DIR *dir;
-        struct dirent *diread;
-        if((dir = opendir("./saves")) != nullptr)
-        {
-          while((diread = readdir(dir)) != nullptr)
-          {
-            std::string filename{ diread->d_name };
-
-            if(filename.at(0) != '.')
-            {
-              filename.erase(filename.begin(),
-                             filename.begin() + filename.find_first_of("/") + 1);
-              filename.erase(filename.begin() + filename.find_last_of("."),
-                             filename.end());
-              saveSelect.addButton(font, filename,
-                                   sf::Vector2f(690, 340 + buttonCounter * 50.0f), 24);
-              ++buttonCounter;
-            }
-          }
-          closedir(dir);
-        }
-        else
-        {
-          perror("opendir");
-          std::cout << "directory not opened or something\n";
-        }
-      }
-      else if(exitToDesktopButton.isClicked(clickPosition))
-      {
-        window.close();
-      }
+      pauseMenu.clickInput(clickPosition);
     break;
 
     case DisplayMode::saveMenu:
@@ -544,12 +554,7 @@ void Game::run(sf::RenderWindow& window, double timeElapsed)
   if(mode == DisplayMode::pauseMenu)
   {
     shade.draw(window);
-    window.draw(pauseMenuBackground); 
-    window.draw(pauseMenuLabel); 
-    menuButton.draw(window);
-    optionsButton.draw(window);
-    saveGameButton.draw(window);
-    exitToDesktopButton.draw(window);
+    pauseMenu.draw(window);
   }
   else if(mode == DisplayMode::saveMenu)
   {

@@ -51,7 +51,7 @@ int main()
   //Setting up game states
   MainMenu menu{ pressStart2P, state };
   GameSettings gameSettings{ pressStart2P };
-  Game game{ pressStart2P };
+  Game game{ pressStart2P, state };
   Options options{ pressStart2P, state, previousState };
   Credits credits{ pressStart2P, state };
   MapLoading mapLoading{ pressStart2P };
@@ -140,7 +140,7 @@ int main()
           break;
 
           case GameState::game:
-            game.mouseInput(state, window, clickPosition, pressStart2P);
+            game.mouseInput(window, clickPosition, pressStart2P);
           break;
 
           case GameState::options:

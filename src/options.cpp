@@ -4,9 +4,6 @@
 #include <SFML/Graphics.hpp>
 
 Options::Options(sf::Font& font, GameState& state, GameState& previousState)
-  /*: backButton{ font, "back", sf::Vector2f(100, 968), 32 },
-    fpsDisplay{ font, "FPS display", sf::Vector2f(100, 100), 32 },
-    vSync{ font, "vertical sync", sf::Vector2f(100, 150), 32 }*/
 {
   backButton.setFont(font);
   backButton.setText("back");
@@ -36,18 +33,6 @@ void Options::mouseInput(sf::Vector2i clickPosition)
   fpsDisplay.clickInput(clickPosition);
   vSync.clickInput(clickPosition);
 
-  /*if(backButton.isClicked(clickPosition))
-  {
-    state = previousState;
-  }
-  else
-  {
-    fpsDisplay.clickInput(clickPosition);
-    vSync.clickInput(clickPosition);
-  }*/
-
-  /*fpsDisplaySelected = fpsDisplay.getState();
-  vSyncSelected = vSync.getState();*/
   fpsDisplaySelected = fpsDisplay.active;
   vSyncSelected = vSync.active;
 }
