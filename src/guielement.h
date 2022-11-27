@@ -13,8 +13,7 @@
     {
       clickable   = 1,
       togglable   = 2,
-      textInput  = 4,
-      scrollable  = 8
+      scrollable  = 4
     };
   }
 
@@ -26,6 +25,8 @@
       GUIElement(sf::Vector2f size, GUIElement* masterElement, int flags);
       GUIElement(sf::Vector2f size, GUIElement* masterElement);
       GUIElement() = default;
+
+      virtual ~GUIElement() {  };
 
       void bindElement(GUIElement* slave);
       void setFunction(std::function<void()> func);
@@ -46,7 +47,7 @@
       void positionLeftTo(GUIElement* element, int pixels);
 
       bool isClicked(sf::Vector2i clickPosition);
-      void clickInput(sf::Vector2i clickPosition);
+      virtual void clickInput(sf::Vector2i clickPosition);
 
       void update();
       virtual void draw(sf::RenderWindow& window);

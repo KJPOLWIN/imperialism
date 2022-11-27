@@ -50,7 +50,7 @@ int main()
 
   //Setting up game states
   MainMenu menu{ pressStart2P, state };
-  GameSettings gameSettings{ pressStart2P };
+  GameSettings gameSettings{ pressStart2P, state };
   Game game{ pressStart2P, state };
   Options options{ pressStart2P, state, previousState };
   Credits credits{ pressStart2P, state };

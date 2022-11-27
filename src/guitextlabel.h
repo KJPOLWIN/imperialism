@@ -20,6 +20,8 @@
       GUITextLabel(unsigned int size, GUIElement* masterElement, int flags);
       GUITextLabel(unsigned int size, GUIElement* masterElement);
       GUITextLabel() = default;
+      
+      virtual ~GUITextLabel() {  };
 
       void setPosition(sf::Vector2f position);
       
@@ -40,9 +42,9 @@
       void setText(std::string text);
       void setTextColor(sf::Color color);
 
-      virtual void draw(sf::RenderWindow& window);
+      void draw(sf::RenderWindow& window) override;
 
-    private:
+    protected:
       sf::Text text{  };
   };
 
