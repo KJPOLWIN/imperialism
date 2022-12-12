@@ -24,6 +24,10 @@
       virtual ~GUITextLabel() {  };
 
       void setPosition(sf::Vector2f position);
+
+      //TEST
+      sf::Vector2f getPosition();
+      sf::Vector2f getSize();
       
       void centerHorizontally();
       void centerVertically();

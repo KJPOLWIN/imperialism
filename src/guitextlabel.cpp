@@ -58,6 +58,18 @@ void GUITextLabel::setPosition(sf::Vector2f position)
   text.setPosition(position);
 }
       
+
+sf::Vector2f GUITextLabel::getPosition()
+{
+  return field.getPosition();
+}
+
+sf::Vector2f GUITextLabel::getSize()
+{
+  return field.getSize();
+}
+      
+
 void GUITextLabel::centerHorizontally()
 {
   GUIElement::centerHorizontally();

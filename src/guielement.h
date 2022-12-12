@@ -12,8 +12,7 @@
     enum Flag
     {
       clickable   = 1,
-      togglable   = 2,
-      scrollable  = 4
+      togglable   = 2
     };
   }
 
@@ -29,10 +28,15 @@
       virtual ~GUIElement() {  };
 
       void bindElement(GUIElement* slave);
+      void clearSlaveElements();
+
       void setFunction(std::function<void()> func);
 
       sf::Vector2f getPosition();
       void setPosition(sf::Vector2f position);
+
+      sf::Vector2f getSize();
+      void setSize(sf::Vector2f size);
 
       void centerHorizontally();
       void centerVertically();
@@ -49,17 +53,11 @@
       bool isClicked(sf::Vector2i clickPosition);
       virtual void clickInput(sf::Vector2i clickPosition);
 
-      void update();
       virtual void draw(sf::RenderWindow& window);
 
       bool testFlag(int flag);
       void setFlag(int flag);
 
-      /*inline Flag operator|(Flag a, Flag b)
-      {
-        return static_cast<Flag>(static_cast<int>(a) | static_cast<int>(b));
-      }*/
-      
       bool active{ false };
 
     protected:

@@ -79,6 +79,11 @@ void GUIElement::bindElement(GUIElement* slave)
   slaveElements.push_back(slave);
 }
       
+void GUIElement::clearSlaveElements()
+{
+  slaveElements.clear();
+}
+      
 void GUIElement::setFunction(std::function<void()> func)
 {
   function = func;
@@ -99,6 +104,16 @@ void GUIElement::setPosition(sf::Vector2f position)
   {
     slave->setPosition(slave->getPosition() + delta);
   }
+}
+
+sf::Vector2f GUIElement::getSize()
+{
+  return field.getSize();
+}
+
+void GUIElement::setSize(sf::Vector2f size)
+{
+  field.setSize(size);
 }
 
 void GUIElement::centerHorizontally()
@@ -209,10 +224,6 @@ void GUIElement::clickInput(sf::Vector2i clickPosition)
   }
 }
 
-void GUIElement::update()
-{
-
-}
 
 void GUIElement::draw(sf::RenderWindow& window)
 {

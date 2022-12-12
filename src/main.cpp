@@ -54,7 +54,7 @@ int main()
   Game game{ pressStart2P, state };
   Options options{ pressStart2P, state, previousState };
   Credits credits{ pressStart2P, state };
-  MapLoading mapLoading{ pressStart2P };
+  MapLoading mapLoading{ pressStart2P, state };
 
   //Uploading saved options
   options.fpsDisplaySelected = savedOptions["fpsDisplay"];
